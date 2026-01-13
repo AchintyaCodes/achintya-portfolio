@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-    <section className="min-h-screen flex flex-col px-8 pt-16 pb-16 relative">
+    <section className="min-h-screen flex flex-col px-8 pt-[10vh] pb-16 relative">
       <div className="max-w-4xl ml-[5%]">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
