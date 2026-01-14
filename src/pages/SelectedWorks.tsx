@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useCallback } from "react";
+import StarBorder from "../components/StarBorder"; // Adjust path if needed
 import './ScrollStack.css';
 
 const projects = [
@@ -37,7 +38,6 @@ const projects = [
   },
 ];
 
-// ScrollStack Card Component
 interface ScrollStackCardProps {
   project: typeof projects[0];
   index: number;
@@ -45,30 +45,39 @@ interface ScrollStackCardProps {
 
 const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
   return (
-    <div className="scroll-stack-card">
-      
-      {/* Top Section: ID, Client, and Button */}
+    /* We use StarBorder as the root container of the card.
+       The 'as="div"' and 'className="scroll-stack-card"' are vital 
+       for your scroll logic to find the element. */
+  <StarBorder 
+  as="div" 
+  className="scroll-stack-card" 
+  color="#00f2fe, #4facfe, #7000ff" // Cyan to Purple Gradient
+  speed="8s" 
+  thickness={2}
+>
       <div className="card-top-row">
         <div className="id-brand-group">
           <span className="huge-number">{project.id}</span>
           <div className="client-info">
-            <span className="label">Client</span>
-            <span className="client-name">{project.title}</span>
+            <span className="label">{project.title}</span>
+            <span className="client-name">{project.stack}</span>
           </div>
         </div>
 
-        <a href={project.links.live} className="live-btn">
+        {/* The Button also gets the effect */}
+    <StarBorder 
+    as="a" 
+    href="#" 
+    className="live-btn-star"
+    color="#f6d365, #fda085" // Gold/Sunset Gradient
+    speed="3s"
+  >
           Live Project
-        </a>
+        </StarBorder>
       </div>
 
-      {/* Image Grid Section: 1 Large, 2 Small */}
       <div className="image-grid">
-        <img 
-          src={project.image} 
-          className="main-image" 
-          alt="Main feature" 
-        />
+        <img src={project.image} className="main-image" alt={project.title} />
         <img 
           src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400" 
           className="sub-image" 
@@ -80,14 +89,7 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
           alt="Detail 2" 
         />
       </div>
-
-      {/* Description below (Optional, or keep hidden to match reference exactly) */}
-      <div className="mt-4">
-        <p className="text-white/50 text-sm max-w-2xl">
-          [{project.stack}] — {project.description}
-        </p>
-      </div>
-    </div>
+    </StarBorder>
   );
 };
 
@@ -95,9 +97,9 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
 const CONFIG = {
   itemDistance: 100,
   itemScale: 0.015,
-  itemStackDistance: 18, // Reduced to give more space for visible card
-  stackPosition: 0.08, // 8% of viewport - less space at top
-  scaleEndPosition: 0.05, // 5% of viewport
+  itemStackDistance: 18,
+  stackPosition: 0.08,
+  scaleEndPosition: 0.05,
   baseScale: 0.92,
 };
 
@@ -108,7 +110,6 @@ const SelectedWorks = () => {
   const lastScrollRef = useRef<number>(-1);
   const rafIdRef = useRef<number | null>(null);
 
-  // Cache card positions on mount and resize
   const cachePositions = useCallback(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
     cardsRef.current = cards;
@@ -128,8 +129,6 @@ const SelectedWorks = () => {
 
   const updateCardTransforms = useCallback(() => {
     const scrollTop = window.scrollY;
-    
-    // Skip if scroll hasn't changed significantly
     if (Math.abs(scrollTop - lastScrollRef.current) < 0.5) return;
     lastScrollRef.current = scrollTop;
 
@@ -146,13 +145,11 @@ const SelectedWorks = () => {
     for (let i = 0; i < cards.length; i++) {
       const card = cards[i];
       const cardTop = cardOffsets[i];
-
       const triggerStart = cardTop - stackPositionPx - CONFIG.itemStackDistance * i;
       const triggerEnd = cardTop - scaleEndPositionPx;
       const pinStart = triggerStart;
       const pinEnd = endElementTop - containerHeight * 0.5;
 
-      // Calculate scale progress
       let scaleProgress = 0;
       if (scrollTop >= triggerEnd) {
         scaleProgress = 1;
@@ -163,7 +160,6 @@ const SelectedWorks = () => {
       const targetScale = CONFIG.baseScale + i * CONFIG.itemScale;
       const scale = 1 - scaleProgress * (1 - targetScale);
 
-      // Calculate translateY
       let translateY = 0;
       if (scrollTop >= pinStart && scrollTop <= pinEnd) {
         translateY = scrollTop - cardTop + stackPositionPx + CONFIG.itemStackDistance * i;
@@ -171,14 +167,12 @@ const SelectedWorks = () => {
         translateY = pinEnd - cardTop + stackPositionPx + CONFIG.itemStackDistance * i;
       }
 
-      // Apply transform directly - no rounding for smoother animation
       card.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
     }
   }, []);
 
   const onScroll = useCallback(() => {
     if (rafIdRef.current) return;
-    
     rafIdRef.current = requestAnimationFrame(() => {
       updateCardTransforms();
       rafIdRef.current = null;
@@ -186,24 +180,18 @@ const SelectedWorks = () => {
   }, [updateCardTransforms]);
 
   useEffect(() => {
-    // Initial setup
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
-    
     cards.forEach((card, i) => {
-      if (i < cards.length - 1) {
-        card.style.marginBottom = `${CONFIG.itemDistance}px`;
-      }
+      if (i < cards.length - 1) card.style.marginBottom = `${CONFIG.itemDistance}px`;
       card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
     });
 
-    // Cache positions after a small delay to ensure layout is complete
     const initTimer = setTimeout(() => {
       cachePositions();
       updateCardTransforms();
     }, 100);
 
-    // Event listeners
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', cachePositions, { passive: true });
 
@@ -211,37 +199,25 @@ const SelectedWorks = () => {
       clearTimeout(initTimer);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', cachePositions);
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
   }, [cachePositions, updateCardTransforms, onScroll]);
 
   return (
     <section className="min-h-screen bg-black text-white font-sans relative">
-      
-      {/* HEADER: Marquee */}
       <div className="w-full border-b border-white/20 overflow-hidden flex items-center py-32 md:py-52 relative z-10 bg-black">
         <motion.div
           className="flex whitespace-nowrap items-center"
           initial={{ x: "0%" }}
           animate={{ x: "-50%" }}
-          transition={{ 
-            repeat: Infinity, 
-            ease: "linear", 
-            duration: 25 
-          }}
+          transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
         >
           {[0, 1].map((blockIndex) => (
             <div key={blockIndex} className="flex items-center">
               {[0, 1].map((textIndex) => (
                 <div key={textIndex} className="flex items-center">
-                  <span className="text-[13vw] font-medium leading-[0.8] tracking-tighter text-white">
-                    Selected Works
-                  </span>
-                  <span className="text-[13vw] font-light leading-[0.8] text-white/40 mx-[3vw] -translate-y-2">
-                    —
-                  </span>
+                  <span className="text-[13vw] font-medium leading-[0.8] tracking-tighter">Selected Works</span>
+                  <span className="text-[13vw] font-light mx-[3vw] -translate-y-2">—</span>
                 </div>
               ))}
             </div>
@@ -249,14 +225,12 @@ const SelectedWorks = () => {
         </motion.div>
       </div>
 
-      {/* SCROLL STACK SECTION */}
       <div className="scroll-stack-inner px-6 md:px-12 lg:px-16">
         {projects.map((project, index) => (
           <ScrollStackCard key={project.id} project={project} index={index} />
         ))}
         <div className="scroll-stack-end" />
       </div>
-
     </section>
   );
 };

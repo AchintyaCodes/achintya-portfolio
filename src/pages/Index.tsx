@@ -2,7 +2,11 @@ import { motion } from "framer-motion";
 import About from "./About";
 import SplashCursor from "./SplashCursor";
 import SelectedWorks from "./SelectedWorks";
+import SkillsPhilosophy from "./SkillsPhilosophy";
 import Footer from "./Footer";
+import Contact from "./Contact";
+import Testimonial from "./Testimonial";
+
 
 const Index = () => {
   return (
@@ -50,6 +54,9 @@ const Index = () => {
 
       <About />
       <SelectedWorks/>
+      <SkillsPhilosophy/>
+      <Testimonial/>
+      <Contact/>
       <Footer/>
     </div>
   );

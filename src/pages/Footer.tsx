@@ -22,7 +22,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-white text-black font-sans px-6 py-24 md:px-12 md:py-32 lg:px-16 border-t border-black">
+    <footer className="bg-black text-white font-sans px-6 py-24 md:px-12 md:py-32 lg:px-16 border-t border-white">
       <motion.div
         className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-y-16 md:gap-x-12"
         variants={containerVariants}
@@ -40,10 +40,10 @@ const Footer = () => {
           <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide leading-relaxed">
             Mahesh P Pai
           </p>
-          <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide leading-relaxed text-black/60">
+          <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide leading-relaxed text-white/60">
             Full Stack Engineer
           </p>
-          <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide leading-relaxed text-black/60">
+          <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide leading-relaxed text-white/60">
             Kerala, India [Lat: 9.7, Long: 76.5]
           </p>
         </motion.div>
@@ -86,20 +86,20 @@ const Footer = () => {
             <h3 className="font-sans text-xs font-bold uppercase tracking-widest mb-6">
               Colophon
             </h3>
-            <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-black/60">
+            <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-white/60">
               Built With: React / Three.js
             </p>
-            <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-black/60">
+            <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-white/60">
               Typeface: Inter
             </p>
-            <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-black/60">
+            <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-white/60">
               Deployed On: Vercel
             </p>
           </div>
 
           {/* The Year: Pushed to bottom via mt-auto to create diagonal balance with ID */}
           <div className="mt-12 md:mt-auto pt-8">
-            <p className="font-sans text-xs md:text-sm font-bold uppercase tracking-widest text-black">
+            <p className="font-sans text-xs md:text-sm font-bold uppercase tracking-widest text-white">
               2026
             </p>
           </div>
