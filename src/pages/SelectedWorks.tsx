@@ -94,11 +94,11 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
 // ScrollStack configuration
 const CONFIG = {
   itemDistance: 100,
-  itemScale: 0.02,
-  itemStackDistance: 30,
-  stackPosition: 0.15, // 15% of viewport
-  scaleEndPosition: 0.08, // 8% of viewport
-  baseScale: 0.9,
+  itemScale: 0.015,
+  itemStackDistance: 18, // Reduced to give more space for visible card
+  stackPosition: 0.08, // 8% of viewport - less space at top
+  scaleEndPosition: 0.05, // 5% of viewport
+  baseScale: 0.92,
 };
 
 const SelectedWorks = () => {

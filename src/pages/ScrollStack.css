@@ -18,18 +18,18 @@
   width: 92%;
   max-width: 1200px;
   height: auto; /* Height adapts to grid content */
-  max-height: 85vh; /* Ensure card fits within viewport */
+  max-height: 78vh; /* Reduced to fit with stacked cards above */
   background-color: #000;
   
   /* The "Reference" Border & Corners */
   border: 1.5px solid rgba(255, 255, 255, 0.4); 
   border-radius: 60px; /* Highly rounded corners from image */
-  padding: 2.5rem;
+  padding: 2rem;
   margin-bottom: 2rem;
   
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   position: relative;
   overflow: hidden;
 }
@@ -96,8 +96,8 @@
   display: grid;
   grid-template-columns: 1.6fr 1fr; /* Larger left image */
   grid-template-rows: 1fr 1fr;
-  gap: 1.5rem;
-  height: min(400px, 50vh); /* Responsive height that fits viewport */
+  gap: 1rem;
+  height: min(350px, 45vh); /* Smaller to fit within card bounds */
   flex: 1;
 }
 
