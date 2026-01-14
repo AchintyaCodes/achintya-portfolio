@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import About from "./About";
-import SplashCursor from "./Splashcursor";
+import SplashCursor from "./SplashCursor";
 import SelectedWorks from "./SelectedWorks";
 import Footer from "./Footer";
 
