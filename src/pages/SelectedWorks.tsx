@@ -224,8 +224,8 @@ const SelectedWorks = () => {
       <div className="w-full border-b border-white/20 overflow-hidden flex items-center py-32 md:py-52 relative z-10 bg-black">
         <motion.div
           className="flex whitespace-nowrap items-center"
-          initial={{ x: "-50%" }}
-          animate={{ x: "0%" }}
+          initial={{ x: "0%" }}
+          animate={{ x: "-50%" }}
           transition={{ 
             repeat: Infinity, 
             ease: "linear", 
