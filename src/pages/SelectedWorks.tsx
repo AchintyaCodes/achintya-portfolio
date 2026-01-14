@@ -45,59 +45,47 @@ interface ScrollStackCardProps {
 
 const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
   return (
-    <div 
-      className="scroll-stack-card bg-zinc-900 flex flex-col md:flex-row gap-6 md:gap-10 items-stretch"
-      style={{ 
-        backgroundColor: `hsl(${220 + index * 12}, 12%, ${10 + index * 2}%)` 
-      }}
-    >
-      {/* Image Section */}
-      <div className="w-full md:w-2/5 h-40 md:h-auto rounded-2xl overflow-hidden flex-shrink-0">
+    <div className="scroll-stack-card">
+      
+      {/* Top Section: ID, Client, and Button */}
+      <div className="card-top-row">
+        <div className="id-brand-group">
+          <span className="huge-number">{project.id}</span>
+          <div className="client-info">
+            <span className="label">Client</span>
+            <span className="client-name">{project.title}</span>
+          </div>
+        </div>
+
+        <a href={project.links.live} className="live-btn">
+          Live Project
+        </a>
+      </div>
+
+      {/* Image Grid Section: 1 Large, 2 Small */}
+      <div className="image-grid">
         <img 
           src={project.image} 
-          alt={project.title}
-          className="w-full h-full object-cover"
-          loading="lazy"
+          className="main-image" 
+          alt="Main feature" 
+        />
+        <img 
+          src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400" 
+          className="sub-image" 
+          alt="Detail 1" 
+        />
+        <img 
+          src="https://images.unsplash.com/photo-1550684847-75bdda21cc95?w=400" 
+          className="sub-image" 
+          alt="Detail 2" 
         />
       </div>
-      
-      {/* Content Section */}
-      <div className="flex-1 flex flex-col justify-center gap-4 md:gap-6 py-2">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="font-sans text-xs font-bold text-white/40 tracking-widest">
-            {project.id}
-          </span>
-          <span className="font-sans text-xs font-medium text-white/50 uppercase tracking-wide">
-            [{project.stack}]
-          </span>
-        </div>
-        
-        <h3 className="font-sans text-2xl md:text-4xl lg:text-5xl font-black uppercase leading-[0.95] tracking-tight text-white">
-          {project.title}
-        </h3>
-        
-        <p className="font-sans text-sm md:text-base lg:text-lg font-normal leading-relaxed text-white/70 max-w-xl">
-          {project.description}
+
+      {/* Description below (Optional, or keep hidden to match reference exactly) */}
+      <div className="mt-4">
+        <p className="text-white/50 text-sm max-w-2xl">
+          [{project.stack}] — {project.description}
         </p>
-        
-        <div className="flex items-center gap-6 mt-2 md:mt-4">
-          <a 
-            href={project.links.live}
-            className="font-sans text-xs font-bold uppercase tracking-wider text-white hover:underline underline-offset-4 decoration-1 transition-all"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Live ↗
-          </a>
-          <a 
-            href={project.links.code}
-            className="font-sans text-xs font-bold uppercase tracking-wider text-white hover:underline underline-offset-4 decoration-1 transition-all"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Code ↗
-          </a>
-        </div>
       </div>
     </div>
   );

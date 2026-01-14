@@ -1,50 +1,126 @@
+/* ScrollStack.css - Neo-Brutalist Capsule Redesign */
+
 .scroll-stack-scroller {
-  position: relative;
+  background-color: #000;
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  overflow-x: visible;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  will-change: scroll-position;
 }
 
 .scroll-stack-inner {
-  padding: 20vh 5rem 50rem;
-  min-height: 100vh;
-}
-
-.scroll-stack-card-wrapper {
-  position: relative;
+  padding: 10vh 0 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .scroll-stack-card {
-  transform-origin: top center;
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
-  height: 28rem;
-  width: 100%;
-  margin: 40px 0;
-  padding: 2.5rem;
-  border-radius: 32px;
-  box-sizing: border-box;
+  width: 92%;
+  max-width: 1200px;
+  height: auto; /* Height adapts to grid content */
+  min-height: 60vh;
+  background-color: #000;
+  
+  /* The "Reference" Border & Corners */
+  border: 1.5px solid rgba(255, 255, 255, 0.4); 
+  border-radius: 60px; /* Highly rounded corners from image */
+  padding: 3rem;
+  margin-bottom: 2rem;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   position: relative;
+  overflow: hidden;
 }
 
-@media (min-width: 768px) {
-  .scroll-stack-card {
-    height: 32rem;
-    padding: 3rem;
-  }
-}
-
-.scroll-stack-end {
+/* --- HEADER AREA --- */
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   width: 100%;
-  height: 1px;
 }
 
+.id-brand-group {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.huge-number {
+  font-family: 'Inter', sans-serif;
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 0.8;
+  color: #fff;
+}
+
+.client-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.client-name {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.live-btn {
+  border: 1.5px solid #fff;
+  border-radius: 100px;
+  padding: 0.8rem 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.3s;
+}
+
+.live-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* --- IMAGE GRID (Matching Reference) --- */
+.image-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr; /* Larger left image */
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5rem;
+  height: 450px;
+}
+
+.main-image {
+  grid-row: span 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 40px;
+}
+
+.sub-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 40px;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+  .image-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .huge-number { font-size: 3rem; }
+  .scroll-stack-card { border-radius: 30px; padding: 1.5rem; }
+}
