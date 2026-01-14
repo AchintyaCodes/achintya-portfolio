@@ -23,20 +23,24 @@
 
 .scroll-stack-card {
   transform-origin: top center;
-  will-change: transform, filter;
+  will-change: transform;
   backface-visibility: hidden;
-  transform-style: preserve-3d;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-  height: 20rem;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  height: 28rem;
   width: 100%;
-  margin: 30px 0;
-  padding: 3rem;
-  border-radius: 40px;
+  margin: 40px 0;
+  padding: 2.5rem;
+  border-radius: 32px;
   box-sizing: border-box;
-  /* Improve mobile performance */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
   position: relative;
+}
+
+@media (min-width: 768px) {
+  .scroll-stack-card {
+    height: 32rem;
+    padding: 3rem;
+  }
 }
 
 .scroll-stack-end {
