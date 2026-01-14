@@ -1,61 +1,56 @@
 import { motion } from "framer-motion";
+import About from "./About";
+import SplashCursor from "./Splashcursor";
+import SelectedWorks from "./SelectedWorks";
+import Footer from "./Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section - Black */}
-      <section className="min-h-screen bg-black flex flex-col items-center justify-center px-8 relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="text-center"
-        >
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl xl:text-9xl text-white font-medium tracking-tight mb-24">
-            Intelligent by Design
-          </h1>
-        </motion.div>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="absolute bottom-24 text-center max-w-2xl text-white/60 text-xs md:text-sm tracking-[0.2em] uppercase leading-relaxed"
-        >
-          Living for curiosity, designing for the world and passionate about the design and mechanics of everyday things.
-        </motion.p>
-      </section>
+    <div className="min-h-screen relative bg-black">
+      {/* SplashCursor is fixed to the viewport */}
+      <SplashCursor />
 
-      {/* Statement Section - White */}
-      <section className="min-h-screen bg-white flex flex-col px-8 pt-[15vh] pb-16 relative">
-        <div className="max-w-4xl ml-[15%]">
+      {/* Hero Section - Swiss Style / International Typographic Style */}
+      <section className="min-h-screen bg-black flex flex-col justify-between px-6 py-12 md:px-16 md:py-16 relative overflow-hidden">
+        
+        {/* 1. THE HEADLINE: Flush left, massive scale, tight tracking, Neo-Grotesque */}
+        <div className="z-10 mt-16 md:mt-24">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} // Custom bezier for snappy "Swiss" motion
+            className="w-full max-w-[90vw]"
           >
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-medium text-black max-w-3xl leading-tight">
-              I build digital experiences where elegant design meets robust functionality, bringing ideas to life through clean code and thoughtful architecture.
-            </h2>
+            <h1 className="font-sans font-bold text-7xl md:text-8xl lg:text-[9rem] xl:text-[11rem] leading-[0.85] tracking-tighter text-white uppercase text-left">
+              Driven<br />
+              by Logic
+            </h1>
+          </motion.div>
+        </div>
+
+        {/* 2. THE SUBTEXT: Strictly aligned to grid, objective, treating text as block element */}
+        {/* Using a 12-col grid to place the subtext mathematically */}
+        <div className="z-10 grid grid-cols-1 md:grid-cols-12 w-full gap-4 mb-8 md:mb-0">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            className="col-span-1 md:col-span-5 lg:col-span-4"
+          >
+            {/* Visual Anchor Line - Common in Swiss Design */}
+            <div className="w-12 h-[2px] bg-white mb-6 md:hidden"></div>
+
+            <p className="font-sans text-xs md:text-sm font-medium text-white leading-relaxed tracking-wide uppercase text-left">
+              Building robust software, automating the complex and focused on transforming static systems into intelligent ones.
+            </p>
           </motion.div>
         </div>
         
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="absolute bottom-16 right-8"
-        >
-          <a 
-            href="#work" 
-            className="text-black text-sm tracking-[0.1em] uppercase border-b border-black pb-1 hover:opacity-70 transition-opacity"
-          >
-            View Selected Work
-          </a>
-        </motion.div>
       </section>
+
+      <About />
+      <SelectedWorks/>
+      <Footer/>
     </div>
   );
 };
