@@ -92,22 +92,24 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
   );
 };
 
-// ScrollStack configuration
+// ScrollStack configuration - optimized for smooth scrolling
 const CONFIG = {
-  itemDistance: 100,
-  itemScale: 0.015,
-  itemStackDistance: 18,
-  stackPosition: 0.08,
-  scaleEndPosition: 0.05,
-  baseScale: 0.92,
+  itemDistance: 80,
+  itemScale: 0.012,
+  itemStackDistance: 20,
+  stackPosition: 0.1,
+  scaleEndPosition: 0.06,
+  baseScale: 0.94,
+  lerpFactor: 0.12, // Smoothing factor for interpolation
 };
 
 const SelectedWorks = () => {
   const cardsRef = useRef<HTMLElement[]>([]);
   const cardOffsetsRef = useRef<number[]>([]);
   const endOffsetRef = useRef<number>(0);
-  const lastScrollRef = useRef<number>(-1);
   const rafIdRef = useRef<number | null>(null);
+  const currentTransformsRef = useRef<{ translateY: number; scale: number }[]>([]);
+  const targetTransformsRef = useRef<{ translateY: number; scale: number }[]>([]);
 
   const cachePositions = useCallback(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
@@ -119,6 +121,12 @@ const SelectedWorks = () => {
       return rect.top + scrollY;
     });
 
+    // Initialize transform arrays
+    if (currentTransformsRef.current.length !== cards.length) {
+      currentTransformsRef.current = cards.map(() => ({ translateY: 0, scale: 1 }));
+      targetTransformsRef.current = cards.map(() => ({ translateY: 0, scale: 1 }));
+    }
+
     const endElement = document.querySelector('.scroll-stack-end') as HTMLElement;
     if (endElement) {
       const rect = endElement.getBoundingClientRect();
@@ -126,11 +134,12 @@ const SelectedWorks = () => {
     }
   }, []);
 
+  const lerp = (start: number, end: number, factor: number) => {
+    return start + (end - start) * factor;
+  };
+
   const updateCardTransforms = useCallback(() => {
     const scrollTop = window.scrollY;
-    if (Math.abs(scrollTop - lastScrollRef.current) < 0.5) return;
-    lastScrollRef.current = scrollTop;
-
     const cards = cardsRef.current;
     const cardOffsets = cardOffsetsRef.current;
     const endElementTop = endOffsetRef.current;
@@ -141,8 +150,8 @@ const SelectedWorks = () => {
     const stackPositionPx = CONFIG.stackPosition * containerHeight;
     const scaleEndPositionPx = CONFIG.scaleEndPosition * containerHeight;
 
+    // Calculate target transforms
     for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
       const cardTop = cardOffsets[i];
       const triggerStart = cardTop - stackPositionPx - CONFIG.itemStackDistance * i;
       const triggerEnd = cardTop - scaleEndPositionPx;
@@ -166,24 +175,45 @@ const SelectedWorks = () => {
         translateY = pinEnd - cardTop + stackPositionPx + CONFIG.itemStackDistance * i;
       }
 
-      card.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+      targetTransformsRef.current[i] = { translateY, scale };
+    }
+
+    // Interpolate current transforms towards target
+    let needsUpdate = false;
+    for (let i = 0; i < cards.length; i++) {
+      const current = currentTransformsRef.current[i];
+      const target = targetTransformsRef.current[i];
+      
+      const newTranslateY = lerp(current.translateY, target.translateY, CONFIG.lerpFactor);
+      const newScale = lerp(current.scale, target.scale, CONFIG.lerpFactor);
+      
+      // Check if we still need to update
+      if (Math.abs(newTranslateY - target.translateY) > 0.1 || Math.abs(newScale - target.scale) > 0.0001) {
+        needsUpdate = true;
+      }
+      
+      currentTransformsRef.current[i] = { translateY: newTranslateY, scale: newScale };
+      cards[i].style.transform = `translate3d(0, ${newTranslateY}px, 0) scale(${newScale})`;
+    }
+
+    // Continue animation loop if still interpolating
+    if (needsUpdate) {
+      rafIdRef.current = requestAnimationFrame(updateCardTransforms);
+    } else {
+      rafIdRef.current = null;
     }
   }, []);
 
   const onScroll = useCallback(() => {
-    if (rafIdRef.current) return;
-    rafIdRef.current = requestAnimationFrame(() => {
-      updateCardTransforms();
-      rafIdRef.current = null;
-    });
+    if (!rafIdRef.current) {
+      rafIdRef.current = requestAnimationFrame(updateCardTransforms);
+    }
   }, [updateCardTransforms]);
 
   useEffect(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
     cards.forEach((card, i) => {
       if (i < cards.length - 1) card.style.marginBottom = `${CONFIG.itemDistance}px`;
-      card.style.willChange = 'transform';
-      card.style.transformOrigin = 'top center';
     });
 
     const initTimer = setTimeout(() => {

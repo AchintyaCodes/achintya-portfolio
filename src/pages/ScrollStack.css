@@ -26,6 +26,10 @@
   border-radius: 60px;
   display: block; /* Ensure it stays block for offset calculations */
   position: relative;
+  will-change: transform;
+  transform-origin: top center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Transfer original card styling to the inner container of StarBorder */
