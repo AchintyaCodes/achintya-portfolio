@@ -11,11 +11,10 @@ import Testimonial from "./Testimonial";
 const Index = () => {
   return (
     <div className="min-h-screen relative bg-black">
-      {/* SplashCursor is fixed to the viewport */}
-      <SplashCursor />
-
       {/* Hero Section - Swiss Style / International Typographic Style */}
       <section className="min-h-screen bg-black flex flex-col justify-between px-6 py-12 md:px-16 md:py-16 relative overflow-hidden">
+        {/* SplashCursor only on hero section */}
+        <SplashCursor />
         
         {/* 1. THE HEADLINE: Flush left, massive scale, tight tracking, Neo-Grotesque */}
         <div className="z-10 mt-16 md:mt-24">

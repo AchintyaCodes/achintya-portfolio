@@ -71,7 +71,6 @@ const SkillsPhilosophy = () => {
           items={skillCategories}
           speed={8}
           marqueeBgColor="#000000"
-          marqueeTextColor="#FFFFFF"
         />
       </div>
     </section>

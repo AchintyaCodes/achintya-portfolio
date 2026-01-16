@@ -51,9 +51,8 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
   <StarBorder 
   as="div" 
   className="scroll-stack-card" 
-  color="#00f2fe, #4facfe, #7000ff" // Cyan to Purple Gradient
-  speed="8s" 
-  thickness={2}
+  color="#00f2fe, #4facfe, #7000ff"
+  speed="8s"
 >
       <div className="card-top-row">
         <div className="id-brand-group">
