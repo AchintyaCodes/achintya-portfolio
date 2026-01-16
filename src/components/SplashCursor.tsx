@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ColorRGB {
   r: number;
@@ -69,6 +69,7 @@ export default function SplashCursor({
   TRANSPARENT = true
 }: SplashCursorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [webGLSupported, setWebGLSupported] = useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -94,8 +95,23 @@ export default function SplashCursor({
       TRANSPARENT
     };
 
-    const { gl, ext } = getWebGLContext(canvas);
-    if (!gl || !ext) return;
+    let gl: WebGL2RenderingContext | null = null;
+    let ext: any = null;
+    
+    try {
+      const result = getWebGLContext(canvas);
+      gl = result.gl;
+      ext = result.ext;
+    } catch (e) {
+      console.warn('WebGL not supported, SplashCursor disabled');
+      setWebGLSupported(false);
+      return;
+    }
+    
+    if (!gl || !ext) {
+      setWebGLSupported(false);
+      return;
+    }
 
     if (!ext.supportLinearFiltering) {
       config.DYE_RESOLUTION = 256;
@@ -1280,13 +1296,17 @@ export default function SplashCursor({
     TRANSPARENT
   ]);
 
+  if (!webGLSupported) {
+    return null;
+  }
+
   return (
     <div
       style={{
-        position: 'fixed',
+        position: 'absolute',
         top: 0,
         left: 0,
-        zIndex: 50,
+        zIndex: 10,
         pointerEvents: 'none',
         width: '100%',
         height: '100%'
@@ -1296,8 +1316,8 @@ export default function SplashCursor({
         ref={canvasRef}
         id="fluid"
         style={{
-          width: '100vw',
-          height: '100vh',
+          width: '100%',
+          height: '100%',
           display: 'block'
         }}
       />

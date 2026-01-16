@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import About from "./About";
-import SplashCursor from "./SplashCursor";
+import SplashCursor from "@/components/SplashCursor";
 import SelectedWorks from "./SelectedWorks";
 import SkillsPhilosophy from "./SkillsPhilosophy";
 import Footer from "./Footer";
@@ -11,8 +11,8 @@ import Testimonial from "./Testimonial";
 const Index = () => {
   return (
     <div className="min-h-screen relative bg-black">
-      {/* Hero Section - Swiss Style / International Typographic Style */}
-      <section className="min-h-screen bg-black flex flex-col justify-between px-6 py-12 md:px-16 md:py-16 relative overflow-hidden">
+      {/* Hero Section - Sticky so content scrolls over it */}
+      <section className="h-screen bg-black flex flex-col justify-between px-6 py-12 md:px-16 md:py-16 sticky top-0 overflow-hidden">
         {/* SplashCursor only on hero section */}
         <SplashCursor />
         
@@ -51,12 +51,15 @@ const Index = () => {
         
       </section>
 
-      <About />
-      <SelectedWorks/>
-      <SkillsPhilosophy/>
-      <Testimonial/>
-      <Contact/>
-      <Footer/>
+      {/* Content wrapper - scrolls over the sticky hero */}
+      <div className="relative z-10">
+        <About />
+        <SelectedWorks/>
+        <SkillsPhilosophy/>
+        <Testimonial/>
+        <Contact/>
+        <Footer/>
+      </div>
     </div>
   );
 };
