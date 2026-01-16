@@ -69,6 +69,7 @@ export default function SplashCursor({
   TRANSPARENT = true
 }: SplashCursorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [webGLSupported, setWebGLSupported] = React.useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -94,8 +95,23 @@ export default function SplashCursor({
       TRANSPARENT
     };
 
-    const { gl, ext } = getWebGLContext(canvas);
-    if (!gl || !ext) return;
+    let gl: WebGL2RenderingContext | null = null;
+    let ext: any = null;
+    
+    try {
+      const result = getWebGLContext(canvas);
+      gl = result.gl;
+      ext = result.ext;
+    } catch (e) {
+      console.warn('WebGL not supported, SplashCursor disabled');
+      setWebGLSupported(false);
+      return;
+    }
+    
+    if (!gl || !ext) {
+      setWebGLSupported(false);
+      return;
+    }
 
     if (!ext.supportLinearFiltering) {
       config.DYE_RESOLUTION = 256;
@@ -1279,6 +1295,10 @@ export default function SplashCursor({
     BACK_COLOR,
     TRANSPARENT
   ]);
+
+  if (!webGLSupported) {
+    return null;
+  }
 
   return (
     <div
