@@ -75,18 +75,11 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
         </StarBorder>
       </div>
 
-      <div className="image-grid">
+      <div className="content-grid">
         <img src={project.image} className="main-image" alt={project.title} />
-        <img 
-          src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400" 
-          className="sub-image" 
-          alt="Detail 1" 
-        />
-        <img 
-          src="https://images.unsplash.com/photo-1550684847-75bdda21cc95?w=400" 
-          className="sub-image" 
-          alt="Detail 2" 
-        />
+        <div className="project-description">
+          <p>{project.description}</p>
+        </div>
       </div>
     </StarBorder>
   );
