@@ -195,36 +195,42 @@ const SelectedWorks = () => {
     };
   }, [cachePositions, updateCardTransforms, onScroll]);
 
-  return (
-    <section className="min-h-screen bg-black text-white font-sans relative">
-      <div className="w-full border-b border-white/20 overflow-hidden flex items-center py-32 md:py-52 relative z-10 bg-black">
-        <motion.div
-          className="flex whitespace-nowrap items-center"
-          initial={{ x: "0%" }}
-          animate={{ x: "-50%" }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
-        >
-          {[0, 1].map((blockIndex) => (
-            <div key={blockIndex} className="flex items-center">
-              {[0, 1].map((textIndex) => (
-                <div key={textIndex} className="flex items-center">
-                  <span className="text-[13vw] font-medium leading-[0.8] tracking-tighter">Selected Works</span>
-                  <span className="text-[13vw] font-light mx-[3vw] -translate-y-2">—</span>
-                </div>
-              ))}
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      <div className="scroll-stack-inner px-6 md:px-12 lg:px-16">
-        {projects.map((project, index) => (
-          <ScrollStackCard key={project.id} project={project} index={index} />
+// Find the <section> return in your code and replace the marquee container div
+return (
+  <section className="min-h-screen bg-black text-white font-sans relative">
+    
+    {/* UPDATES:
+      1. Added h-[50vh] (sets height to 50% of viewport)
+      2. Removed py-32 md:py-52 (removed padding so height is strict)
+    */}
+    <div className="w-full h-[75vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
+      <motion.div
+        className="flex whitespace-nowrap items-center"
+        initial={{ x: "0%" }}
+        animate={{ x: "-50%" }}
+        transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
+      >
+        {[0, 1].map((blockIndex) => (
+          <div key={blockIndex} className="flex items-center">
+            {[0, 1].map((textIndex) => (
+              <div key={textIndex} className="flex items-center">
+                <span className="text-[13vw] font-medium leading-[0.8] tracking-tighter">Selected Works</span>
+                <span className="text-[13vw] font-light mx-[3vw] -translate-y-2">—</span>
+              </div>
+            ))}
+          </div>
         ))}
-        <div className="scroll-stack-end" />
-      </div>
-    </section>
-  );
+      </motion.div>
+    </div>
+
+    <div className="scroll-stack-inner px-6 md:px-12 lg:px-16">
+      {projects.map((project, index) => (
+        <ScrollStackCard key={project.id} project={project} index={index} />
+      ))}
+      <div className="scroll-stack-end" />
+    </div>
+  </section>
+);
 };
 
 export default SelectedWorks;
