@@ -1,6 +1,5 @@
-/* ScrollStack.css - Neo-Brutalist Swiss Design */
+/* ScrollStack.css - Neo-Brutalist Starry Design */
 
-/* --- CORE LAYOUT --- */
 .scroll-stack-scroller {
   background-color: #000;
   width: 100%;
@@ -22,81 +21,59 @@
   height: auto;
   max-height: 78vh;
   margin-bottom: 2rem;
-  background: transparent !important;
-  border: none !important;
+  background: transparent !important; /* Hide default bg */
+  border: none !important; /* Hide default border */
   border-radius: 60px;
-  display: block;
+  display: block; /* Ensure it stays block for offset calculations */
   position: relative;
 }
 
-/* Inner Container Styling */
+/* Transfer original card styling to the inner container of StarBorder */
 .scroll-stack-card > .inner-content {
   background-color: #000 !important;
   border-radius: 60px !important;
-  padding: 3rem !important; /* Increased padding for Swiss spacing */
+  padding: 2.5rem !important;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  text-align: left;
-  /* SHARED TYPOGRAPHY RESET */
-  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #ffffff !important;
+  gap: 1.5rem;
+  text-align: left; /* Override StarBorder default center text */
 }
 
 /* --- HEADER AREA --- */
 .card-top-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Align top for better grid structure */
+  align-items: center;
   width: 100%;
 }
 
 .id-brand-group {
   display: flex;
-  gap: 2rem;
-  align-items: flex-start;
+  gap: 1.5rem;
+  align-items: center;
 }
 
-/* SWISS TYPOGRAPHY: ID NUMBER */
 .huge-number {
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  font-size: 6rem;
-  font-weight: 900; /* Black weight */
-  line-height: 0.75;
+  font-family: 'Inter', sans-serif;
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 0.8;
   color: #fff;
-  letter-spacing: -0.06em; /* Tight Swiss tracking */
 }
 
-/* Wrapper for Title + Stack */
-.client-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.25rem;
-  padding-top: 0.5rem; /* Optical alignment with the huge number */
-}
-
-/* SWISS TYPOGRAPHY: PROJECT TITLE */
 .label {
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  font-size: 2.25rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
-  color: #ffffff; /* Pure white */
-  font-weight: 800; /* Extra Bold */
-  letter-spacing: -0.04em;
-  line-height: 1;
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: 0.02em;
   display: block;
 }
 
-/* SWISS TYPOGRAPHY: TECH STACK */
 .client-name {
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  font-size: 1rem;
-  color: #ffffff; /* Pure white */
-  font-weight: 700; /* Bold */
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 500;
 }
 
 /* --- STAR BUTTON STYLE --- */
@@ -104,7 +81,6 @@
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.3s ease;
-  white-space: nowrap;
 }
 
 .live-btn-star:hover {
@@ -114,125 +90,138 @@
 .live-btn-star > .inner-content {
   background: #000 !important;
   border-radius: 100px !important;
-  padding: 1rem 2.5rem !important;
-  font-size: 0.85rem;
-  font-weight: 800; /* Bolder button text */
+  padding: 0.8rem 2rem !important;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: #fff;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
+/* --- CONTENT GRID (Image + Description) --- */
 .content-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 3rem;
+  gap: 2rem;
   height: min(350px, 40vh);
   flex: 1;
-  /* CHANGE: Align items to start (top) instead of stretch */
-  align-items: start;
+  align-items: stretch;
 }
-/* CHANGE 2: Grayscale filter removed so image is always colored */
+
 .main-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 40px;
-  /* filter: grayscale(100%) contrast(110%);  <-- REMOVED */
-  /* transition: filter 0.3s ease; <-- REMOVED */
 }
 
-/* CHANGE 2 (cont): Hover state removed */
-/* .scroll-stack-card:hover .main-image {
-  filter: grayscale(0%) contrast(100%);
-} */
 .project-description {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0 0 0 0; /* 20px top padding */
-  border-left: none;
-  height: 100%;
+  padding: 1.5rem;
 }
 
 .project-description p {
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  font-size: 1.4rem;
-  line-height: 1.25;
-  color: #ffffff;
-  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
   margin: 0;
-  letter-spacing: -0.03em;
-  text-align: center;
-  max-width: 100%;
 }
+
 /* --- RESPONSIVE STYLES --- */
 @media (max-width: 1024px) {
-  .huge-number { font-size: 4rem; }
-  .label { font-size: 1.8rem; }
-  
   .content-grid {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
   
-  .project-description p { 
-    font-size: 1.15rem; 
+  .project-description p {
+    font-size: 1rem;
   }
-  .project-description { padding-left: 0; }
 }
 
 @media (max-width: 768px) {
   .card-top-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.5rem;
+    gap: 1rem;
   }
   
   .id-brand-group {
     flex-wrap: wrap;
     gap: 1rem;
-    align-items: center;
   }
   
-  .huge-number { font-size: 3.5rem; }
-  .label { font-size: 1.5rem; line-height: 1.1; }
-  .client-name { font-size: 0.85rem; }
+  .huge-number {
+    font-size: 3rem;
+  }
   
-  .live-btn-star { align-self: flex-start; }
+  .label {
+    font-size: 1rem;
+  }
+  
+  .live-btn-star {
+    align-self: flex-start;
+  }
   
   .content-grid {
     grid-template-columns: 1fr;
     height: auto;
-    gap: 1.5rem;
+    gap: 1rem;
   }
   
   .main-image {
-    height: 220px;
-    border-radius: 30px;
+    height: 200px;
+    border-radius: 24px;
+  }
+  
+  .project-description {
+    padding: 0.5rem 0;
   }
   
   .project-description p {
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 1.4;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .scroll-stack-card {
+    border-radius: 30px;
   }
   
   .scroll-stack-card > .inner-content {
+    border-radius: 30px !important;
     padding: 1.5rem !important;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .huge-number { font-size: 2.5rem; }
-  .label { font-size: 1.1rem; }
+  .huge-number {
+    font-size: 2.5rem;
+  }
   
-  .live-btn-star > .inner-content {
-    padding: 0.8rem 1.8rem !important;
+  .label {
+    font-size: 0.9rem;
+  }
+  
+  .client-name {
     font-size: 0.75rem;
   }
   
-  .main-image { height: 180px; }
+  .live-btn-star > .inner-content {
+    padding: 0.6rem 1.5rem !important;
+    font-size: 0.7rem;
+  }
   
-  .project-description p { font-size: 1rem; }
+  .main-image {
+    height: 180px;
+  }
+  
+  .project-description p {
+    font-size: 0.85rem;
+  }
+  
+  .scroll-stack-card > .inner-content {
+    padding: 1rem !important;
+  }
 }
