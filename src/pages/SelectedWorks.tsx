@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useCallback } from "react";
-import StarBorder from "../components/StarBorder"; // Adjust path if needed
+import StarBorder from "../components/StarBorder"; 
 import './ScrollStack.css';
 
 const projects = [
