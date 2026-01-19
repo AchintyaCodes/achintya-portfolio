@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent, useSpring, useMotionValue } from "framer-motion";
 
 // Components
 import About from "./About";
@@ -10,6 +10,41 @@ import Footer from "./Footer";
 import Contact from "./Contact";
 import Testimonial from "./Testimonial";
 import Navigation from "@/components/Navigation";
+
+// --- NEW COMPONENT: Cursor Follower ---
+const CursorFollower = () => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // ADJUSTED PHYSICS:
+  // stiffness: Lower values (e.g., 100) make the spring "looser", creating the lag/follow effect.
+  // damping: Controls the "bounciness". 20 provides a smooth stop without wobbling.
+  // mass: Adds a feeling of weight.
+  const springConfig = { damping: 20, stiffness: 100, mass: 0.8 };
+  
+  const x = useSpring(mouseX, springConfig);
+  const y = useSpring(mouseY, springConfig);
+
+  useEffect(() => {
+    const moveCursor = (e) => {
+      // Offset by half the width (12px) to center it on the cursor target
+      mouseX.set(e.clientX - 12);
+      mouseY.set(e.clientY - 12);
+    };
+
+    window.addEventListener("mousemove", moveCursor);
+    return () => {
+      window.removeEventListener("mousemove", moveCursor);
+    };
+  }, [mouseX, mouseY]);
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 w-6 h-6 bg-gray-400/50 rounded-full pointer-events-none z-[9999] hidden md:block backdrop-blur-[1px]"
+      style={{ x, y }}
+    />
+  );
+};
 
 // 1. The Dynamic Logo Component
 const BrandLogo = () => {
@@ -29,6 +64,9 @@ const Index = () => {
       
       {/* 2. Insert the Logo */}
       <BrandLogo />
+      
+      {/* Insert Custom Cursor Follower here */}
+      <CursorFollower />
 
       {/* Navigation Menu */}
       <Navigation />
@@ -89,13 +127,11 @@ const Index = () => {
         </div>
 
         {/* --- MODIFIED CONTACT SECTION --- */}
-        {/* Added 'sticky top-0 z-0' so this section stays put while the footer slides over it */}
         <div id="contact" className="sticky top-0 z-0 bg-white text-black">
             <Contact />
         </div>
         
         {/* --- MODIFIED FOOTER WRAPPER --- */}
-        {/* Added 'relative z-10' to ensure the footer sits ON TOP of the sticky contact section */}
         <div className="relative z-10 bg-black text-white">
             <Footer />
         </div>
