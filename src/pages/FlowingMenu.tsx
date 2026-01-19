@@ -31,35 +31,65 @@ const MenuItem: React.FC<MenuItemData & { speed: number; marqueeBgColor: string;
   const itemRef = useRef<HTMLDivElement>(null);
   const marqueeInnerRef = useRef<HTMLDivElement>(null);
   const [repetitions, setRepetitions] = useState(2);
+  
+  // State to track if the menu is explicitly toggled open (for clicks/taps)
+  const [isOpen, setIsOpen] = useState(false);
 
+  // Calculate how many times to repeat the items to fill the screen
   useEffect(() => {
     const calculate = () => {
       if (!marqueeInnerRef.current) return;
       const part = marqueeInnerRef.current.querySelector('.marquee__part') as HTMLElement;
-      if (part) setRepetitions(Math.ceil(window.innerWidth / part.offsetWidth) + 2);
+      if (part) {
+        // Ensure enough repetitions to cover screen + buffer
+        setRepetitions(Math.ceil(window.innerWidth / part.offsetWidth) + 2);
+      }
     };
     calculate();
     window.addEventListener('resize', calculate);
     return () => window.removeEventListener('resize', calculate);
   }, [items]);
 
+  // GSAP Animation for the infinite scroll
   useEffect(() => {
     if (!marqueeInnerRef.current) return;
     const part = marqueeInnerRef.current.querySelector('.marquee__part') as HTMLElement;
     if (!part) return;
-    gsap.to(marqueeInnerRef.current, {
-      x: -(part.offsetWidth + window.innerWidth * 0.08),
-      duration: (part.offsetWidth / 200) * speed,
-      ease: 'none',
-      repeat: -1
-    });
+
+    const ctx = gsap.context(() => {
+      gsap.to(marqueeInnerRef.current, {
+        x: -(part.offsetWidth), 
+        duration: (part.offsetWidth / 200) * speed,
+        ease: 'none',
+        repeat: -1
+      });
+    }, marqueeInnerRef);
+
+    return () => ctx.revert();
   }, [items, repetitions, speed]);
 
+  // Handle Click: Toggle the open state
+  const handleInteraction = (e: React.MouseEvent) => {
+    e.preventDefault(); 
+    setIsOpen(prev => !prev); // Toggles: Close if open, Open if closed
+  };
+
   return (
-    <div className="menu__item" ref={itemRef} style={{ borderTop: isFirst ? 'none' : '1px solid black' }}>
-      <a className="menu__item-link" href={link}>{text}</a>
+    <div 
+      className={`menu__item ${isOpen ? 'is-open' : ''}`} 
+      ref={itemRef} 
+      style={{ borderTop: isFirst ? 'none' : '1px solid black' }}
+    >
+      <a 
+        className="menu__item-link" 
+        href={link}
+        onClick={handleInteraction}
+      >
+        {text}
+      </a>
       <div className="marquee" style={{ backgroundColor: marqueeBgColor }}>
         <div className="marquee__inner" ref={marqueeInnerRef}>
+          {/* Create repetitions for infinite loop */}
           {[...Array(repetitions)].map((_, i) => (
             <div className="marquee__part" key={i}>
               {items.map((skill, idx) => (
