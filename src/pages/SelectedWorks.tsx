@@ -9,8 +9,10 @@ const projects = [
     title: "Enterprise Resource Architecture",
     stack: "React / Node.js / Firebase / Firestore",
     description: "A full-stack ERP engine automating multi-currency invoicing, inventory logic, and international tax compliance for distributed teams.",
-    links: { live: "#", code: "#" },
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop"
+    // UPDATED LINK
+    links: { live: "https://erpbeta.netlify.app", code: "#" },
+    // UPDATED IMAGE (Referencing file in public folder)
+    image: "/p1.png"
   },
   {
     id: "002",
@@ -62,7 +64,10 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
 
         <StarBorder 
           as="a" 
-          href="#" 
+          // UPDATED: Now uses the dynamic link from the project data
+          href={project.links.live} 
+          target="_blank"
+          rel="noopener noreferrer"
           className="live-btn-star"
           color="#f6d365, #fda085"
           speed="3s"
@@ -213,9 +218,9 @@ const SelectedWorks = () => {
     <section className="min-h-screen bg-black text-white font-sans relative">
       
       {/* UPDATED HEIGHTS:
-         Mobile (<768px): h-[25vh]
-         Tablet (≥768px): h-[50vh]
-         Desktop (≥1024px): h-[75vh]
+          Mobile (<768px): h-[25vh]
+          Tablet (≥768px): h-[50vh]
+          Desktop (≥1024px): h-[75vh]
       */}
       <div className="w-full h-[25vh] md:h-[50vh] lg:h-[75vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
         <motion.div
