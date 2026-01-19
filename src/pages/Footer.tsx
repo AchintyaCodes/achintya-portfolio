@@ -22,10 +22,13 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-black text-white font-sans px-6 pt-12 md:px-12 md:pt-20 lg:px-16 border-t border-white min-h-screen flex flex-col justify-between">
+    // REMOVED global px padding here to allow full-width text at the bottom
+    <footer className="bg-black text-white font-sans pt-12 md:pt-20 border-t border-white min-h-screen flex flex-col">
+      
       {/* Top Section: Info Grid */}
+      {/* ADDED padding here (px-6 md:px-12 lg:px-16) to keep the content aligned correctly */}
       <motion.div
-        className="max-w-[1600px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-x-12"
+        className="px-6 md:px-12 lg:px-16 max-w-[1600px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-x-12 shrink-0"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -103,19 +106,21 @@ const Footer = () => {
         </motion.div>
       </motion.div>
 
-      {/* Bottom Section: The Image */}
+      {/* Bottom Section: Branding Text */}
+      {/* w-full and NO padding allows text to touch edges. flex-1 centers it vertically. */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="w-full mt-10 md:mt-16 flex justify-center overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+        className="w-full flex-1 flex flex-col justify-center items-center overflow-hidden select-none pb-4"
       >
-        {/* Replace filename with your actual file name if different */}
-        <img 
-          src="/footer-logo.png" 
-          alt="MAHESH Logo" 
-          className="w-full max-w-[1800px] h-auto object-cover md:object-contain opacity-90"
-        />
+        <h1 className="font-sans font-black text-[23vw] leading-[0.8] text-white uppercase tracking-tighter flex items-start">
+          Mahesh
+          {/* Trademark Symbol */}
+          <span className="text-xl md:text-4xl lg:text-6xl font-medium mt-[2vw] ml-1 opacity-60">
+            ®
+          </span>
+        </h1>
       </motion.div>
     </footer>
   );

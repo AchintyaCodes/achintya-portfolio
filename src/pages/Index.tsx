@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 
 // Components
 import About from "./About";
@@ -10,15 +11,31 @@ import Contact from "./Contact";
 import Testimonial from "./Testimonial";
 import Navigation from "@/components/Navigation";
 
+// 1. The Dynamic Logo Component (UPDATED)
+const BrandLogo = () => {
+  return (
+    <div className="fixed top-6 left-6 md:top-8 md:left-10 z-50 mix-blend-difference">
+      <h1 className="font-sans font-black text-2xl md:text-4xl tracking-tighter text-white flex items-start">
+        MAHESH
+        {/* Adjusted size and added negative top margin to pull it to top-right */}
+        <span className="text-xs md:text-lg font-medium ml-1 -mt-1 md:-mt-2">®</span>
+      </h1>
+    </div>
+  );
+};
+
 const Index = () => {
   return (
-    <div className="min-h-screen relative bg-black">
+    <div className="min-h-screen relative bg-black selection:bg-white selection:text-black">
       
+      {/* 2. Insert the Logo */}
+      <BrandLogo />
+
       {/* Navigation Menu */}
       <Navigation />
 
-      {/* Hero Section - Sticky so content scrolls over it */}
-      <section className="h-screen bg-black flex flex-col justify-between px-6 py-12 md:px-16 md:py-16 sticky top-0 overflow-hidden">
+      {/* Hero Section */}
+      <section className="h-screen bg-black flex flex-col justify-between px-6 py-12 md:px-16 md:py-16 sticky top-0 overflow-hidden z-0">
         <SplashCursor />
 
         {/* THE HEADLINE */}
@@ -54,14 +71,31 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Content wrapper - scrolls over the sticky hero */}
-      <div className="relative z-10 bg-black">
-        <div id="about"><About /></div>
-        <div id="work"><SelectedWorks /></div>
-        <div id="philosophy"><SkillsPhilosophy /></div>
-        <Testimonial />
-        <div id="contact"><Contact /></div>
-        <Footer />
+      {/* Content wrapper */}
+      <div className="relative z-10">
+        <div id="about" className="bg-white text-black">
+            <About />
+        </div>
+        
+        <div id="work" className="bg-black text-white">
+            <SelectedWorks />
+        </div>
+        
+        <div id="philosophy" className="bg-white text-black">
+            <SkillsPhilosophy />
+        </div>
+        
+        <div className="bg-black text-white">
+            <Testimonial />
+        </div>
+
+        <div id="contact" className="bg-white text-black">
+            <Contact />
+        </div>
+        
+        <div className="bg-black text-white">
+            <Footer />
+        </div>
       </div>
     </div>
   );
