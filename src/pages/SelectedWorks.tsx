@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useCallback } from "react";
-import StarBorder from "../components/StarBorder"; // Adjust path if needed
+import { useEffect, useRef, useCallback, useState } from "react";
+import StarBorder from "../components/StarBorder"; 
 import './ScrollStack.css';
 
 const projects = [
@@ -45,15 +45,12 @@ interface ScrollStackCardProps {
 
 const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
   return (
-    /* We use StarBorder as the root container of the card.
-       The 'as="div"' and 'className="scroll-stack-card"' are vital 
-       for your scroll logic to find the element. */
-  <StarBorder 
-  as="div" 
-  className="scroll-stack-card" 
-  color="#00f2fe, #4facfe, #7000ff"
-  speed="8s"
->
+    <StarBorder 
+      as="div" 
+      className="scroll-stack-card" 
+      color="#00f2fe, #4facfe, #7000ff"
+      speed="8s"
+    >
       <div className="card-top-row">
         <div className="id-brand-group">
           <span className="huge-number">{project.id}</span>
@@ -63,14 +60,13 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
           </div>
         </div>
 
-        {/* The Button also gets the effect */}
-    <StarBorder 
-    as="a" 
-    href="#" 
-    className="live-btn-star"
-    color="#f6d365, #fda085" // Gold/Sunset Gradient
-    speed="3s"
-  >
+        <StarBorder 
+          as="a" 
+          href="#" 
+          className="live-btn-star"
+          color="#f6d365, #fda085"
+          speed="3s"
+        >
           Live Project
         </StarBorder>
       </div>
@@ -101,6 +97,24 @@ const SelectedWorks = () => {
   const endOffsetRef = useRef<number>(0);
   const lastScrollRef = useRef<number>(-1);
   const rafIdRef = useRef<number | null>(null);
+
+  const [marqueeDuration, setMarqueeDuration] = useState(25);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // CHANGED: Now checks for < 1024px to include both Mobile AND Tablet
+      if (window.innerWidth < 1024) {
+        setMarqueeDuration(10); // Fast speed for Mobile & Tablet
+      } else {
+        setMarqueeDuration(25); // Normal speed for Desktop
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const cachePositions = useCallback(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
@@ -195,42 +209,42 @@ const SelectedWorks = () => {
     };
   }, [cachePositions, updateCardTransforms, onScroll]);
 
-// Find the <section> return in your code and replace the marquee container div
-return (
-  <section className="min-h-screen bg-black text-white font-sans relative">
-    
-    {/* UPDATES:
-      1. Added h-[50vh] (sets height to 50% of viewport)
-      2. Removed py-32 md:py-52 (removed padding so height is strict)
-    */}
-    <div className="w-full h-[75vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
-      <motion.div
-        className="flex whitespace-nowrap items-center"
-        initial={{ x: "0%" }}
-        animate={{ x: "-50%" }}
-        transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
-      >
-        {[0, 1].map((blockIndex) => (
-          <div key={blockIndex} className="flex items-center">
-            {[0, 1].map((textIndex) => (
-              <div key={textIndex} className="flex items-center">
-                <span className="text-[13vw] font-medium leading-[0.8] tracking-tighter">Selected Works</span>
-                <span className="text-[13vw] font-light mx-[3vw] -translate-y-2">—</span>
-              </div>
-            ))}
-          </div>
-        ))}
-      </motion.div>
-    </div>
+  return (
+    <section className="min-h-screen bg-black text-white font-sans relative">
+      
+      {/* UPDATED HEIGHTS:
+         Mobile (<768px): h-[25vh]
+         Tablet (≥768px): h-[50vh]
+         Desktop (≥1024px): h-[75vh]
+      */}
+      <div className="w-full h-[25vh] md:h-[50vh] lg:h-[75vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
+        <motion.div
+          className="flex whitespace-nowrap items-center"
+          initial={{ x: "0%" }}
+          animate={{ x: "-50%" }}
+          transition={{ repeat: Infinity, ease: "linear", duration: marqueeDuration }}
+        >
+          {[0, 1].map((blockIndex) => (
+            <div key={blockIndex} className="flex items-center">
+              {[0, 1].map((textIndex) => (
+                <div key={textIndex} className="flex items-center">
+                  <span className="text-[13vw] font-medium leading-[0.8] tracking-tighter">Selected Works</span>
+                  <span className="text-[13vw] font-light mx-[3vw] -translate-y-2">—</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </motion.div>
+      </div>
 
-    <div className="scroll-stack-inner px-6 md:px-12 lg:px-16">
-      {projects.map((project, index) => (
-        <ScrollStackCard key={project.id} project={project} index={index} />
-      ))}
-      <div className="scroll-stack-end" />
-    </div>
-  </section>
-);
+      <div className="scroll-stack-inner px-6 md:px-12 lg:px-16">
+        {projects.map((project, index) => (
+          <ScrollStackCard key={project.id} project={project} index={index} />
+        ))}
+        <div className="scroll-stack-end" />
+      </div>
+    </section>
+  );
 };
 
 export default SelectedWorks;
