@@ -32,16 +32,14 @@ const MenuItem: React.FC<MenuItemData & { speed: number; marqueeBgColor: string;
   const marqueeInnerRef = useRef<HTMLDivElement>(null);
   const [repetitions, setRepetitions] = useState(2);
   
-  // State to track if the menu is explicitly toggled open (for clicks/taps)
+  // Local state: Only affects THIS specific menu item
   const [isOpen, setIsOpen] = useState(false);
 
-  // Calculate how many times to repeat the items to fill the screen
   useEffect(() => {
     const calculate = () => {
       if (!marqueeInnerRef.current) return;
       const part = marqueeInnerRef.current.querySelector('.marquee__part') as HTMLElement;
       if (part) {
-        // Ensure enough repetitions to cover screen + buffer
         setRepetitions(Math.ceil(window.innerWidth / part.offsetWidth) + 2);
       }
     };
@@ -50,7 +48,6 @@ const MenuItem: React.FC<MenuItemData & { speed: number; marqueeBgColor: string;
     return () => window.removeEventListener('resize', calculate);
   }, [items]);
 
-  // GSAP Animation for the infinite scroll
   useEffect(() => {
     if (!marqueeInnerRef.current) return;
     const part = marqueeInnerRef.current.querySelector('.marquee__part') as HTMLElement;
@@ -68,10 +65,17 @@ const MenuItem: React.FC<MenuItemData & { speed: number; marqueeBgColor: string;
     return () => ctx.revert();
   }, [items, repetitions, speed]);
 
-  // Handle Click: Toggle the open state
-  const handleInteraction = (e: React.MouseEvent) => {
+  // 1. Handle clicking the TEXT (Opens the menu)
+  const handleTextClick = (e: React.MouseEvent) => {
     e.preventDefault(); 
-    setIsOpen(prev => !prev); // Toggles: Close if open, Open if closed
+    setIsOpen(!isOpen); 
+  };
+
+  // 2. Handle clicking the MARQUEE (Closes the menu)
+  const handleMarqueeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation(); 
+    setIsOpen(false);
   };
 
   return (
@@ -83,13 +87,33 @@ const MenuItem: React.FC<MenuItemData & { speed: number; marqueeBgColor: string;
       <a 
         className="menu__item-link" 
         href={link}
-        onClick={handleInteraction}
+        onClick={handleTextClick}
       >
-        {text}
+        {/* Main Text */}
+        <span className="menu__item-text">{text}</span>
+        
+        {/* 45 Degree Arrow Icon */}
+        <svg 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="2.5" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          className="menu__item-arrow"
+        >
+          <line x1="7" y1="17" x2="17" y2="7"></line>
+          <polyline points="7 7 17 7 17 17"></polyline>
+        </svg>
       </a>
-      <div className="marquee" style={{ backgroundColor: marqueeBgColor }}>
+      
+      {/* The scrolling banner */}
+      <div 
+        className="marquee" 
+        style={{ backgroundColor: marqueeBgColor }}
+        onClick={handleMarqueeClick} 
+      >
         <div className="marquee__inner" ref={marqueeInnerRef}>
-          {/* Create repetitions for infinite loop */}
           {[...Array(repetitions)].map((_, i) => (
             <div className="marquee__part" key={i}>
               {items.map((skill, idx) => (

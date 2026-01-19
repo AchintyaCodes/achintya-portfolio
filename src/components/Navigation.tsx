@@ -44,10 +44,12 @@ const Navigation = () => {
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <button
-              className="pointer-events-auto flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-black rounded-full border border-white/20 hover:border-white/40 transition-colors"
+              /* CHANGED: w-16 h-16 -> w-12 h-12 for mobile */
+              className="pointer-events-auto flex items-center justify-center w-12 h-12 md:w-20 md:h-20 bg-black rounded-full border border-white/20 hover:border-white/40 transition-colors"
               aria-label="Open menu"
             >
-              <Menu className="w-6 h-6 md:w-7 md:h-7 text-white" />
+              {/* CHANGED: w-6 h-6 -> w-5 h-5 for mobile */}
+              <Menu className="w-5 h-5 md:w-7 md:h-7 text-white" />
             </button>
           </SheetTrigger>
           <SheetContent 
