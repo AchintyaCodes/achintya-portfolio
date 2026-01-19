@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 // Components
@@ -9,42 +8,14 @@ import SkillsPhilosophy from "./SkillsPhilosophy";
 import Footer from "./Footer";
 import Contact from "./Contact";
 import Testimonial from "./Testimonial";
-import StaggeredMenu from "./StaggeredMenu"; 
+import Navigation from "@/components/Navigation";
 
 const Index = () => {
-  // Logic for Menu State (kept for internal tracking if needed)
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Define Menu Items
-  const menuItems = [
-    { label: "About", link: "#about", ariaLabel: "Go to About section" },
-    { label: "Work", link: "#work", ariaLabel: "View selected works" },
-    { label: "Philosophy", link: "#philosophy", ariaLabel: "Read philosophy" },
-    { label: "Contact", link: "#contact", ariaLabel: "Contact me" },
-  ];
-
-  const socialItems = [
-    { label: "GitHub", link: "https://github.com" },
-    { label: "LinkedIn", link: "https://linkedin.com" },
-    { label: "Twitter", link: "https://twitter.com" },
-  ];
-
   return (
     <div className="min-h-screen relative bg-black">
       
-      {/* Staggered Menu Wrapper 
-         Removed motion animations for hiding/showing. 
-         It is now always fixed at the top.
-      */}
-      <div className="fixed top-0 left-0 w-full z-50 h-0">
-        <StaggeredMenu 
-          isFixed={true}
-          items={menuItems}
-          socialItems={socialItems}
-          onMenuOpen={() => setIsMenuOpen(true)}
-          onMenuClose={() => setIsMenuOpen(false)}
-        />
-      </div>
+      {/* Navigation Menu */}
+      <Navigation />
 
       {/* Hero Section - Sticky so content scrolls over it */}
       <section className="h-screen bg-black flex flex-col justify-between px-6 py-12 md:px-16 md:py-16 sticky top-0 overflow-hidden">
