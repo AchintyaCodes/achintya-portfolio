@@ -32,3 +32,9 @@
     color: white; font-family: 'Inter', sans-serif;
     font-weight: 700; font-size: 2.5vh; text-transform: uppercase;
 }
+
+/* Add this to your FlowingMenu.css */
+.marquee__icon[alt="GitHub"],
+.marquee__icon[alt="Express"] {
+    filter: invert(1) brightness(2);
+}

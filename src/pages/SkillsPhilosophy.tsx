@@ -69,7 +69,7 @@ const SkillsPhilosophy = () => {
       <div className="flex-grow w-full border-t border-black relative overflow-hidden">
         <FlowingMenu 
           items={skillCategories}
-          speed={8}
+          speed={3}
           marqueeBgColor="#000000"
         />
       </div>

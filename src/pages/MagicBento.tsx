@@ -8,7 +8,7 @@ const MagicBento = () => {
         {/* Section Header */}
         <div className="mb-24">
           <h2 className="font-sans text-xs font-bold uppercase tracking-[0.2em]">
-            Performance Metrics
+            More About Me
           </h2>
         </div>
 

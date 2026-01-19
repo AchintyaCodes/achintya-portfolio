@@ -11,13 +11,12 @@ import Contact from "./Contact";
 import Testimonial from "./Testimonial";
 import Navigation from "@/components/Navigation";
 
-// 1. The Dynamic Logo Component (UPDATED)
+// 1. The Dynamic Logo Component
 const BrandLogo = () => {
   return (
     <div className="fixed top-6 left-6 md:top-8 md:left-10 z-50 mix-blend-difference">
       <h1 className="font-sans font-black text-2xl md:text-4xl tracking-tighter text-white flex items-start">
         MAHESH
-        {/* Adjusted size and added negative top margin to pull it to top-right */}
         <span className="text-xs md:text-lg font-medium ml-1 -mt-1 md:-mt-2">®</span>
       </h1>
     </div>
@@ -89,11 +88,15 @@ const Index = () => {
             <Testimonial />
         </div>
 
-        <div id="contact" className="bg-white text-black">
+        {/* --- MODIFIED CONTACT SECTION --- */}
+        {/* Added 'sticky top-0 z-0' so this section stays put while the footer slides over it */}
+        <div id="contact" className="sticky top-0 z-0 bg-white text-black">
             <Contact />
         </div>
         
-        <div className="bg-black text-white">
+        {/* --- MODIFIED FOOTER WRAPPER --- */}
+        {/* Added 'relative z-10' to ensure the footer sits ON TOP of the sticky contact section */}
+        <div className="relative z-10 bg-black text-white">
             <Footer />
         </div>
       </div>

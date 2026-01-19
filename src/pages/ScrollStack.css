@@ -70,10 +70,12 @@
   display: block;
 }
 
+/* Updated tech stack text color - more white */
 .client-name {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: #ffffff; /* Changed from rgba(255, 255, 255, 0.45) to pure white */
   font-weight: 500;
+  opacity: 0.95;
 }
 
 /* --- STAR BUTTON STYLE --- */
@@ -120,12 +122,14 @@
   padding: 1.5rem;
 }
 
+/* Updated project description text color - more white */
 .project-description p {
   font-size: 1.3rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.75);
+  color: #f8f8f8; /* Changed from rgba(255, 255, 255, 0.75) to off-white */
   font-weight: 400;
   margin: 0;
+  opacity: 0.9;
 }
 
 /* --- RESPONSIVE STYLES --- */
