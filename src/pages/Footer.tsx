@@ -57,13 +57,13 @@ const Footer = () => {
           </h3>
           <div className="flex flex-col gap-2">
             <a
-              href="mailto:hello@example.com"
+              href="mailto:maheshpailinked@gmail.com"
               className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide hover:underline underline-offset-4 decoration-1 w-fit flex items-center gap-1"
             >
               Email ↗
             </a>
             <a
-              href="#"
+              href="https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/"
               target="_blank"
               rel="noopener noreferrer"
               className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide hover:underline underline-offset-4 decoration-1 w-fit flex items-center gap-1"
@@ -71,7 +71,7 @@ const Footer = () => {
               LinkedIn ↗
             </a>
             <a
-              href="#"
+              href="https://github.com/MAHESHPPAI"
               target="_blank"
               rel="noopener noreferrer"
               className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide hover:underline underline-offset-4 decoration-1 w-fit flex items-center gap-1"
@@ -88,10 +88,10 @@ const Footer = () => {
               Colophon
             </h3>
             <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-white/60">
-              Built With: React / Three.js
+              Built With: React / GSAP / Framer / Lenis
             </p>
             <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-white/60">
-              Typeface: Inter
+              Typeface: Inter / Halvetica
             </p>
             <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide text-white/60">
               Deployed On: Vercel

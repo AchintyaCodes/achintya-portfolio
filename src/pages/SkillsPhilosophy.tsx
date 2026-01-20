@@ -55,7 +55,7 @@ const SkillsPhilosophy = () => {
           className="grid grid-cols-1 md:grid-cols-5 gap-y-8"
         >
           <div className="md:col-span-1">
-            <h2 className="text-xs font-bold uppercase tracking-widest">04. Skills & Philosophy</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest">Skills & Philosophy</h2>
           </div>
           <div className="md:col-span-4">
             <blockquote className="text-4xl md:text-7xl font-black uppercase leading-tight">

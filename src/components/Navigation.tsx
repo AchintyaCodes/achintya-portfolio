@@ -26,9 +26,10 @@ const navItems: NavItem[] = [
 ];
 
 const socialItems: SocialItem[] = [
-  { label: "GitHub", href: "https://github.com" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "Twitter", href: "https://twitter.com" },
+  { label: "GitHub", href: "https://github.com/MAHESHPPAI" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/" },
+  { label: "Instagram", href: "https://www.instagram.com/mahesh_3.14_/" },
+  { label: "Email", href: "mailto:maheshpailinked@gmail.com" },
 ];
 
 const Navigation = () => {
@@ -44,11 +45,9 @@ const Navigation = () => {
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <button
-              /* CHANGED: w-16 h-16 -> w-12 h-12 for mobile */
               className="pointer-events-auto flex items-center justify-center w-12 h-12 md:w-20 md:h-20 bg-black rounded-full border border-white/20 hover:border-white/40 transition-colors"
               aria-label="Open menu"
             >
-              {/* CHANGED: w-6 h-6 -> w-5 h-5 for mobile */}
               <Menu className="w-5 h-5 md:w-7 md:h-7 text-white" />
             </button>
           </SheetTrigger>
@@ -74,7 +73,8 @@ const Navigation = () => {
             </nav>
 
             <div className="mt-auto pt-12">
-              <h3 className="text-sm font-medium text-black/60 uppercase tracking-wider mb-4">
+              {/* CHANGED: text-black/60 -> text-black */}
+              <h3 className="text-sm font-medium text-black uppercase tracking-wider mb-4">
                 Socials
               </h3>
               <div className="flex flex-wrap gap-4">

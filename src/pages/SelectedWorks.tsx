@@ -11,7 +11,7 @@ const projects = [
     description: "A full-stack ERP engine automating multi-currency invoicing, inventory logic, and international tax compliance for distributed teams.",
     links: { live: "https://erpbeta.netlify.app", code: "#" },
     image: "/p1.png",
-    cta: "Live Project" // Added CTA label
+    cta: "Live Project"
   },
   {
     id: "002",
@@ -33,12 +33,12 @@ const projects = [
   },
   {
     id: "004",
-    title: "BusBuddy: Transit Management Logic", // Updated Title
-    stack: "React / Firebase / Springboot / ngrok", // Updated Stack based on typical BusBuddy tech
+    title: "BusBuddy: Transit Management Logic",
+    stack: "React / Firebase / Springboot / ngrok",
     description: "A real-time campus transportation platform that enables students to book seats and track buses live, drivers to stream GPS data during journeys, and transport officers to manage fleet availability, monitoring, and notifications seamlessly.",
-    links: { live: "https://github.com/MAHESHPPAI/Busbuddy-latest", code: "#" }, // Updated Link
+    links: { live: "https://github.com/MAHESHPPAI/Busbuddy-latest", code: "#" },
     image: "./p4.png",
-    cta: "View on Github" // Updated CTA text
+    cta: "View on Github"
   },
 ];
 
@@ -79,7 +79,12 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
       </div>
 
       <div className="content-grid">
-        <img src={project.image} className="main-image" alt={project.title} />
+        {/* UPDATED: Added w-full h-auto object-contain to ensure responsiveness without cropping */}
+        <img 
+          src={project.image} 
+          className="main-image w-full h-auto object-contain" 
+          alt={project.title} 
+        />
         <div className="project-description">
           <p>{project.description}</p>
         </div>

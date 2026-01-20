@@ -16,22 +16,22 @@ const MagicBento = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-40">
 
           <SwissItem
-            value={42}
-            suffix=""
-            label="Production Systems"
-            description="Production-grade systems designed and shipped across web platforms."
+            value={10}
+            suffix="+"
+            label="Projects Completed"
+            description="Completed multiple projects from concept to final implementation."
           />
 
           <SwissItem
-            value={8}
+            value={2}
             suffix="+"
             label="Years Experience"
             description="Building software with architectural intent and predictable system behavior."
           />
 
           <SwissItem
-            value={5000}
-            suffix=""
+            value={200}
+            suffix="+"
             label="Engineering Hours"
             description="Engineering judgment refined through real-world constraints."
           />
