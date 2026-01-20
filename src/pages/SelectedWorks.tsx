@@ -9,34 +9,36 @@ const projects = [
     title: "Enterprise Resource Architecture",
     stack: "React / Node.js / Firebase / Firestore",
     description: "A full-stack ERP engine automating multi-currency invoicing, inventory logic, and international tax compliance for distributed teams.",
-    // UPDATED LINK
     links: { live: "https://erpbeta.netlify.app", code: "#" },
-    // UPDATED IMAGE (Referencing file in public folder)
-    image: "/p1.png"
+    image: "/p1.png",
+    cta: "Live Project" // Added CTA label
   },
   {
     id: "002",
     title: "Geospatial Workforce Analytics",
-    stack: "React / Redux / Google Maps API",
+    stack: "React / Redux / Google Maps API/ Firebase",
     description: "Real-time tracking system implementing location-based validation protocols and live route visualization for workforce monitoring.",
     links: { live: "#", code: "#" },
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop"
+    image: "/p2.png",
+    cta: "Live Project"
   },
   {
     id: "003",
-    title: "Aero Port: High-Availability Engine",
-    stack: "PHP / MySQL / Relational Database",
-    description: "A seamless flight booking architecture enabling complex user account management and secure administrative data control.",
-    links: { live: "#", code: "#" },
-    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop"
+    title: "OrderEase: Real-time online table food ordering system",
+    stack: "React / Firebase / Node.js",
+    description: "A real-time restaurant table ordering system that allows customers to place food orders directly from their table while enabling admins to manage menus, waiters, and assign waiters to customers for seamless service coordination.",
+    links: { live: "https://github.com/MAHESHPPAI/OrderEase", code: "#" },
+    image: "./p3.png",
+    cta: "View on Github"
   },
   {
     id: "004",
-    title: "Checkmate: State Management Logic",
-    stack: "Python / PyGame / XML Serialization",
-    description: "A multiplayer chess engine featuring valid move detection algorithms and XML-based game state persistence.",
-    links: { live: "#", code: "#" },
-    image: "https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=800&h=600&fit=crop"
+    title: "BusBuddy: Transit Management Logic", // Updated Title
+    stack: "React / Firebase / Springboot / ngrok", // Updated Stack based on typical BusBuddy tech
+    description: "A real-time campus transportation platform that enables students to book seats and track buses live, drivers to stream GPS data during journeys, and transport officers to manage fleet availability, monitoring, and notifications seamlessly.",
+    links: { live: "https://github.com/MAHESHPPAI/Busbuddy-latest", code: "#" }, // Updated Link
+    image: "./p4.png",
+    cta: "View on Github" // Updated CTA text
   },
 ];
 
@@ -64,7 +66,6 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
 
         <StarBorder 
           as="a" 
-          // UPDATED: Now uses the dynamic link from the project data
           href={project.links.live} 
           target="_blank"
           rel="noopener noreferrer"
@@ -72,7 +73,8 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
           color="#f6d365, #fda085"
           speed="3s"
         >
-          Live Project
+          {/* DYNAMIC TEXT BASED ON DATA */}
+          {project.cta} 
         </StarBorder>
       </div>
 
@@ -86,7 +88,7 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
   );
 };
 
-// ScrollStack configuration
+
 const CONFIG = {
   itemDistance: 100,
   itemScale: 0.015,
