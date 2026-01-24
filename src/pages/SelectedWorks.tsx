@@ -73,17 +73,17 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
           color="#f6d365, #fda085"
           speed="3s"
         >
-          {/* DYNAMIC TEXT BASED ON DATA */}
           {project.cta} 
         </StarBorder>
       </div>
 
       <div className="content-grid">
-        {/* UPDATED: Added w-full h-auto object-contain to ensure responsiveness without cropping */}
         <img 
           src={project.image} 
           className="main-image w-full h-auto object-contain" 
-          alt={project.title} 
+          alt={project.title}
+          // FIX 1: Force a window resize event when image loads to trigger recalculation
+          onLoad={() => window.dispatchEvent(new Event('resize'))}
         />
         <div className="project-description">
           <p>{project.description}</p>
@@ -114,11 +114,10 @@ const SelectedWorks = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      // CHANGED: Now checks for < 1024px to include both Mobile AND Tablet
       if (window.innerWidth < 1024) {
-        setMarqueeDuration(10); // Fast speed for Mobile & Tablet
+        setMarqueeDuration(10); 
       } else {
-        setMarqueeDuration(25); // Normal speed for Desktop
+        setMarqueeDuration(25);
       }
     };
 
@@ -147,7 +146,7 @@ const SelectedWorks = () => {
 
   const updateCardTransforms = useCallback(() => {
     const scrollTop = window.scrollY;
-    if (Math.abs(scrollTop - lastScrollRef.current) < 0.5) return;
+    // Removed the optimization check (Math.abs < 0.5) to ensure initial render is always accurate
     lastScrollRef.current = scrollTop;
 
     const cards = cardsRef.current;
@@ -197,38 +196,52 @@ const SelectedWorks = () => {
     });
   }, [updateCardTransforms]);
 
+  // Wrapper function to handle recalculations
+  const calculateAndRender = useCallback(() => {
+    cachePositions();
+    updateCardTransforms();
+  }, [cachePositions, updateCardTransforms]);
+
   useEffect(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
+    
+    // Initial Styles
     cards.forEach((card, i) => {
       if (i < cards.length - 1) card.style.marginBottom = `${CONFIG.itemDistance}px`;
       card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
     });
 
-    const initTimer = setTimeout(() => {
-      cachePositions();
-      updateCardTransforms();
-    }, 100);
+    // FIX 2: ResizeObserver
+    // This watches the cards for size changes (like images loading) and recalculates positions
+    const resizeObserver = new ResizeObserver(() => {
+      calculateAndRender();
+    });
+
+    cards.forEach((card) => {
+      resizeObserver.observe(card);
+    });
+
+    // Initial calculation sequence
+    calculateAndRender();
+    const initTimer = setTimeout(calculateAndRender, 100);
+    const backupTimer = setTimeout(calculateAndRender, 500); 
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', cachePositions, { passive: true });
+    window.addEventListener('resize', calculateAndRender, { passive: true });
 
     return () => {
       clearTimeout(initTimer);
+      clearTimeout(backupTimer);
+      resizeObserver.disconnect();
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', cachePositions);
+      window.removeEventListener('resize', calculateAndRender);
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
-  }, [cachePositions, updateCardTransforms, onScroll]);
+  }, [calculateAndRender, onScroll]);
 
   return (
     <section className="min-h-screen bg-black text-white font-sans relative">
-      
-      {/* UPDATED HEIGHTS:
-          Mobile (<768px): h-[25vh]
-          Tablet (≥768px): h-[50vh]
-          Desktop (≥1024px): h-[75vh]
-      */}
       <div className="w-full h-[25vh] md:h-[50vh] lg:h-[75vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
         <motion.div
           className="flex whitespace-nowrap items-center"
