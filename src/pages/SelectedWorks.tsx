@@ -82,7 +82,6 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
           src={project.image} 
           className="main-image w-full h-auto object-contain" 
           alt={project.title}
-          // FIX 1: Force a window resize event when image loads to trigger recalculation
           onLoad={() => window.dispatchEvent(new Event('resize'))}
         />
         <div className="project-description">
@@ -127,26 +126,10 @@ const SelectedWorks = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const cachePositions = useCallback(() => {
-    const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
-    cardsRef.current = cards;
-    
-    const scrollY = window.scrollY;
-    cardOffsetsRef.current = cards.map(card => {
-      const rect = card.getBoundingClientRect();
-      return rect.top + scrollY;
-    });
-
-    const endElement = document.querySelector('.scroll-stack-end') as HTMLElement;
-    if (endElement) {
-      const rect = endElement.getBoundingClientRect();
-      endOffsetRef.current = rect.top + scrollY;
-    }
-  }, []);
-
+  // --- UPDATED LOGIC HERE ---
   const updateCardTransforms = useCallback(() => {
     const scrollTop = window.scrollY;
-    // Removed the optimization check (Math.abs < 0.5) to ensure initial render is always accurate
+    // Always run on mobile to ensure smoothness even if scroll delta is small
     lastScrollRef.current = scrollTop;
 
     const cards = cardsRef.current;
@@ -188,6 +171,36 @@ const SelectedWorks = () => {
     }
   }, []);
 
+  // --- CRITICAL FIX IN THIS FUNCTION ---
+  const cachePositions = useCallback(() => {
+    const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
+    cardsRef.current = cards;
+    
+    // 1. TEMPORARILY RESET TRANSFORMS
+    // We must clear the 'transform' style so we can measure the element's 
+    // true position in the document flow, unaffected by previous scroll animations.
+    cards.forEach(card => card.style.transform = '');
+
+    // 2. MEASURE
+    const scrollY = window.scrollY;
+    cardOffsetsRef.current = cards.map(card => {
+      const rect = card.getBoundingClientRect();
+      return rect.top + scrollY;
+    });
+
+    const endElement = document.querySelector('.scroll-stack-end') as HTMLElement;
+    if (endElement) {
+      const rect = endElement.getBoundingClientRect();
+      endOffsetRef.current = rect.top + scrollY;
+    }
+
+    // 3. RE-APPLY TRANSFORMS IMMEDIATELY
+    // If we don't do this, there might be a visible flash where cards jump to 
+    // their natural position before the next scroll frame picks them up.
+    updateCardTransforms();
+
+  }, [updateCardTransforms]);
+
   const onScroll = useCallback(() => {
     if (rafIdRef.current) return;
     rafIdRef.current = requestAnimationFrame(() => {
@@ -196,24 +209,19 @@ const SelectedWorks = () => {
     });
   }, [updateCardTransforms]);
 
-  // Wrapper function to handle recalculations
   const calculateAndRender = useCallback(() => {
     cachePositions();
-    updateCardTransforms();
-  }, [cachePositions, updateCardTransforms]);
+  }, [cachePositions]);
 
   useEffect(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
     
-    // Initial Styles
     cards.forEach((card, i) => {
       if (i < cards.length - 1) card.style.marginBottom = `${CONFIG.itemDistance}px`;
       card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
     });
 
-    // FIX 2: ResizeObserver
-    // This watches the cards for size changes (like images loading) and recalculates positions
     const resizeObserver = new ResizeObserver(() => {
       calculateAndRender();
     });
@@ -222,7 +230,6 @@ const SelectedWorks = () => {
       resizeObserver.observe(card);
     });
 
-    // Initial calculation sequence
     calculateAndRender();
     const initTimer = setTimeout(calculateAndRender, 100);
     const backupTimer = setTimeout(calculateAndRender, 500); 
@@ -266,7 +273,8 @@ const SelectedWorks = () => {
         {projects.map((project, index) => (
           <ScrollStackCard key={project.id} project={project} index={index} />
         ))}
-        <div className="scroll-stack-end" />
+        {/* Added some bottom padding to ensure the last card has room to unpin nicely on mobile */}
+        <div className="scroll-stack-end h-[20vh]" /> 
       </div>
     </section>
   );
