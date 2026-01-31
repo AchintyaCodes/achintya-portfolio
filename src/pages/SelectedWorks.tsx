@@ -249,7 +249,7 @@ const SelectedWorks = () => {
 
   return (
     <section className="min-h-screen bg-black text-white font-sans relative">
-      <div className="w-full h-[25vh] md:h-[50vh] lg:h-[60vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
+      <div className="w-full h-[25vh] md:h-[50vh] lg:h-[70vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
         <motion.div
           className="flex whitespace-nowrap items-center"
           initial={{ x: "0%" }}
