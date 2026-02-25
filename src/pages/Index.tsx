@@ -21,7 +21,7 @@ const CursorFollower = () => {
   // damping: Controls the "bounciness". 20 provides a smooth stop without wobbling.
   // mass: Adds a feeling of weight.
   const springConfig = { damping: 20, stiffness: 100, mass: 0.8 };
-  
+
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
 
@@ -61,10 +61,10 @@ const BrandLogo = () => {
 const Index = () => {
   return (
     <div className="min-h-screen relative bg-black selection:bg-white selection:text-black">
-      
+
       {/* 2. Insert the Logo */}
       <BrandLogo />
-      
+
       {/* Insert Custom Cursor Follower here */}
       <CursorFollower />
 
@@ -72,11 +72,11 @@ const Index = () => {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="h-screen bg-black flex flex-col justify-between px-6 py-12 md:px-16 md:py-16 sticky top-0 overflow-hidden z-0">
+      <section className="h-screen bg-black flex flex-col justify-end px-6 py-12 md:px-16 md:py-16 sticky top-0 overflow-hidden z-0">
         <SplashCursor />
 
-        {/* THE HEADLINE - Centered for Mobile/Tablet, Top-aligned for Desktop */}
-        <div className="z-10 flex-1 flex items-center justify-center md:items-start md:justify-start md:mt-32">
+        {/* THE HEADLINE - Anchored just above subtext on all viewports */}
+        <div className="z-10 mt-auto mb-6 md:mb-8">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
@@ -109,29 +109,29 @@ const Index = () => {
       {/* Content wrapper */}
       <div className="relative z-10">
         <div id="about" className="bg-white text-black">
-            <About />
+          <About />
         </div>
-        
+
         <div id="work" className="bg-black text-white">
-            <SelectedWorks />
+          <SelectedWorks />
         </div>
-        
+
         <div id="philosophy" className="bg-white text-black">
-            <SkillsPhilosophy />
+          <SkillsPhilosophy />
         </div>
-        
+
         <div className="bg-black text-white">
-            <Testimonial />
+          <Testimonial />
         </div>
 
         {/* --- MODIFIED CONTACT SECTION --- */}
         <div id="contact" className="sticky top-0 z-0 bg-white text-black">
-            <Contact />
+          <Contact />
         </div>
-        
+
         {/* --- MODIFIED FOOTER WRAPPER --- */}
         <div className="relative z-10 bg-black text-white">
-            <Footer />
+          <Footer />
         </div>
       </div>
     </div>

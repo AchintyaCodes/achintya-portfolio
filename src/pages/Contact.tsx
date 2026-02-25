@@ -71,7 +71,7 @@ const Contact = () => {
       >
         {/* Left Column */}
         <div className="lg:col-span-7 flex flex-col justify-between h-full py-2">
-          <motion.div variants={itemVariants}>
+          <motion.div variants={itemVariants} className="mb-8 lg:mb-0">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tight text-left">
               Contact <br />
               Me <span className="inline-block ml-2">→</span>

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useCallback, useState } from "react";
-import StarBorder from "../components/StarBorder"; 
+import StarBorder from "../components/StarBorder";
 import './ScrollStack.css';
 
 const projects = [
@@ -49,9 +49,9 @@ interface ScrollStackCardProps {
 
 const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
   return (
-    <StarBorder 
-      as="div" 
-      className="scroll-stack-card" 
+    <StarBorder
+      as="div"
+      className="scroll-stack-card"
       color="#00f2fe, #4facfe, #7000ff"
       speed="8s"
     >
@@ -64,23 +64,23 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
           </div>
         </div>
 
-        <StarBorder 
-          as="a" 
-          href={project.links.live} 
+        <StarBorder
+          as="a"
+          href={project.links.live}
           target="_blank"
           rel="noopener noreferrer"
           className="live-btn-star"
           color="#f6d365, #fda085"
           speed="3s"
         >
-          {project.cta} 
+          {project.cta}
         </StarBorder>
       </div>
 
       <div className="content-grid">
-        <img 
-          src={project.image} 
-          className="main-image w-full h-auto object-contain" 
+        <img
+          src={project.image}
+          className="main-image w-full h-auto object-contain"
           alt={project.title}
           onLoad={() => window.dispatchEvent(new Event('resize'))}
         />
@@ -93,13 +93,23 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
 };
 
 
-const CONFIG = {
+const BASE_CONFIG = {
   itemDistance: 100,
   itemScale: 0.015,
   itemStackDistance: 18,
   stackPosition: 0.08,
   scaleEndPosition: 0.05,
   baseScale: 0.92,
+};
+
+/** Returns config with stackPosition adjusted for tablets (768-1024px) */
+const getConfig = () => {
+  const w = window.innerWidth;
+  if (w >= 768 && w < 1024) {
+    // Tablet: push stacking point to ~30% from top (≈ vertical centre)
+    return { ...BASE_CONFIG, stackPosition: 0.30 };
+  }
+  return BASE_CONFIG;
 };
 
 const SelectedWorks = () => {
@@ -114,7 +124,7 @@ const SelectedWorks = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024) {
-        setMarqueeDuration(10); 
+        setMarqueeDuration(10);
       } else {
         setMarqueeDuration(25);
       }
@@ -135,17 +145,18 @@ const SelectedWorks = () => {
     const cards = cardsRef.current;
     const cardOffsets = cardOffsetsRef.current;
     const endElementTop = endOffsetRef.current;
-    
+
     if (!cards.length || !cardOffsets.length) return;
 
+    const cfg = getConfig();
     const containerHeight = window.innerHeight;
-    const stackPositionPx = CONFIG.stackPosition * containerHeight;
-    const scaleEndPositionPx = CONFIG.scaleEndPosition * containerHeight;
+    const stackPositionPx = cfg.stackPosition * containerHeight;
+    const scaleEndPositionPx = cfg.scaleEndPosition * containerHeight;
 
     for (let i = 0; i < cards.length; i++) {
       const card = cards[i];
       const cardTop = cardOffsets[i];
-      const triggerStart = cardTop - stackPositionPx - CONFIG.itemStackDistance * i;
+      const triggerStart = cardTop - stackPositionPx - cfg.itemStackDistance * i;
       const triggerEnd = cardTop - scaleEndPositionPx;
       const pinStart = triggerStart;
       const pinEnd = endElementTop - containerHeight * 0.5;
@@ -157,14 +168,14 @@ const SelectedWorks = () => {
         scaleProgress = (scrollTop - triggerStart) / (triggerEnd - triggerStart);
       }
 
-      const targetScale = CONFIG.baseScale + i * CONFIG.itemScale;
+      const targetScale = cfg.baseScale + i * cfg.itemScale;
       const scale = 1 - scaleProgress * (1 - targetScale);
 
       let translateY = 0;
       if (scrollTop >= pinStart && scrollTop <= pinEnd) {
-        translateY = scrollTop - cardTop + stackPositionPx + CONFIG.itemStackDistance * i;
+        translateY = scrollTop - cardTop + stackPositionPx + cfg.itemStackDistance * i;
       } else if (scrollTop > pinEnd) {
-        translateY = pinEnd - cardTop + stackPositionPx + CONFIG.itemStackDistance * i;
+        translateY = pinEnd - cardTop + stackPositionPx + cfg.itemStackDistance * i;
       }
 
       card.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
@@ -175,7 +186,7 @@ const SelectedWorks = () => {
   const cachePositions = useCallback(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
     cardsRef.current = cards;
-    
+
     // 1. TEMPORARILY RESET TRANSFORMS
     // We must clear the 'transform' style so we can measure the element's 
     // true position in the document flow, unaffected by previous scroll animations.
@@ -215,9 +226,9 @@ const SelectedWorks = () => {
 
   useEffect(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
-    
+
     cards.forEach((card, i) => {
-      if (i < cards.length - 1) card.style.marginBottom = `${CONFIG.itemDistance}px`;
+      if (i < cards.length - 1) card.style.marginBottom = `${getConfig().itemDistance}px`;
       card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
     });
@@ -232,7 +243,7 @@ const SelectedWorks = () => {
 
     calculateAndRender();
     const initTimer = setTimeout(calculateAndRender, 100);
-    const backupTimer = setTimeout(calculateAndRender, 500); 
+    const backupTimer = setTimeout(calculateAndRender, 500);
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', calculateAndRender, { passive: true });
@@ -274,7 +285,7 @@ const SelectedWorks = () => {
           <ScrollStackCard key={project.id} project={project} index={index} />
         ))}
         {/* Added some bottom padding to ensure the last card has room to unpin nicely on mobile */}
-        <div className="scroll-stack-end h-[20vh]" /> 
+        <div className="scroll-stack-end h-[20vh]" />
       </div>
     </section>
   );
