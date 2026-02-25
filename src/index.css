@@ -103,14 +103,13 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Removed scroll-behavior: smooth — Lenis handles this now */
     margin: 0 !important;
     padding: 0 !important;
     width: 100%;
     max-width: 100%;
     overflow-x: clip;
     background-color: theme('colors.black');
-    /* Ensures any browser-injected overscroll or canvas margins at top match the dark mode start */
   }
 
   body {
