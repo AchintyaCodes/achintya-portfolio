@@ -1,16 +1,10 @@
-import { useState } from "react";
-import { Menu } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
 interface NavItem {
   label: string;
   href: string;
+  number: string;
 }
 
 interface SocialItem {
@@ -19,10 +13,10 @@ interface SocialItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "About", href: "#about" },
-  { label: "Work", href: "#work" },
-  { label: "Philosophy", href: "#philosophy" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "#about", number: "01" },
+  { label: "Work", href: "#work", number: "02" },
+  { label: "Philosophy", href: "#philosophy", number: "03" },
+  { label: "Contact", href: "#contact", number: "04" },
 ];
 
 const socialItems: SocialItem[] = [
@@ -32,69 +26,183 @@ const socialItems: SocialItem[] = [
   { label: "Email", href: "mailto:maheshpailinked@gmail.com" },
 ];
 
+const ease = [0.76, 0, 0.24, 1] as [number, number, number, number];
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+const overlayVariants: Variants = {
+  closed: {
+    clipPath: "inset(0% 0% 100% 0%)",
+    transition: { duration: 1.4, ease }, // ← was 1.0
+  },
+  open: {
+    clipPath: "inset(0% 0% 0% 0%)",
+    transition: { duration: 1.6, ease }, // ← was 1.0
+  },
+};
+
+const itemVariants: Variants = {
+  closed: {
+    y: 40,
+    opacity: 0,
+    transition: { duration: 0.7, ease }, // ← was 0.5
+  },
+  open: (i: number) => ({
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 1.0,                     // ← was 0.7
+      delay: 0.5 + i * 0.12,            // ← was 0.3 + i * 0.08, longer stagger
+      ease: easeOut,
+    },
+  }),
+};
+
+const socialVariants: Variants = {
+  closed: {
+    opacity: 0,
+    y: 10,
+    transition: { duration: 0.6, ease }, // ← was 0.4
+  },
+  open: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,                     // ← was 0.5
+      delay: 0.9 + i * 0.08,            // ← was 0.65 + i * 0.05
+      ease: "easeOut",
+    },
+  }),
+};
+
 const Navigation = () => {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const handleNavClick = () => {
     setOpen(false);
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 pointer-events-none">
-      <header className="flex items-center justify-end p-6 md:p-8">
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <button
-              className="pointer-events-auto flex items-center justify-center w-12 h-12 md:w-20 md:h-20 bg-black rounded-full border border-white/30 hover:border-white/40 transition-colors"
-              aria-label="Open menu"
-            >
-              <Menu className="w-5 h-5 md:w-7 md:h-7 text-white" />
-            </button>
-          </SheetTrigger>
-          <SheetContent 
-            side="right" 
-            className="w-full sm:max-w-md bg-white border-l border-black/10 p-8 pt-20"
+    <>
+      {/* Hamburger Button */}
+      <div
+        className="fixed top-6 right-6 md:top-8 md:right-10 z-[200]"
+        style={{ transform: "translateZ(0)", willChange: "transform" }}
+      >
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="flex flex-col items-center justify-center gap-[5px] w-14 h-14 md:w-16 md:h-16 rounded-full bg-black transition-colors duration-300"
+          style={{
+            boxShadow: "0 0 0 1px rgba(255, 255, 255, 0.6)",
+            WebkitFontSmoothing: "antialiased",
+          }}
+          aria-label={open ? "Close menu" : "Open menu"}
+        >
+          <motion.span
+            animate={open ? { rotate: 45, y: 7, width: "18px" } : { rotate: 0, y: 0, width: "22px" }}
+            transition={{ duration: 0.7, ease }} // ← was 0.5
+            className="block h-[1.5px] bg-white origin-center"
+            style={{ width: "22px" }}
+          />
+          <motion.span
+            animate={open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+            transition={{ duration: 0.4, ease }} // ← was 0.3
+            className="block h-[1.5px] bg-white origin-center"
+            style={{ width: "22px" }}
+          />
+          <motion.span
+            animate={open ? { rotate: -45, y: -7, width: "18px" } : { rotate: 0, y: 0, width: "22px" }}
+            transition={{ duration: 0.7, ease }} // ← was 0.5
+            className="block h-[1.5px] bg-white origin-center"
+            style={{ width: "22px" }}
+          />
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="menu"
+            variants={overlayVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className="fixed inset-0 z-[100] bg-black flex flex-col justify-between px-8 md:px-16 pt-16 pb-10 md:pt-20 md:pb-14"
           >
-            <SheetHeader className="sr-only">
-              <SheetTitle>Navigation Menu</SheetTitle>
-            </SheetHeader>
-            
-            <nav className="flex flex-col gap-2">
-              {navItems.map((item) => (
-                <a
+            {/* Socials row */}
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-4 pt-10 md:pt-0">
+              <p className="text-sm text-white/70 uppercase tracking-widest font-mono mr-2">
+                Socials
+              </p>
+              {socialItems.map((item, i) => (
+                <motion.a
                   key={item.label}
                   href={item.href}
-                  onClick={handleNavClick}
-                  className="text-4xl md:text-5xl font-semibold text-black uppercase tracking-tight hover:opacity-60 transition-opacity py-2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  custom={i}
+                  variants={socialVariants}
+                  initial="closed"
+                  animate="open"
+                  exit="closed"
+                  className="text-base md:text-lg font-medium text-white hover:opacity-40 transition-opacity"
                 >
                   {item.label}
-                </a>
+                </motion.a>
+              ))}
+            </div>
+
+            {/* Nav Links */}
+            <nav className="flex flex-col gap-0">
+              {navItems.map((item, i) => (
+                <div
+                  key={item.label}
+                  className="overflow-hidden border-b border-white/25 py-3 md:py-4"
+                >
+                  <motion.a
+                    href={item.href}
+                    onClick={handleNavClick}
+                    custom={i}
+                    variants={itemVariants}
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                    className="flex items-baseline justify-between group cursor-pointer"
+                  >
+                    <span className="text-5xl md:text-7xl lg:text-8xl font-semibold text-white uppercase tracking-tight leading-none group-hover:translate-x-3 transition-transform duration-300 ease-out">
+                      {item.label}
+                    </span>
+                    <span className="text-xs text-white/55 font-mono tracking-widest self-start mt-2">
+                      {item.number}
+                    </span>
+                  </motion.a>
+                </div>
               ))}
             </nav>
 
-            <div className="mt-auto pt-12">
-              {/* CHANGED: text-black/60 -> text-black */}
-              <h3 className="text-sm font-medium text-black uppercase tracking-wider mb-4">
-                Socials
-              </h3>
-              <div className="flex flex-wrap gap-4">
-                {socialItems.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-lg font-medium text-black hover:opacity-60 transition-opacity"
-                  >
-                    {item.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
-      </header>
-    </div>
+            {/* Bottom copyright */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { delay: 1.2, duration: 0.8 } }}
+              exit={{ opacity: 0, transition: { duration: 0.6 } }}
+              className="text-xs text-white/20 font-mono tracking-widest mt-8 md:mt-0 md:self-end"
+            >
+              © 2026 MAHESH
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
