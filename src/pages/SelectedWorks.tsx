@@ -102,15 +102,7 @@ const BASE_CONFIG = {
   baseScale: 0.92,
 };
 
-/** Returns config with stackPosition adjusted for tablets (768-1024px) */
-const getConfig = () => {
-  const w = window.innerWidth;
-  if (w >= 768 && w < 1024) {
-    // Tablet: push stacking point to ~30% from top (≈ vertical centre)
-    return { ...BASE_CONFIG, stackPosition: 0.30 };
-  }
-  return BASE_CONFIG;
-};
+
 
 const SelectedWorks = () => {
   const cardsRef = useRef<HTMLElement[]>([]);
@@ -148,15 +140,18 @@ const SelectedWorks = () => {
 
     if (!cards.length || !cardOffsets.length) return;
 
-    const cfg = getConfig();
     const containerHeight = window.innerHeight;
-    const stackPositionPx = cfg.stackPosition * containerHeight;
-    const scaleEndPositionPx = cfg.scaleEndPosition * containerHeight;
+    const firstCardHeight = cards[0].offsetHeight;
+
+    // Dynamically center the first card vertically
+    const stackPositionPx = (containerHeight - firstCardHeight) / 2;
+    // Maintain the original scroll scaling duration (difference between stackPosition and scaleEndPosition)
+    const scaleEndPositionPx = stackPositionPx - (BASE_CONFIG.stackPosition - BASE_CONFIG.scaleEndPosition) * containerHeight;
 
     for (let i = 0; i < cards.length; i++) {
       const card = cards[i];
       const cardTop = cardOffsets[i];
-      const triggerStart = cardTop - stackPositionPx - cfg.itemStackDistance * i;
+      const triggerStart = cardTop - stackPositionPx - BASE_CONFIG.itemStackDistance * i;
       const triggerEnd = cardTop - scaleEndPositionPx;
       const pinStart = triggerStart;
       const pinEnd = endElementTop - containerHeight * 0.5;
@@ -168,14 +163,14 @@ const SelectedWorks = () => {
         scaleProgress = (scrollTop - triggerStart) / (triggerEnd - triggerStart);
       }
 
-      const targetScale = cfg.baseScale + i * cfg.itemScale;
+      const targetScale = BASE_CONFIG.baseScale + i * BASE_CONFIG.itemScale;
       const scale = 1 - scaleProgress * (1 - targetScale);
 
       let translateY = 0;
       if (scrollTop >= pinStart && scrollTop <= pinEnd) {
-        translateY = scrollTop - cardTop + stackPositionPx + cfg.itemStackDistance * i;
+        translateY = scrollTop - cardTop + stackPositionPx + BASE_CONFIG.itemStackDistance * i;
       } else if (scrollTop > pinEnd) {
-        translateY = pinEnd - cardTop + stackPositionPx + cfg.itemStackDistance * i;
+        translateY = pinEnd - cardTop + stackPositionPx + BASE_CONFIG.itemStackDistance * i;
       }
 
       card.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
@@ -228,7 +223,7 @@ const SelectedWorks = () => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
 
     cards.forEach((card, i) => {
-      if (i < cards.length - 1) card.style.marginBottom = `${getConfig().itemDistance}px`;
+      if (i < cards.length - 1) card.style.marginBottom = `${BASE_CONFIG.itemDistance}px`;
       card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
     });
@@ -260,7 +255,7 @@ const SelectedWorks = () => {
 
   return (
     <section className="min-h-screen bg-black text-white font-sans relative">
-      <div className="w-full h-[25vh] md:h-[50vh] lg:h-[70vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
+      <div className="w-full h-[25vh] md:h-[25vh] lg:h-[70vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
         <motion.div
           className="flex whitespace-nowrap items-center"
           initial={{ x: "0%" }}

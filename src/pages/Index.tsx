@@ -73,7 +73,9 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="h-screen bg-black flex flex-col justify-end px-6 py-12 md:px-16 md:py-16 sticky top-0 overflow-hidden z-0">
-        <SplashCursor />
+        <div className="hidden lg:block">
+          <SplashCursor />
+        </div>
 
         {/* THE HEADLINE - Anchored just above subtext on all viewports */}
         <div className="z-10 mt-auto mb-6 md:mb-8">
