@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { motion, useScroll, useMotionValueEvent, useSpring, useMotionValue } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, useSpring, useMotionValue } from "framer-motion";
 
 // Components
 import About from "./About";
@@ -11,7 +11,7 @@ import Contact from "./Contact";
 import Testimonial from "./Testimonial";
 import Navigation from "@/components/Navigation";
 
-// --- NEW COMPONENT: Cursor Follower ---
+// --- Cursor Follower ---
 const CursorFollower = () => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -58,21 +58,222 @@ const BrandLogo = () => {
   );
 };
 
+// --- Availability Badge — top center, hero-scoped ---
+const AvailabilityBadge = () => (
+  <motion.div
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.4, ease: "easeOut" }}
+    className="absolute z-10 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2 pointer-events-none"
+    style={{ top: "2.25rem" }}
+  >
+    <span className="relative flex h-1.5 w-1.5">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-400" />
+    </span>
+    <span className="font-sans font-black text-[9px] tracking-[0.25em] uppercase text-white">
+      Available for work
+    </span>
+  </motion.div>
+);
+
+// --- Vertical Social Strip — hero-scoped ---
+const SocialStrip = () => {
+  const socials = [
+    { label: "GitHub", href: "https://github.com/MAHESHPPAI" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/" },
+    { label: "Instagram", href: "https://www.instagram.com/mahesh_3.14_/" },
+    { label: "Email", href: "mailto:maheshpailinked@gmail.com" },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="absolute z-20 hidden md:flex flex-col items-center"
+      style={{
+        right: "64px",
+        top: "112px",
+        bottom: "194px",
+        justifyContent: "center",
+        gap: "1rem",
+      }}
+    >
+      {/* Decorative line above GitHub */}
+      <span className="w-[1px] h-8 bg-white/30 flex-shrink-0" />
+
+      {socials.map(({ label, href }) => (
+        <a
+          key={label}
+          href={href}
+          target={href.startsWith("mailto") ? "_self" : "_blank"}
+          rel="noopener noreferrer"
+          title={label}
+          className="group flex-shrink-0"
+          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+        >
+          <span className="font-sans font-black text-[10px] tracking-[0.22em] uppercase text-white opacity-75 group-hover:opacity-100 transition-opacity duration-300">
+            {label}
+          </span>
+        </a>
+      ))}
+
+      {/* Decorative line below Email */}
+      <span className="w-[1px] h-8 bg-white/30 flex-shrink-0" />
+    </motion.div>
+  );
+};
+
+// --- Spinning Circular CTA — hero-scoped ---
+const SpinningCTA = () => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    className="absolute z-10 hidden md:flex items-center justify-center"
+    style={{ bottom: "4rem", right: "4rem" }}
+  >
+    <style>{`
+      @keyframes ctaSpin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      .cta-ring {
+        animation: ctaSpin var(--cta-spin-duration, 10s) linear infinite;
+        transform-origin: center;
+      }
+      .cta-wrap:hover .cta-ring {
+        --cta-spin-duration: 3s;
+      }
+      .cta-wrap {
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .cta-wrap:hover {
+        transform: scale(1.08);
+      }
+    `}</style>
+
+    <a
+      href="#contact"
+      className="cta-wrap group relative flex items-center justify-center w-[130px] h-[130px]"
+      aria-label="Get in touch"
+    >
+      {/* Static outer border ring */}
+      <svg
+        viewBox="0 0 130 130"
+        className="absolute inset-0 w-full h-full pointer-events-none"
+      >
+        <circle
+          cx="65" cy="65" r="62"
+          fill="none"
+          stroke="rgba(255,255,255,0.6)"
+          strokeWidth="1.5"
+        />
+      </svg>
+
+      {/* Spinning text ring */}
+      <svg
+        viewBox="0 0 130 130"
+        className="cta-ring absolute inset-0 w-full h-full pointer-events-none"
+      >
+        <defs>
+          <path
+            id="cta-circle-path"
+            d="M65,65 m-50,0 a50,50 0 1,1 100,0 a50,50 0 1,1 -100,0"
+          />
+        </defs>
+        <text
+          fill="rgba(255,255,255,1)"
+          fontSize="8.5"
+          fontFamily="'Inter', sans-serif"
+          fontWeight="900"
+          letterSpacing="4"
+        >
+          <textPath href="#cta-circle-path">
+            GET IN TOUCH · GET IN TOUCH · GET IN TOUCH ·&nbsp;
+          </textPath>
+        </text>
+      </svg>
+
+      {/* Hover fill circle */}
+      <span
+        className="absolute inset-4 rounded-full bg-white scale-0 group-hover:scale-100 transition-transform duration-500 ease-in-out"
+        style={{ transformOrigin: "center" }}
+      />
+
+      {/* Center arrow */}
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        className="relative z-10 w-6 h-6 text-white group-hover:text-black"
+        style={{ transition: "color 0.3s ease, transform 0.3s ease" }}
+      >
+        <path d="M7 17L17 7M17 7H7M17 7v10" />
+      </svg>
+    </a>
+  </motion.div>
+);
+
+// --- Mobile Social Strip (hero section, small screens only) ---
+const MobileSocialStrip = () => {
+  const socials = [
+    { label: "GH", href: "https://github.com/MAHESHPPAI" },
+    { label: "LI", href: "https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/" },
+    { label: "IG", href: "https://www.instagram.com/mahesh_3.14_/" },
+    { label: "✉", href: "mailto:maheshpailinked@gmail.com" },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
+      className="absolute right-6 top-[35%] z-10 flex flex-col items-center gap-5 md:hidden"
+    >
+      {socials.map(({ label, href }) => (
+        <a
+          key={label}
+          href={href}
+          target={href.startsWith("mailto") ? "_self" : "_blank"}
+          rel="noopener noreferrer"
+          className="font-sans font-black text-[10px] tracking-[0.2em] text-white opacity-50 hover:opacity-100 uppercase transition-opacity duration-300 block"
+        >
+          {label}
+        </a>
+      ))}
+    </motion.div>
+  );
+};
+
 const Index = () => {
   return (
     <div className="min-h-screen relative bg-black selection:bg-white selection:text-black">
 
-      {/* 2. Insert the Logo */}
+      {/* Logo */}
       <BrandLogo />
 
-      {/* Insert Custom Cursor Follower here */}
+      {/* Custom Cursor Follower */}
       <CursorFollower />
 
       {/* Navigation Menu */}
       <Navigation />
 
-      {/* Hero Section */}
-      <section className="h-screen bg-black flex flex-col justify-end px-6 py-12 md:px-16 md:py-16 sticky top-0 overflow-hidden z-0">
+      {/* Background About Section (Fixed) */}
+      <div className="fixed inset-0 z-0 bg-white text-black">
+        <About />
+      </div>
+
+      {/* Hero Section — all hero-only elements live here and scroll away naturally */}
+      <section className="relative h-screen bg-black flex flex-col justify-end px-6 py-12 md:px-16 md:py-16 z-20 overflow-hidden">
+
+        {/* Hero-scoped elements — positioned absolute within this container */}
+        <AvailabilityBadge />
+        <SocialStrip />
+        <SpinningCTA />
+
         <div className="hidden lg:block">
           <SplashCursor />
         </div>
@@ -85,6 +286,21 @@ const Index = () => {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="w-fit"
           >
+            <a
+              href="#contact"
+              className="group relative overflow-hidden border border-white/30 px-5 py-3 flex items-center gap-3 hover:border-white transition-colors duration-500 w-fit mb-6 md:hidden"
+            >
+              <span className="absolute inset-0 bg-white translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out" />
+              <span className="relative font-sans font-black text-[10px] tracking-[0.25em] uppercase text-white group-hover:text-black transition-colors duration-300 z-10">
+                Get in touch
+              </span>
+              <svg
+                className="relative w-3 h-3 text-white group-hover:text-black transition-colors duration-300 z-10"
+                viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.5"
+              >
+                <path d="M1 6h10M6 1l5 5-5 5" />
+              </svg>
+            </a>
             <h1 className="font-sans font-bold text-7xl md:text-8xl lg:text-[9rem] xl:text-[11rem] leading-[0.85] tracking-tighter text-white uppercase text-left">
               Driven<br />
               by logic
@@ -106,23 +322,25 @@ const Index = () => {
             </p>
           </motion.div>
         </div>
+
+        {/* Mobile CTA */}
+        <MobileSocialStrip />
       </section>
 
       {/* Content wrapper */}
-      <div className="relative z-10">
-        <div id="about" className="bg-white text-black">
-          <About />
-        </div>
+      <div className="relative z-20 w-full bg-transparent">
+        {/* Spacer for About Section so we can scroll past it */}
+        <div id="about" className="h-screen w-full pointer-events-none"></div>
 
-        <div id="work" className="bg-black text-white">
+        <div id="work" className="bg-black text-white relative z-20">
           <SelectedWorks />
         </div>
 
-        <div id="philosophy" className="bg-white text-black">
+        <div id="philosophy" className="bg-white text-black relative z-20">
           <SkillsPhilosophy />
         </div>
 
-        <div className="bg-black text-white">
+        <div className="bg-black text-white relative z-20">
           <Testimonial />
         </div>
 
@@ -132,7 +350,7 @@ const Index = () => {
         </div>
 
         {/* --- MODIFIED FOOTER WRAPPER --- */}
-        <div className="relative z-10 bg-black text-white">
+        <div className="relative z-20 bg-black text-white">
           <Footer />
         </div>
       </div>

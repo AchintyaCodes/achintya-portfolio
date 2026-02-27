@@ -32,11 +32,11 @@ const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const overlayVariants: Variants = {
   closed: {
     clipPath: "inset(0% 0% 100% 0%)",
-    transition: { duration: 1.4, ease }, // ← was 1.0
+    transition: { duration: 1.0, ease },
   },
   open: {
     clipPath: "inset(0% 0% 0% 0%)",
-    transition: { duration: 1.6, ease }, // ← was 1.0
+    transition: { duration: 1.0, ease },
   },
 };
 
@@ -44,14 +44,14 @@ const itemVariants: Variants = {
   closed: {
     y: 40,
     opacity: 0,
-    transition: { duration: 0.7, ease }, // ← was 0.5
+    transition: { duration: 0.8, ease },
   },
   open: (i: number) => ({
     y: 0,
     opacity: 1,
     transition: {
-      duration: 1.0,                     // ← was 0.7
-      delay: 0.5 + i * 0.12,            // ← was 0.3 + i * 0.08, longer stagger
+      duration: 1.0,
+      delay: 0.4 + i * 0.1,
       ease: easeOut,
     },
   }),
@@ -61,14 +61,14 @@ const socialVariants: Variants = {
   closed: {
     opacity: 0,
     y: 10,
-    transition: { duration: 0.6, ease }, // ← was 0.4
+    transition: { duration: 0.6, ease },
   },
   open: (i: number) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,                     // ← was 0.5
-      delay: 0.9 + i * 0.08,            // ← was 0.65 + i * 0.05
+      duration: 0.8,
+      delay: 0.6 + i * 0.08,
       ease: "easeOut",
     },
   }),
@@ -110,19 +110,19 @@ const Navigation = () => {
         >
           <motion.span
             animate={open ? { rotate: 45, y: 7, width: "18px" } : { rotate: 0, y: 0, width: "22px" }}
-            transition={{ duration: 0.7, ease }} // ← was 0.5
+            transition={{ duration: 0.8, ease }}
             className="block h-[1.5px] bg-white origin-center"
             style={{ width: "22px" }}
           />
           <motion.span
             animate={open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.4, ease }} // ← was 0.3
+            transition={{ duration: 0.6, ease }}
             className="block h-[1.5px] bg-white origin-center"
             style={{ width: "22px" }}
           />
           <motion.span
             animate={open ? { rotate: -45, y: -7, width: "18px" } : { rotate: 0, y: 0, width: "22px" }}
-            transition={{ duration: 0.7, ease }} // ← was 0.5
+            transition={{ duration: 0.8, ease }}
             className="block h-[1.5px] bg-white origin-center"
             style={{ width: "22px" }}
           />
