@@ -104,11 +104,6 @@ const Navigation = () => {
       >
         <button
           onClick={() => setOpen((v) => !v)}
-          onTouchStart={(e) => {
-            // Prevent default to avoid double-firing with onClick on some devices
-            e.preventDefault();
-            setOpen((v) => !v);
-          }}
           className="flex flex-col items-center justify-center gap-[5px] w-14 h-14 md:w-16 md:h-16 rounded-full bg-black transition-colors duration-300 relative"
           style={{
             boxShadow: "0 0 0 1px rgba(255, 255, 255, 0.6)",
