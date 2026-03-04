@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import StarBorder from "../components/StarBorder";
 import './ScrollStack.css';
 
@@ -110,23 +109,6 @@ const SelectedWorks = () => {
   const endOffsetRef = useRef<number>(0);
   const lastScrollRef = useRef<number>(-1);
   const rafIdRef = useRef<number | null>(null);
-
-  const [marqueeDuration, setMarqueeDuration] = useState(25);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        setMarqueeDuration(10);
-      } else {
-        setMarqueeDuration(25);
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   // --- UPDATED LOGIC HERE ---
   const updateCardTransforms = useCallback(() => {
@@ -256,23 +238,16 @@ const SelectedWorks = () => {
   return (
     <section className="min-h-screen bg-black text-white font-sans relative">
       <div className="w-full h-[25vh] md:h-[25vh] lg:h-[70vh] border-b border-white/20 overflow-hidden flex items-center relative z-10 bg-black">
-        <motion.div
-          className="flex whitespace-nowrap items-center"
-          initial={{ x: "0%" }}
-          animate={{ x: "-50%" }}
-          transition={{ repeat: Infinity, ease: "linear", duration: marqueeDuration }}
-        >
-          {[0, 1].map((blockIndex) => (
-            <div key={blockIndex} className="flex items-center">
-              {[0, 1].map((textIndex) => (
-                <div key={textIndex} className="flex items-center">
-                  <span className="text-[13vw] font-medium leading-[0.8] tracking-tighter">Selected Works</span>
-                  <span className="text-[13vw] font-light mx-[3vw] -translate-y-2">—</span>
-                </div>
-              ))}
-            </div>
-          ))}
-        </motion.div>
+        <div className="marquee-selected-works">
+          <div className="marquee-selected-works__track">
+            {[0, 1, 2, 3].map((blockIndex) => (
+              <div key={blockIndex} className="marquee-selected-works__segment" aria-hidden={blockIndex > 0 ? "true" : undefined}>
+                <span className="marquee-selected-works__text">Selected Works</span>
+                <span className="marquee-selected-works__dash">—</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="scroll-stack-inner px-6 md:px-12 lg:px-16">
