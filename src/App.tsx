@@ -12,18 +12,23 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ReactLenis root options={{
-      syncTouch: true,
+      // Self-drive the animation loop (replaces the manual rAF that was in main.tsx)
+      autoRaf: true,
+      // Desktop smooth scroll settings (ported from main.tsx)
       smoothWheel: true,
-      syncTouchLerp: 0.02, // Heavy, thick fluid trailing
-      touchMultiplier: 0.5, // Reduced distance per swipe
-      touchInertiaExponent: 50, // Massive resistance to momentum
-      // Intercept and clamp touch events to enforce a strict speed limit
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      // Touch-only physics for heavy, viscous scrolling
+      syncTouch: true,
+      syncTouchLerp: 0.025,       // Very slow interpolation → thick fluid trailing
+      touchMultiplier: 0.4,       // Each swipe moves the page less → heavy feel
+      touchInertiaExponent: 1.2,  // Near-linear inertia → almost no fling overshoot
+      // Hard-cap touch deltas to prevent fast swipes from overshooting
       virtualScroll: (data) => {
-        // Only clamp touch events; leave wheel/trackpad alone
         if (data.event.type.includes('touch')) {
-          // Hard clamp the scroll distance per event to prevent long flicks
-          const maxDelta = 12; // Extremely low max speed limit
+          const maxDelta = 15;
           data.deltaY = Math.max(-maxDelta, Math.min(maxDelta, data.deltaY));
+          data.deltaX = Math.max(-maxDelta, Math.min(maxDelta, data.deltaX));
         }
         return true;
       }
