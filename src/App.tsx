@@ -14,9 +14,9 @@ const App = () => (
     <ReactLenis root options={{
       syncTouch: true,
       smoothWheel: true,
-      syncTouchLerp: 0.04, // Lower lerp for more fluid trailing
-      touchMultiplier: 0.8, // Lower multiplier for a heavier swipe feel
-      touchInertiaExponent: 20 // Lower exponent for a more fluid inertia
+      syncTouchLerp: 0.015, // Extremely low lerp for high-viscosity fluid drag effect
+      touchMultiplier: 0.4, // Low multiplier makes the page feel very heavy to swipe
+      touchInertiaExponent: 50 // High exponent kills inertia faster, simulating thick liquid resistance
     }}>
       <TooltipProvider>
         <Toaster />
