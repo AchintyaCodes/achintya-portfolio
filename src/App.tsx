@@ -20,13 +20,13 @@ const App = () => (
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       // Touch-only physics for heavy, viscous scrolling
       syncTouch: true,
-      syncTouchLerp: 0.025,       // Very slow interpolation → thick fluid trailing
-      touchMultiplier: 0.4,       // Each swipe moves the page less → heavy feel
-      touchInertiaExponent: 1.2,  // Near-linear inertia → almost no fling overshoot
-      // Hard-cap touch deltas to prevent fast swipes from overshooting
+      syncTouchLerp: 0.05,        // Smooth fluid trailing (higher = tracks finger closer)
+      touchMultiplier: 0.65,      // Moderate weight per swipe
+      touchInertiaExponent: 1.2,  // Near-linear inertia → controlled fling
+      // Cap touch deltas to prevent fast swipes from overshooting
       virtualScroll: (data) => {
         if (data.event.type.includes('touch')) {
-          const maxDelta = 15;
+          const maxDelta = 30;
           data.deltaY = Math.max(-maxDelta, Math.min(maxDelta, data.deltaY));
           data.deltaX = Math.max(-maxDelta, Math.min(maxDelta, data.deltaX));
         }
