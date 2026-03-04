@@ -11,7 +11,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ReactLenis root>
+    <ReactLenis root options={{ syncTouch: true, smoothWheel: true }}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
