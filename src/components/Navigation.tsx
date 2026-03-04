@@ -80,11 +80,14 @@ const Navigation = () => {
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none"; // Critical for iOS Safari
     } else {
       document.body.style.overflow = "";
+      document.body.style.touchAction = "";
     }
     return () => {
       document.body.style.overflow = "";
+      document.body.style.touchAction = "";
     };
   }, [open]);
 
@@ -101,30 +104,38 @@ const Navigation = () => {
       >
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex flex-col items-center justify-center gap-[5px] w-14 h-14 md:w-16 md:h-16 rounded-full bg-black transition-colors duration-300"
+          onTouchStart={(e) => {
+            // Prevent default to avoid double-firing with onClick on some devices
+            e.preventDefault();
+            setOpen((v) => !v);
+          }}
+          className="flex flex-col items-center justify-center gap-[5px] w-14 h-14 md:w-16 md:h-16 rounded-full bg-black transition-colors duration-300 relative"
           style={{
             boxShadow: "0 0 0 1px rgba(255, 255, 255, 0.6)",
             WebkitFontSmoothing: "antialiased",
           }}
           aria-label={open ? "Close menu" : "Open menu"}
         >
+          {/* Top Line */}
           <motion.span
-            animate={open ? { rotate: 45, y: 7, width: "18px" } : { rotate: 0, y: 0, width: "22px" }}
-            transition={{ duration: 0.8, ease }}
-            className="block h-[1.5px] bg-white origin-center"
-            style={{ width: "22px" }}
+            animate={open ? { rotate: 45, y: 6.5, scaleX: 0.8 } : { rotate: 0, y: 0, scaleX: 1 }}
+            transition={{ duration: 0.6, ease }}
+            className="absolute block h-[1.5px] w-[22px] bg-white origin-center"
+            style={{ top: "35%" }}
           />
+          {/* Middle Line */}
           <motion.span
             animate={open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.6, ease }}
-            className="block h-[1.5px] bg-white origin-center"
-            style={{ width: "22px" }}
+            transition={{ duration: 0.4, ease }}
+            className="absolute block h-[1.5px] w-[22px] bg-white origin-center"
+            style={{ top: "50%", marginTop: "-0.75px" }}
           />
+          {/* Bottom Line */}
           <motion.span
-            animate={open ? { rotate: -45, y: -7, width: "18px" } : { rotate: 0, y: 0, width: "22px" }}
-            transition={{ duration: 0.8, ease }}
-            className="block h-[1.5px] bg-white origin-center"
-            style={{ width: "22px" }}
+            animate={open ? { rotate: -45, y: -6.5, scaleX: 0.8 } : { rotate: 0, y: 0, scaleX: 1 }}
+            transition={{ duration: 0.6, ease }}
+            className="absolute block h-[1.5px] w-[22px] bg-white origin-center"
+            style={{ bottom: "35%" }}
           />
         </button>
       </div>
