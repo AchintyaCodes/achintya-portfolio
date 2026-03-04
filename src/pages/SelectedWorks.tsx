@@ -1,4 +1,5 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
+import { useLenis } from "lenis/react";
 import StarBorder from "../components/StarBorder";
 import './ScrollStack.css';
 
@@ -102,19 +103,19 @@ const BASE_CONFIG = {
 };
 
 
-
 const SelectedWorks = () => {
   const cardsRef = useRef<HTMLElement[]>([]);
   const cardOffsetsRef = useRef<number[]>([]);
   const endOffsetRef = useRef<number>(0);
-  const lastScrollRef = useRef<number>(-1);
-  const rafIdRef = useRef<number | null>(null);
 
-  // --- UPDATED LOGIC HERE ---
-  const updateCardTransforms = useCallback(() => {
-    const scrollTop = window.scrollY;
-    // Always run on mobile to ensure smoothness even if scroll delta is small
-    lastScrollRef.current = scrollTop;
+  // We keep a local state just to wait until measurements are ready
+  const [ready, setReady] = useState(false);
+
+  // --- LENIS SCROLL HANDLER ---
+  // This automatically runs precisely in sync with the smooth scroll frame
+  // eliminating any bouncing or sync issues.
+  useLenis(({ scroll }) => {
+    if (!ready) return;
 
     const cards = cardsRef.current;
     const cardOffsets = cardOffsetsRef.current;
@@ -125,9 +126,7 @@ const SelectedWorks = () => {
     const containerHeight = window.innerHeight;
     const firstCardHeight = cards[0].offsetHeight;
 
-    // Dynamically center the first card vertically
     const stackPositionPx = (containerHeight - firstCardHeight) / 2;
-    // Maintain the original scroll scaling duration (difference between stackPosition and scaleEndPosition)
     const scaleEndPositionPx = stackPositionPx - (BASE_CONFIG.stackPosition - BASE_CONFIG.scaleEndPosition) * containerHeight;
 
     for (let i = 0; i < cards.length; i++) {
@@ -139,37 +138,39 @@ const SelectedWorks = () => {
       const pinEnd = endElementTop - containerHeight * 0.5;
 
       let scaleProgress = 0;
-      if (scrollTop >= triggerEnd) {
+      if (scroll >= triggerEnd) {
         scaleProgress = 1;
-      } else if (scrollTop > triggerStart) {
-        scaleProgress = (scrollTop - triggerStart) / (triggerEnd - triggerStart);
+      } else if (scroll > triggerStart) {
+        scaleProgress = (scroll - triggerStart) / (triggerEnd - triggerStart);
       }
 
+      scaleProgress = Math.min(Math.max(scaleProgress, 0), 1);
+
       const targetScale = BASE_CONFIG.baseScale + i * BASE_CONFIG.itemScale;
-      const scale = 1 - scaleProgress * (1 - targetScale);
+      const scale = Number((1 - scaleProgress * (1 - targetScale)).toFixed(4));
 
       let translateY = 0;
-      if (scrollTop >= pinStart && scrollTop <= pinEnd) {
-        translateY = scrollTop - cardTop + stackPositionPx + BASE_CONFIG.itemStackDistance * i;
-      } else if (scrollTop > pinEnd) {
+      if (scroll >= pinStart && scroll <= pinEnd) {
+        translateY = scroll - cardTop + stackPositionPx + BASE_CONFIG.itemStackDistance * i;
+      } else if (scroll > pinEnd) {
         translateY = pinEnd - cardTop + stackPositionPx + BASE_CONFIG.itemStackDistance * i;
       }
 
-      card.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+      card.style.transform = `translate3d(0, ${Math.round(translateY * 10) / 10}px, 0) scale(${scale})`;
     }
-  }, []);
+  });
 
-  // --- CRITICAL FIX IN THIS FUNCTION ---
+  // --- MEASUREMENT LOGIC ---
   const cachePositions = useCallback(() => {
+    setReady(false); // Pause scroll updates while measuring
+
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
     cardsRef.current = cards;
 
-    // 1. TEMPORARILY RESET TRANSFORMS
-    // We must clear the 'transform' style so we can measure the element's 
-    // true position in the document flow, unaffected by previous scroll animations.
+    // Reset styles
     cards.forEach(card => card.style.transform = '');
 
-    // 2. MEASURE
+    // Measure fresh from DOM
     const scrollY = window.scrollY;
     cardOffsetsRef.current = cards.map(card => {
       const rect = card.getBoundingClientRect();
@@ -182,20 +183,8 @@ const SelectedWorks = () => {
       endOffsetRef.current = rect.top + scrollY;
     }
 
-    // 3. RE-APPLY TRANSFORMS IMMEDIATELY
-    // If we don't do this, there might be a visible flash where cards jump to 
-    // their natural position before the next scroll frame picks them up.
-    updateCardTransforms();
-
-  }, [updateCardTransforms]);
-
-  const onScroll = useCallback(() => {
-    if (rafIdRef.current) return;
-    rafIdRef.current = requestAnimationFrame(() => {
-      updateCardTransforms();
-      rafIdRef.current = null;
-    });
-  }, [updateCardTransforms]);
+    setReady(true); // Re-enable scroll updates
+  }, []);
 
   const calculateAndRender = useCallback(() => {
     cachePositions();
@@ -222,18 +211,15 @@ const SelectedWorks = () => {
     const initTimer = setTimeout(calculateAndRender, 100);
     const backupTimer = setTimeout(calculateAndRender, 500);
 
-    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', calculateAndRender, { passive: true });
 
     return () => {
       clearTimeout(initTimer);
       clearTimeout(backupTimer);
       resizeObserver.disconnect();
-      window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', calculateAndRender);
-      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
-  }, [calculateAndRender, onScroll]);
+  }, [calculateAndRender]);
 
   return (
     <section className="min-h-screen bg-black text-white font-sans relative">
