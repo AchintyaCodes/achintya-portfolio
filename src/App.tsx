@@ -20,9 +20,9 @@ const App = () => (
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       // Touch-only physics for heavy, viscous scrolling
       syncTouch: true,
-      syncTouchLerp: 0.14,        // Minimal fluid trailing
-      touchMultiplier: 0.98,      // Almost native weight
-      touchInertiaExponent: 1.5,  // Minimal dampening on fling
+      syncTouchLerp: 0.15,        // Subtle smooth trailing
+      touchMultiplier: 1,         // Native weight
+      touchInertiaExponent: 1.55, // Very subtle dampening
     }}>
       <TooltipProvider>
         <Toaster />
