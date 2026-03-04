@@ -14,9 +14,19 @@ const App = () => (
     <ReactLenis root options={{
       syncTouch: true,
       smoothWheel: true,
-      syncTouchLerp: 0.015, // Extremely low lerp for high-viscosity fluid drag effect
-      touchMultiplier: 0.4, // Low multiplier makes the page feel very heavy to swipe
-      touchInertiaExponent: 50 // High exponent kills inertia faster, simulating thick liquid resistance
+      syncTouchLerp: 0.02, // Heavy, thick fluid trailing
+      touchMultiplier: 0.5, // Reduced distance per swipe
+      touchInertiaExponent: 50, // Massive resistance to momentum
+      // Intercept and clamp touch events to enforce a strict speed limit
+      virtualScroll: (data) => {
+        // Only clamp touch events; leave wheel/trackpad alone
+        if (data.event.type.includes('touch')) {
+          // Hard clamp the scroll distance per event to prevent long flicks
+          const maxDelta = 12; // Extremely low max speed limit
+          data.deltaY = Math.max(-maxDelta, Math.min(maxDelta, data.deltaY));
+        }
+        return true;
+      }
     }}>
       <TooltipProvider>
         <Toaster />
