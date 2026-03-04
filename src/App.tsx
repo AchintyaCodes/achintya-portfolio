@@ -11,7 +11,13 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ReactLenis root options={{ syncTouch: true, smoothWheel: true }}>
+    <ReactLenis root options={{
+      syncTouch: true,
+      smoothWheel: true,
+      syncTouchLerp: 0.04, // Lower lerp for more fluid trailing
+      touchMultiplier: 0.8, // Lower multiplier for a heavier swipe feel
+      touchInertiaExponent: 20 // Lower exponent for a more fluid inertia
+    }}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
