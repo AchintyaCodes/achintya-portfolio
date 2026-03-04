@@ -97,7 +97,7 @@ export default function SplashCursor({
 
     let gl: WebGL2RenderingContext | null = null;
     let ext: any = null;
-    
+
     try {
       const result = getWebGLContext(canvas);
       gl = result.gl;
@@ -107,7 +107,7 @@ export default function SplashCursor({
       setWebGLSupported(false);
       return;
     }
-    
+
     if (!gl || !ext) {
       setWebGLSupported(false);
       return;
@@ -1204,81 +1204,121 @@ export default function SplashCursor({
       return ((value - min) % range) + min;
     }
 
-    window.addEventListener('mousedown', e => {
+    // Handle interactions globally but map mathematically to the canvas bounds
+    const handleMouseDown = (e: MouseEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
+
       const pointer = pointers[0];
-      const posX = scaleByPixelRatio(e.clientX);
-      const posY = scaleByPixelRatio(e.clientY);
+      const posX = scaleByPixelRatio(e.clientX - rect.left);
+      const posY = scaleByPixelRatio(e.clientY - rect.top);
       updatePointerDownData(pointer, -1, posX, posY);
       clickSplat(pointer);
-    });
+    };
 
-    function handleFirstMouseMove(e: MouseEvent) {
+    // First interaction initializer
+    const handleFirstMouseMove = (e: MouseEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
+
       const pointer = pointers[0];
-      const posX = scaleByPixelRatio(e.clientX);
-      const posY = scaleByPixelRatio(e.clientY);
+      const posX = scaleByPixelRatio(e.clientX - rect.left);
+      const posY = scaleByPixelRatio(e.clientY - rect.top);
       const color = generateColor();
       updateFrame();
       updatePointerMoveData(pointer, posX, posY, color);
       document.body.removeEventListener('mousemove', handleFirstMouseMove);
-    }
+    };
     document.body.addEventListener('mousemove', handleFirstMouseMove);
 
-    window.addEventListener('mousemove', e => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+
+      // If outside bounds, don't move the fluid interaction
+      if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
+
       const pointer = pointers[0];
-      const posX = scaleByPixelRatio(e.clientX);
-      const posY = scaleByPixelRatio(e.clientY);
+      const posX = scaleByPixelRatio(e.clientX - rect.left);
+      const posY = scaleByPixelRatio(e.clientY - rect.top);
       const color = pointer.color;
       updatePointerMoveData(pointer, posX, posY, color);
-    });
+    };
 
-    function handleFirstTouchStart(e: TouchEvent) {
+    const handleFirstTouchStart = (e: TouchEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
       const touches = e.targetTouches;
       const pointer = pointers[0];
-      for (let i = 0; i < touches.length; i++) {
-        const posX = scaleByPixelRatio(touches[i].clientX);
-        const posY = scaleByPixelRatio(touches[i].clientY);
-        updateFrame();
-        updatePointerDownData(pointer, touches[i].identifier, posX, posY);
-      }
-      document.body.removeEventListener('touchstart', handleFirstTouchStart);
-    }
-    document.body.addEventListener('touchstart', handleFirstTouchStart);
+      let triggered = false;
 
-    window.addEventListener(
-      'touchstart',
-      e => {
-        const touches = e.targetTouches;
-        const pointer = pointers[0];
-        for (let i = 0; i < touches.length; i++) {
-          const posX = scaleByPixelRatio(touches[i].clientX);
-          const posY = scaleByPixelRatio(touches[i].clientY);
+      for (let i = 0; i < touches.length; i++) {
+        const clientX = touches[i].clientX;
+        const clientY = touches[i].clientY;
+        if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+          const posX = scaleByPixelRatio(clientX - rect.left);
+          const posY = scaleByPixelRatio(clientY - rect.top);
+          updateFrame();
+          updatePointerDownData(pointer, touches[i].identifier, posX, posY);
+          triggered = true;
+        }
+      }
+      if (triggered) {
+        document.body.removeEventListener('touchstart', handleFirstTouchStart);
+      }
+    };
+    document.body.addEventListener('touchstart', handleFirstTouchStart, { passive: false });
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const touches = e.targetTouches;
+      const pointer = pointers[0];
+
+      for (let i = 0; i < touches.length; i++) {
+        const clientX = touches[i].clientX;
+        const clientY = touches[i].clientY;
+        // Only process touches hitting the canvas area
+        if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+          const posX = scaleByPixelRatio(clientX - rect.left);
+          const posY = scaleByPixelRatio(clientY - rect.top);
           updatePointerDownData(pointer, touches[i].identifier, posX, posY);
         }
-      },
-      false
-    );
+      }
+    };
 
-    window.addEventListener(
-      'touchmove',
-      e => {
-        const touches = e.targetTouches;
-        const pointer = pointers[0];
-        for (let i = 0; i < touches.length; i++) {
-          const posX = scaleByPixelRatio(touches[i].clientX);
-          const posY = scaleByPixelRatio(touches[i].clientY);
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const touches = e.targetTouches;
+      const pointer = pointers[0];
+
+      for (let i = 0; i < touches.length; i++) {
+        const clientX = touches[i].clientX;
+        const clientY = touches[i].clientY;
+        if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+          const posX = scaleByPixelRatio(clientX - rect.left);
+          const posY = scaleByPixelRatio(clientY - rect.top);
           updatePointerMoveData(pointer, posX, posY, pointer.color);
         }
-      },
-      false
-    );
+      }
+    };
 
-    window.addEventListener('touchend', e => {
+    const handleTouchEnd = (e: TouchEvent) => {
       const touches = e.changedTouches;
       const pointer = pointers[0];
       for (let i = 0; i < touches.length; i++) {
         updatePointerUpData(pointer);
       }
-    });
+    };
+
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
   }, [
     SIM_RESOLUTION,
     DYE_RESOLUTION,
