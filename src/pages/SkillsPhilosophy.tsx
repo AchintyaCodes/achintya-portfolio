@@ -45,28 +45,28 @@ const skillCategories = [
 
 const SkillsPhilosophy = () => {
   return (
-    <section className="min-h-0 md:min-h-screen bg-white text-black font-sans flex flex-col md:justify-center lg:justify-start">
-      <div className="w-full px-6 md:px-12 lg:px-16 pt-28 pb-14 md:py-12 lg:pt-20 lg:pb-10 bg-white z-10 flex-shrink-0">
+    <section className="min-h-screen bg-white text-black font-sans flex flex-col">
+      <div className="w-full px-6 md:px-12 lg:px-16 pt-24 pb-16 bg-white z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="grid grid-cols-1 md:grid-cols-5 gap-y-8 md:gap-y-6"
+          className="grid grid-cols-1 md:grid-cols-5 gap-y-8"
         >
           <div className="md:col-span-1">
-            <h2 className="text-xs font-bold uppercase tracking-widest mt-1 md:mt-2">Skills & Philosophy</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest">Skills & Philosophy</h2>
           </div>
           <div className="md:col-span-4">
-            <blockquote className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight">
+            <blockquote className="text-4xl md:text-7xl font-black uppercase leading-tight">
               “The function of good software is to make the complex appear to be simple.”
             </blockquote>
-            <p className="mt-4 md:mt-6 text-sm md:text-base">— Grady Booch</p>
+            <p className="mt-8">— Grady Booch</p>
           </div>
         </motion.div>
       </div>
 
-      <div className="flex-grow md:flex-grow-0 lg:flex-grow w-full border-t border-black relative overflow-hidden">
+      <div className="flex-grow w-full border-t border-black relative overflow-hidden">
         <FlowingMenu
           items={skillCategories}
           speed={3}
