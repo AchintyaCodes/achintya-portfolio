@@ -161,7 +161,7 @@ const Navigation = () => {
                   initial="closed"
                   animate="open"
                   exit="closed"
-                  className="text-base md:text-lg font-medium text-white hover:opacity-40 transition-opacity"
+                  className="text-base md:text-lg font-medium text-white hover:opacity-40"
                 >
                   {item.label}
                 </motion.a>

@@ -30,7 +30,7 @@ const MagicBento = () => {
           />
 
           <SwissItem
-            value={2000}
+            value={500}
             suffix="+"
             label="Engineering Hours"
             description="Engineering judgment refined through real-world constraints."

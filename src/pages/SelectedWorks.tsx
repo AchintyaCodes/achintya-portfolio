@@ -92,7 +92,6 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
   );
 };
 
-
 const BASE_CONFIG = {
   itemDistance: 100,
   itemScale: 0.015,
@@ -102,24 +101,34 @@ const BASE_CONFIG = {
   baseScale: 0.92,
 };
 
-
 const SelectedWorks = () => {
   const cardsRef = useRef<HTMLElement[]>([]);
   const cardOffsetsRef = useRef<number[]>([]);
   const endOffsetRef = useRef<number>(0);
+  const stackInnerRef = useRef<HTMLDivElement>(null);
+  const stackInnerTopRef = useRef<number>(0);
+  const voidContainerRef = useRef<HTMLDivElement>(null);
+  const kineticWheelRef = useRef<HTMLDivElement>(null);
+  const threadPathRef = useRef<SVGPathElement>(null);
+  const threadLenRef = useRef(0);
 
-  // We keep a local state just to wait until measurements are ready
   const [ready, setReady] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // --- LENIS SCROLL HANDLER ---
-  // This automatically runs precisely in sync with the smooth scroll frame
-  // eliminating any bouncing or sync issues.
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useLenis(({ scroll }) => {
     if (!ready) return;
 
     const cards = cardsRef.current;
     const cardOffsets = cardOffsetsRef.current;
     const endElementTop = endOffsetRef.current;
+    const stackInnerTop = stackInnerTopRef.current;
 
     if (!cards.length || !cardOffsets.length) return;
 
@@ -129,13 +138,25 @@ const SelectedWorks = () => {
     const stackPositionPx = (containerHeight - firstCardHeight) / 2;
     const scaleEndPositionPx = stackPositionPx - (BASE_CONFIG.stackPosition - BASE_CONFIG.scaleEndPosition) * containerHeight;
 
+    const lastCardTop = cardOffsets[cards.length - 1];
+    const triggerEndLast = lastCardTop - scaleEndPositionPx;
+
+    const voidStart = triggerEndLast;
+    const voidDistance = containerHeight * 1.5;
+    let voidProgress = 0;
+
+    if (scroll > voidStart) {
+      voidProgress = (scroll - voidStart) / voidDistance;
+      voidProgress = Math.min(Math.max(voidProgress, 0), 1);
+    }
+
     for (let i = 0; i < cards.length; i++) {
       const card = cards[i];
       const cardTop = cardOffsets[i];
       const triggerStart = cardTop - stackPositionPx - BASE_CONFIG.itemStackDistance * i;
       const triggerEnd = cardTop - scaleEndPositionPx;
       const pinStart = triggerStart;
-      const pinEnd = endElementTop - containerHeight * 0.5;
+      const pinEnd = Math.max(endElementTop - containerHeight * 0.5, voidStart + voidDistance);
 
       let scaleProgress = 0;
       if (scroll >= triggerEnd) {
@@ -158,33 +179,109 @@ const SelectedWorks = () => {
 
       card.style.transform = `translate3d(0, ${Math.round(translateY * 10) / 10}px, 0) scale(${scale})`;
     }
-  });
 
-  // --- MEASUREMENT LOGIC ---
-  const cachePositions = useCallback(() => {
-    setReady(false); // Pause scroll updates while measuring
+    const voidContainer = voidContainerRef.current;
+    const stackInner = stackInnerRef.current;
 
-    const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
-    cardsRef.current = cards;
+    if (voidContainer && stackInner) {
+      const originY = scroll + containerHeight / 2 - stackInnerTop;
+      stackInner.style.perspectiveOrigin = `50% ${originY}px`;
+      stackInner.style.perspective = '1500px';
 
-    // Reset styles
-    cards.forEach(card => card.style.transform = '');
+      if (voidProgress > 0) {
+        const easeScale = Math.pow(voidProgress, 1.5);
+        const currentZ = -easeScale * 3000;
+        const currentScale = 1 - easeScale;
+        const currentOpacity = 1 - Math.pow(voidProgress, 2.5);
 
-    // Measure fresh from DOM
-    const scrollY = window.scrollY;
-    cardOffsetsRef.current = cards.map(card => {
-      const rect = card.getBoundingClientRect();
-      return rect.top + scrollY;
-    });
+        voidContainer.style.transformOrigin = `50% ${originY}px`;
+        voidContainer.style.transform = `translate3d(0, 0, ${currentZ}px) scale(${Math.max(0, currentScale).toFixed(4)})`;
+        voidContainer.style.opacity = Math.max(0, currentOpacity).toFixed(3);
 
-    const endElement = document.querySelector('.scroll-stack-end') as HTMLElement;
-    if (endElement) {
-      const rect = endElement.getBoundingClientRect();
-      endOffsetRef.current = rect.top + scrollY;
+        if (voidProgress >= 1) {
+          voidContainer.style.visibility = 'hidden';
+        } else {
+          voidContainer.style.visibility = 'visible';
+        }
+      } else {
+        voidContainer.style.transformOrigin = '';
+        voidContainer.style.transform = '';
+        voidContainer.style.opacity = '1';
+        voidContainer.style.visibility = 'visible';
+      }
     }
 
-    setReady(true); // Re-enable scroll updates
-  }, []);
+    const thread = threadPathRef.current;
+    const threadLen = threadLenRef.current;
+    if (thread && threadLen > 0 && isMobile) {
+      // Changed drawP to start immediately (removed 1.5 multiplier)
+      const drawP = Math.min(Math.max(voidProgress, 0), 1);
+      thread.style.strokeDasharray = `${threadLen}`;
+      // Logic fix: Ensure dashoffset moves from full length to 0 to "draw" the path
+      thread.style.strokeDashoffset = `${(threadLen * (1 - drawP)).toFixed(2)}`;
+    }
+
+    const kineticWheel = kineticWheelRef.current;
+    if (kineticWheel) {
+      if (scroll > endElementTop + containerHeight) {
+        kineticWheel.style.display = 'none';
+        kineticWheel.style.visibility = 'hidden';
+      } else if (voidProgress > 0) {
+        kineticWheel.style.display = 'block';
+        kineticWheel.style.visibility = 'visible';
+        kineticWheel.style.opacity = Math.min(voidProgress * 4, 1).toFixed(3);
+
+        if (isMobile) {
+          const slideY = 100 * (1 - voidProgress);
+          kineticWheel.style.transform = `translate3d(0, ${slideY}px, 0)`;
+        } else {
+          const targetRotation = 180 * (1 - voidProgress);
+          kineticWheel.style.transformOrigin = '50% 100%';
+          kineticWheel.style.transform = `rotate(${targetRotation}deg)`;
+        }
+      } else {
+        kineticWheel.style.display = 'block';
+        kineticWheel.style.opacity = '0';
+        kineticWheel.style.visibility = 'hidden';
+        if (isMobile) {
+          kineticWheel.style.transform = `translate3d(0, 100px, 0)`;
+        } else {
+          kineticWheel.style.transform = `rotate(180deg)`;
+        }
+      }
+    }
+  });
+
+  const cachePositions = useCallback(() => {
+    setReady(false);
+    const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
+    cardsRef.current = cards;
+    cards.forEach(card => card.style.transform = '');
+    if (voidContainerRef.current) {
+      voidContainerRef.current.style.transform = '';
+      voidContainerRef.current.style.transformOrigin = '';
+    }
+    if (kineticWheelRef.current) kineticWheelRef.current.style.transform = '';
+
+    if (threadPathRef.current && isMobile) {
+      try {
+        const len = threadPathRef.current.getTotalLength();
+        if (len > 0) {
+          threadLenRef.current = len;
+          // Pre-set dasharray and offset so it starts hidden
+          threadPathRef.current.style.strokeDasharray = `${len}`;
+          threadPathRef.current.style.strokeDashoffset = `${len}`;
+        }
+      } catch (e) { }
+    }
+
+    const scrollY = window.scrollY;
+    cardOffsetsRef.current = cards.map(card => card.getBoundingClientRect().top + scrollY);
+    const endElement = document.querySelector('.scroll-stack-end') as HTMLElement;
+    if (endElement) endOffsetRef.current = endElement.getBoundingClientRect().top + scrollY;
+    if (stackInnerRef.current) stackInnerTopRef.current = stackInnerRef.current.getBoundingClientRect().top + scrollY;
+    setReady(true);
+  }, [isMobile]);
 
   const calculateAndRender = useCallback(() => {
     cachePositions();
@@ -192,30 +289,18 @@ const SelectedWorks = () => {
 
   useEffect(() => {
     const cards = Array.from(document.querySelectorAll('.scroll-stack-card')) as HTMLElement[];
-
     cards.forEach((card, i) => {
       if (i < cards.length - 1) card.style.marginBottom = `${BASE_CONFIG.itemDistance}px`;
       card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
     });
-
-    const resizeObserver = new ResizeObserver(() => {
-      calculateAndRender();
-    });
-
-    cards.forEach((card) => {
-      resizeObserver.observe(card);
-    });
-
+    const resizeObserver = new ResizeObserver(() => calculateAndRender());
+    cards.forEach((card) => resizeObserver.observe(card));
     calculateAndRender();
     const initTimer = setTimeout(calculateAndRender, 100);
-    const backupTimer = setTimeout(calculateAndRender, 500);
-
     window.addEventListener('resize', calculateAndRender, { passive: true });
-
     return () => {
       clearTimeout(initTimer);
-      clearTimeout(backupTimer);
       resizeObserver.disconnect();
       window.removeEventListener('resize', calculateAndRender);
     };
@@ -236,12 +321,52 @@ const SelectedWorks = () => {
         </div>
       </div>
 
-      <div className="scroll-stack-inner px-6 md:px-12 lg:px-16">
-        {projects.map((project, index) => (
-          <ScrollStackCard key={project.id} project={project} index={index} />
-        ))}
-        {/* Added some bottom padding to ensure the last card has room to unpin nicely on mobile */}
-        <div className="scroll-stack-end h-[20vh]" />
+      <div ref={stackInnerRef} className="scroll-stack-inner px-6 md:px-12 lg:px-16" style={{ transformStyle: 'preserve-3d' }}>
+        <div ref={voidContainerRef} className="void-container relative w-full flex flex-col items-center justify-center" style={{ willChange: 'transform, opacity', transformStyle: 'preserve-3d' }}>
+          {projects.map((project, index) => (
+            <ScrollStackCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
+        <div className={`scroll-stack-end pointer-events-none ${isMobile ? 'h-[100vh]' : 'h-[150vh]'}`} />
+      </div>
+
+      <div ref={kineticWheelRef} className="kinetic-wheel pointer-events-none" style={{
+        position: 'fixed',
+        top: isMobile ? '50%' : 'auto',
+        bottom: isMobile ? 'auto' : '-18vh',
+        left: '0',
+        width: '100vw',
+        height: isMobile ? '100vw' : 'auto',
+        marginTop: isMobile ? 'calc(-50vw)' : '0',
+        zIndex: 0,
+        visibility: 'hidden',
+        opacity: 0,
+        willChange: 'transform, opacity',
+      }}>
+        {isMobile ? (
+          <svg viewBox="0 0 1500 1500" className="w-full h-full" style={{ overflow: 'visible' }}>
+            <path ref={threadPathRef} d="M 750,-300 L 750,150 C 750,550 300,550 300,750 C 300,950 550,1350 750,1350 C 950,1350 1200,950 1200,750 C 1200,550 750,550 750,750 L 750,3000" fill="none" stroke="#ffffff" strokeWidth="6" strokeLinecap="round" />
+            <text x="750" y="150" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">ANALYZE</text>
+            <text x="300" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DESIGN</text>
+            <text x="750" y="1350" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">BUILD</text>
+            <text x="1200" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DELIVER</text>
+            <circle cx="750" cy="750" r="20" fill="#ffffff" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 3000 1500" className="w-full h-auto" style={{ overflow: 'visible' }}>
+            <path id="arc-path" d="M 400,1500 A 1100,1100 0 0,1 2600,1500" fill="none" stroke="none" />
+            {[
+              { text: 'ANALYZE', offset: '15%' }, { text: '●', offset: '27%' },
+              { text: 'DESIGN', offset: '38%' }, { text: '●', offset: '50%' },
+              { text: 'BUILD', offset: '62%' }, { text: '●', offset: '73%' },
+              { text: 'DELIVER', offset: '85%' },
+            ].map((item, i) => (
+              <text key={i} fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: item.text === '●' ? '50px' : '100px', textTransform: 'uppercase' }} dy={item.text === '●' ? '-18' : '0'}>
+                <textPath href="#arc-path" startOffset={item.offset} textAnchor="middle">{item.text}</textPath>
+              </text>
+            ))}
+          </svg>
+        )}
       </div>
     </section>
   );

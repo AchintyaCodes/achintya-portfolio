@@ -1,24 +1,24 @@
-.menu__item { 
-    position: relative; 
-    overflow: hidden; 
-    height: 12vh; 
+.menu__item {
+    position: relative;
+    overflow: hidden;
+    height: 12vh;
 }
 
-.menu__item-link { 
-    display: flex; 
-    align-items: center; 
-    height: 100%; 
-    font-size: 4vh; 
-    font-weight: 900; 
+.menu__item-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    font-size: 4vh;
+    font-weight: 900;
     padding-left: 10%;
-    text-transform: uppercase; 
-    text-decoration: none; 
+    text-transform: uppercase;
+    text-decoration: none;
     color: black;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent; 
+    -webkit-tap-highlight-color: transparent;
     transition: opacity 0.3s ease;
     /* Ensure text and arrow stay aligned */
-    gap: 1.5rem; 
+    gap: 1.5rem;
 }
 
 .menu__item-arrow {
@@ -42,64 +42,64 @@
 }
 
 .marquee {
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    transform: translateY(101%); 
+    transform: translateY(101%);
     transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    display: flex; 
+    display: flex;
     align-items: center;
-    pointer-events: none; 
+    pointer-events: none;
     z-index: 2;
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 @media (hover: hover) {
-    .menu__item:hover .marquee { 
-        transform: translateY(0); 
+    .menu__item:hover .marquee {
+        transform: translateY(0);
         pointer-events: all;
     }
 }
 
-.menu__item.is-open .marquee { 
-    transform: translateY(0); 
+.menu__item.is-open .marquee {
+    transform: translateY(0);
     pointer-events: all;
 }
 
-.marquee__inner { 
-    display: flex; 
-    white-space: nowrap; 
-    height: 100%; 
-    align-items: center; 
+.marquee__inner {
+    display: flex;
+    white-space: nowrap;
+    height: 100%;
+    align-items: center;
 }
 
 /* --- DESKTOP DEFAULTS --- */
-.marquee__part { 
-    display: flex; 
-    align-items: center; 
-    padding-right: 6vw; 
-    border-right: 2px solid rgba(255,255,255,0.2);
+.marquee__part {
+    display: flex;
+    align-items: center;
+    padding-right: 6vw;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.marquee__icon-box { 
-    display: flex; 
-    align-items: center; 
-    margin: 0 4vw; 
-    gap: 1.5rem; 
+.marquee__icon-box {
+    display: flex;
+    align-items: center;
+    margin: 0 4vw;
+    gap: 1.5rem;
 }
 
-.marquee__icon { 
-    height: 5vh; 
-    width: auto; 
+.marquee__icon {
+    height: 5vh;
+    width: auto;
 }
 
 .marquee__text {
-    color: white; 
+    color: white;
     font-family: 'Inter', sans-serif;
-    font-weight: 700; 
-    font-size: 3vh; 
+    font-weight: 700;
+    font-size: 3vh;
     text-transform: uppercase;
 }
 
@@ -117,30 +117,33 @@
 
     .marquee__icon-box {
         /* Tighter margin between different skills */
-        margin: 0 3vw; 
+        margin: 0 3vw;
         /* Clearer separation between Icon and Text */
-        gap: 1.2rem; 
+        gap: 1.2rem;
     }
 
     .marquee__icon {
-        height: 4vh; /* Slightly smaller icon to fit nicely */
+        height: 4vh;
+        /* Slightly smaller icon to fit nicely */
     }
 
     .marquee__text {
-        font-size: 2.2vh; /* Slightly smaller text */
+        font-size: 2.2vh;
+        /* Slightly smaller text */
     }
 }
 
 /* --- MOBILE SPECIFIC (Phones) --- */
 @media (max-width: 768px) {
     .menu__item {
-        height: 80px; 
+        height: 80px;
     }
 
     .menu__item-link {
         font-size: 24px;
         padding-left: 20px;
-        gap: 10px; /* Smaller gap for arrow on phone */
+        gap: 10px;
+        /* Smaller gap for arrow on phone */
     }
 
     .menu__item-arrow {
@@ -149,19 +152,19 @@
     }
 
     .marquee__part {
-        padding-right: 40px; 
+        padding-right: 40px;
     }
 
     .marquee__icon-box {
-        margin: 0 30px; 
-        gap: 15px; 
+        margin: 0 30px;
+        gap: 15px;
     }
-    
+
     .marquee__icon {
-        height: 30px; 
+        height: 30px;
     }
 
     .marquee__text {
-        font-size: 16px; 
+        font-size: 16px;
     }
 }

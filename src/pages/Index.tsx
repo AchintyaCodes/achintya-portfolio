@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent, useSpring, useMotionValue } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, useSpring, useMotionValue } from "framer-motion";
 
 // Components
 import About from "./About";
 import SplashCursor from "@/components/SplashCursor";
 import SelectedWorks from "./SelectedWorks";
-import SkillsPhilosophy from "./SkillsPhilosophy";
+import VectorBridge from "./VectorBridge";
 import Footer from "./Footer";
 import Contact from "./Contact";
 import Testimonial from "./Testimonial";
@@ -15,50 +15,36 @@ import Navigation from "@/components/Navigation";
 const CursorFollower = () => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-
-  // ADJUSTED PHYSICS:
-  // stiffness: Lower values (e.g., 100) make the spring "looser", creating the lag/follow effect.
-  // damping: Controls the "bounciness". 20 provides a smooth stop without wobbling.
-  // mass: Adds a feeling of weight.
   const springConfig = { damping: 20, stiffness: 100, mass: 0.8 };
-
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    const moveCursor = (e) => {
-      // Offset by half the width (12px) to center it on the cursor target
+    const moveCursor = (e: MouseEvent) => {
       mouseX.set(e.clientX - 12);
       mouseY.set(e.clientY - 12);
     };
-
     window.addEventListener("mousemove", moveCursor);
-    return () => {
-      window.removeEventListener("mousemove", moveCursor);
-    };
+    return () => window.removeEventListener("mousemove", moveCursor);
   }, [mouseX, mouseY]);
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-6 h-6 bg-gray-400/50 rounded-full pointer-events-none z-[9999] hidden md:block backdrop-blur-[1px]"
+      className="fixed top-0 left-0 w-6 h-6 bg-gray-400/50 rounded-full pointer-events-none z-[9999] hidden lg:block backdrop-blur-[1px]"
       style={{ x, y }}
     />
   );
 };
 
-// 1. The Dynamic Logo Component
-const BrandLogo = () => {
-  return (
-    <div className="fixed top-6 left-6 md:top-8 md:left-10 z-50 mix-blend-difference">
-      <h1 className="font-sans font-black text-2xl md:text-4xl tracking-tighter text-white flex items-start">
-        MAHESH
-        <span className="text-xs md:text-lg font-medium ml-1 -mt-1 md:-mt-2">®</span>
-      </h1>
-    </div>
-  );
-};
+const BrandLogo = () => (
+  <div className="fixed top-6 left-6 md:top-8 md:left-10 z-50 mix-blend-difference">
+    <h1 className="font-sans font-black text-2xl md:text-4xl tracking-tighter text-white flex items-start">
+      MAHESH
+      <span className="text-xs md:text-lg font-medium ml-1 -mt-1 md:-mt-2">®</span>
+    </h1>
+  </div>
+);
 
-// --- Availability Badge — top center, hero-scoped ---
 const AvailabilityBadge = () => (
   <motion.div
     initial={{ opacity: 0, y: -10 }}
@@ -77,7 +63,6 @@ const AvailabilityBadge = () => (
   </motion.div>
 );
 
-// --- Vertical Social Strip — hero-scoped ---
 const SocialStrip = () => {
   const socials = [
     { label: "GitHub", href: "https://github.com/MAHESHPPAI" },
@@ -85,24 +70,15 @@ const SocialStrip = () => {
     { label: "Instagram", href: "https://www.instagram.com/mahesh_3.14_/" },
     { label: "Email", href: "mailto:maheshpailinked@gmail.com" },
   ];
-
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="absolute z-20 hidden md:flex flex-col items-center"
-      style={{
-        right: "64px",
-        top: "112px",
-        bottom: "194px",
-        justifyContent: "center",
-        gap: "1rem",
-      }}
+      style={{ right: "64px", top: "112px", bottom: "194px", justifyContent: "center", gap: "1rem" }}
     >
-      {/* Decorative line above GitHub */}
       <span className="w-[1px] h-8 bg-white/30 flex-shrink-0" />
-
       {socials.map(({ label, href }) => (
         <a
           key={label}
@@ -118,14 +94,11 @@ const SocialStrip = () => {
           </span>
         </a>
       ))}
-
-      {/* Decorative line below Email */}
       <span className="w-[1px] h-8 bg-white/30 flex-shrink-0" />
     </motion.div>
   );
 };
 
-// --- Spinning Circular CTA — hero-scoped ---
 const SpinningCTA = () => (
   <motion.div
     initial={{ opacity: 0, scale: 0.8 }}
@@ -135,89 +108,32 @@ const SpinningCTA = () => (
     style={{ bottom: "4rem", right: "4rem" }}
   >
     <style>{`
-      @keyframes ctaSpin {
-        from { transform: rotate(0deg); }
-        to   { transform: rotate(360deg); }
-      }
-      .cta-ring {
-        animation: ctaSpin var(--cta-spin-duration, 10s) linear infinite;
-        transform-origin: center;
-      }
-      .cta-wrap:hover .cta-ring {
-        --cta-spin-duration: 3s;
-      }
-      .cta-wrap {
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      .cta-wrap:hover {
-        transform: scale(1.08);
-      }
+      @keyframes ctaSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .cta-ring { animation: ctaSpin var(--cta-spin-duration, 10s) linear infinite; transform-origin: center; }
+      .cta-wrap:hover .cta-ring { --cta-spin-duration: 3s; }
+      .cta-wrap { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+      .cta-wrap:hover { transform: scale(1.08); }
     `}</style>
-
-    <a
-      href="#contact"
-      className="cta-wrap group relative flex items-center justify-center w-[130px] h-[130px]"
-      aria-label="Get in touch"
-    >
-      {/* Static outer border ring */}
-      <svg
-        viewBox="0 0 130 130"
-        className="absolute inset-0 w-full h-full pointer-events-none"
-      >
-        <circle
-          cx="65" cy="65" r="62"
-          fill="none"
-          stroke="rgba(255,255,255,0.6)"
-          strokeWidth="1.5"
-        />
+    <a href="#contact" className="cta-wrap group relative flex items-center justify-center w-[130px] h-[130px]" aria-label="Get in touch">
+      <svg viewBox="0 0 130 130" className="absolute inset-0 w-full h-full pointer-events-none">
+        <circle cx="65" cy="65" r="62" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" />
       </svg>
-
-      {/* Spinning text ring */}
-      <svg
-        viewBox="0 0 130 130"
-        className="cta-ring absolute inset-0 w-full h-full pointer-events-none"
-      >
+      <svg viewBox="0 0 130 130" className="cta-ring absolute inset-0 w-full h-full pointer-events-none">
         <defs>
-          <path
-            id="cta-circle-path"
-            d="M65,65 m-50,0 a50,50 0 1,1 100,0 a50,50 0 1,1 -100,0"
-          />
+          <path id="cta-circle-path" d="M65,65 m-50,0 a50,50 0 1,1 100,0 a50,50 0 1,1 -100,0" />
         </defs>
-        <text
-          fill="rgba(255,255,255,1)"
-          fontSize="8.5"
-          fontFamily="'Inter', sans-serif"
-          fontWeight="900"
-          letterSpacing="4"
-        >
-          <textPath href="#cta-circle-path">
-            GET IN TOUCH · GET IN TOUCH · GET IN TOUCH ·&nbsp;
-          </textPath>
+        <text fill="rgba(255,255,255,1)" fontSize="8.5" fontFamily="'Inter', sans-serif" fontWeight="900" letterSpacing="4">
+          <textPath href="#cta-circle-path">GET IN TOUCH · GET IN TOUCH · GET IN TOUCH ·&nbsp;</textPath>
         </text>
       </svg>
-
-      {/* Hover fill circle */}
-      <span
-        className="absolute inset-4 rounded-full bg-white scale-0 group-hover:scale-100 transition-transform duration-500 ease-in-out"
-        style={{ transformOrigin: "center" }}
-      />
-
-      {/* Center arrow */}
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        className="relative z-10 w-6 h-6 text-white group-hover:text-black"
-        style={{ transition: "color 0.3s ease, transform 0.3s ease" }}
-      >
+      <span className="absolute inset-4 rounded-full bg-white scale-0 group-hover:scale-100 transition-transform duration-500 ease-in-out" style={{ transformOrigin: "center" }} />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="relative z-10 w-6 h-6 text-white group-hover:text-black" style={{ transition: "color 0.3s ease" }}>
         <path d="M7 17L17 7M17 7H7M17 7v10" />
       </svg>
     </a>
   </motion.div>
 );
 
-// --- Mobile Social Strip (hero section, small screens only) ---
 const MobileSocialStrip = () => {
   const socials = [
     { label: "GH", href: "https://github.com/MAHESHPPAI" },
@@ -225,7 +141,6 @@ const MobileSocialStrip = () => {
     { label: "IG", href: "https://www.instagram.com/mahesh_3.14_/" },
     { label: "✉", href: "mailto:maheshpailinked@gmail.com" },
   ];
-
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -234,13 +149,8 @@ const MobileSocialStrip = () => {
       className="absolute right-6 top-[35%] z-10 flex flex-col items-center gap-5 md:hidden"
     >
       {socials.map(({ label, href }) => (
-        <a
-          key={label}
-          href={href}
-          target={href.startsWith("mailto") ? "_self" : "_blank"}
-          rel="noopener noreferrer"
-          className="font-sans font-black text-[10px] tracking-[0.2em] text-white opacity-50 hover:opacity-100 uppercase transition-opacity duration-300 block"
-        >
+        <a key={label} href={href} target={href.startsWith("mailto") ? "_self" : "_blank"} rel="noopener noreferrer"
+          className="font-sans font-black text-[10px] tracking-[0.2em] text-white opacity-50 hover:opacity-100 uppercase transition-opacity duration-300 block">
           {label}
         </a>
       ))}
@@ -251,34 +161,22 @@ const MobileSocialStrip = () => {
 const Index = () => {
   return (
     <div className="min-h-screen relative bg-black selection:bg-white selection:text-black">
-
-      {/* Logo */}
       <BrandLogo />
-
-      {/* Custom Cursor Follower */}
       <CursorFollower />
-
-      {/* Navigation Menu */}
       <Navigation />
 
-      {/* Background About Section (Fixed) */}
+      {/* Fixed background About section */}
       <div className="fixed inset-0 z-0 bg-white text-black">
         <About />
       </div>
 
-      {/* Hero Section — all hero-only elements live here and scroll away naturally */}
+      {/* Hero */}
       <section className="relative h-screen bg-black flex flex-col justify-end px-6 py-12 md:px-16 md:py-16 z-20 overflow-hidden">
-
-        {/* Hero-scoped elements — positioned absolute within this container */}
         <AvailabilityBadge />
         <SocialStrip />
         <SpinningCTA />
+        <div className="hidden lg:block"><SplashCursor /></div>
 
-        <div className="hidden lg:block">
-          <SplashCursor />
-        </div>
-
-        {/* THE HEADLINE - Anchored just above subtext on all viewports */}
         <div className="z-10 mt-auto mb-6 md:mb-8">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
@@ -286,29 +184,19 @@ const Index = () => {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="w-fit"
           >
-            <a
-              href="#contact"
-              className="group relative overflow-hidden border border-white/30 px-5 py-3 flex items-center gap-3 hover:border-white transition-colors duration-500 w-fit mb-6 md:hidden"
-            >
+            <a href="#contact" className="group relative overflow-hidden border border-white/30 px-5 py-3 flex items-center gap-3 hover:border-white transition-colors duration-500 w-fit mb-6 md:hidden">
               <span className="absolute inset-0 bg-white translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out" />
-              <span className="relative font-sans font-black text-[10px] tracking-[0.25em] uppercase text-white group-hover:text-black transition-colors duration-300 z-10">
-                Get in touch
-              </span>
-              <svg
-                className="relative w-3 h-3 text-white group-hover:text-black transition-colors duration-300 z-10"
-                viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.5"
-              >
+              <span className="relative font-sans font-black text-[10px] tracking-[0.25em] uppercase text-white group-hover:text-black transition-colors duration-300 z-10">Get in touch</span>
+              <svg className="relative w-3 h-3 text-white group-hover:text-black transition-colors duration-300 z-10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M1 6h10M6 1l5 5-5 5" />
               </svg>
             </a>
             <h1 className="font-sans font-bold text-7xl md:text-8xl lg:text-[9rem] xl:text-[11rem] leading-[0.85] tracking-tighter text-white uppercase text-left">
-              Driven<br />
-              by logic
+              Driven<br />by logic
             </h1>
           </motion.div>
         </div>
 
-        {/* THE SUBTEXT */}
         <div className="z-10 grid grid-cols-1 md:grid-cols-12 w-full gap-4 mb-8 md:mb-0">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -316,40 +204,42 @@ const Index = () => {
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             className="col-span-1 md:col-span-5 lg:col-span-4"
           >
-            <div className="w-12 h-[2px] bg-white mb-6 md:hidden"></div>
+            <div className="w-12 h-[2px] bg-white mb-6 md:hidden" />
             <p className="font-sans text-xs md:text-sm font-medium text-white leading-relaxed tracking-wide uppercase text-left">
               Building robust software, automating the complex and focused on transforming static systems into intelligent ones.
             </p>
           </motion.div>
         </div>
-
-        {/* Mobile CTA */}
         <MobileSocialStrip />
       </section>
 
-      {/* Content wrapper */}
+      {/* Content stack */}
       <div className="relative z-20 w-full bg-transparent">
-        {/* Spacer for About Section so we can scroll past it */}
-        <div id="about" className="h-screen w-full pointer-events-none"></div>
+        <div id="about" className="h-screen w-full pointer-events-none" />
 
         <div id="work" className="bg-black text-white relative z-20">
           <SelectedWorks />
         </div>
 
-        <div id="philosophy" className="bg-white text-black relative z-20">
-          <SkillsPhilosophy />
+        {/*
+          VectorBridge owns the entire Skills & Philosophy transition:
+            - Black arc line on white background
+            - Portal rectangle with SkillsPhilosophy inside
+            - Scroll-driven expansion to full viewport
+          SkillsPhilosophy is NOT rendered again below — it lives inside VectorBridge only.
+        */}
+        <div className="bg-white text-black relative z-20">
+          <VectorBridge />
         </div>
 
         <div className="bg-black text-white relative z-20">
           <Testimonial />
         </div>
 
-        {/* --- MODIFIED CONTACT SECTION --- */}
         <div id="contact" className="sticky top-0 z-0 bg-white text-black">
           <Contact />
         </div>
 
-        {/* --- MODIFIED FOOTER WRAPPER --- */}
         <div className="relative z-20 bg-black text-white">
           <Footer />
         </div>
