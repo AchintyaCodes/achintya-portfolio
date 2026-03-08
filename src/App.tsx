@@ -11,37 +11,31 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    {/* Lenis Setup: 
-      - syncTouch: false allows the 'momentum' effect on mobile.
-      - lerp: 0.08 creates a smooth, heavy 'glide' after scrolling.
-    */}
-    <ReactLenis
-      root
-      options={{
-        autoRaf: true,
-        duration: 1.5,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    <ReactLenis root options={{
+      // Self-drive the animation loop
+      autoRaf: true,
 
-        // Desktop settings
-        smoothWheel: true,
-        wheelMultiplier: 1.1,
+      // Desktop / Laptop settings
+      smoothWheel: true,
+      duration: 1.2,
+      // wheelMultiplier: 0.9 increases the "weight" by 10% (requires more physical movement)
+      wheelMultiplier: 0.9,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
 
-        // Touch settings 
-        // Note: 'smoothTouch' was removed in newer versions. 
-        // Setting syncTouch to false enables the smooth momentum on touch.
-        syncTouch: false,
-        touchMultiplier: 1.8,
-        lerp: 0.08,
-
-        infinite: false,
-      }}
-    >
+      // Touch-only physics
+      syncTouch: true,
+      syncTouchLerp: 0.15,         // Subtle smooth trailing
+      // touchMultiplier: 1.2 reduces the "weight" by 20% (moves further with less effort)
+      touchMultiplier: 1.2,
+      touchInertiaExponent: 1.55,  // Subtle dampening
+    }}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
