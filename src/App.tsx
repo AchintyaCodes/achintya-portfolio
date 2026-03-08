@@ -12,17 +12,22 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ReactLenis root options={{
-      // Self-drive the animation loop (replaces the manual rAF that was in main.tsx)
+      // Self-drive the animation loop
       autoRaf: true,
-      // Desktop smooth scroll settings (ported from main.tsx)
+
+      // Desktop / Laptop settings
       smoothWheel: true,
       duration: 1.2,
+      // wheelMultiplier: 0.9 increases the "weight" by 10% (requires more physical movement)
+      wheelMultiplier: 0.9,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      // Touch-only physics for heavy, viscous scrolling
+
+      // Touch-only physics
       syncTouch: true,
-      syncTouchLerp: 0.15,        // Subtle smooth trailing
-      touchMultiplier: 1,         // Native weight
-      touchInertiaExponent: 1.55, // Very subtle dampening
+      syncTouchLerp: 0.15,         // Subtle smooth trailing
+      // touchMultiplier: 1.2 reduces the "weight" by 20% (moves further with less effort)
+      touchMultiplier: 1.2,
+      touchInertiaExponent: 1.55,  // Subtle dampening
     }}>
       <TooltipProvider>
         <Toaster />
