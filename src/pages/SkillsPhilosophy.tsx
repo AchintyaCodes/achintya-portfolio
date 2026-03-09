@@ -46,7 +46,7 @@ const skillCategories = [
 const SkillsPhilosophy = () => {
   return (
     <section className="min-h-screen bg-white text-black font-sans flex flex-col">
-      <div className="w-full px-6 md:px-12 lg:px-16 pt-16 pb-12 bg-white z-10">
+      <div className="w-full px-6 md:px-12 lg:px-16 pt-24 pb-12 md:pt-16 md:pb-12 bg-white z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
