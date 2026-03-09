@@ -1,6 +1,18 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const Footer = () => {
+  const footerRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: footerRef,
+    offset: ["start end", "end end"],
+  });
+
+  // Dynamically scrubs opacity & scale using scroll progression instead of transition
+  const textScale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const textOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -22,11 +34,9 @@ const Footer = () => {
   };
 
   return (
-    // REMOVED global px padding here to allow full-width text at the bottom
-    <footer className="bg-black text-white font-sans pt-12 md:pt-20 border-t border-white min-h-screen flex flex-col">
-      
+    <footer ref={footerRef} className="bg-black text-white font-sans pt-12 md:pt-20 border-t border-white h-screen flex flex-col">
+
       {/* Top Section: Info Grid */}
-      {/* ADDED padding here (px-6 md:px-12 lg:px-16) to keep the content aligned correctly */}
       <motion.div
         className="px-6 md:px-12 lg:px-16 max-w-[1600px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-x-12 shrink-0"
         variants={containerVariants}
@@ -107,16 +117,12 @@ const Footer = () => {
       </motion.div>
 
       {/* Bottom Section: Branding Text */}
-      {/* w-full and NO padding allows text to touch edges. flex-1 centers it vertically. */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+      <motion.div
+        style={{ opacity: textOpacity, scale: textScale }}
         className="w-full flex-1 flex flex-col justify-center items-center overflow-hidden select-none pb-4"
       >
         <h1 className="font-sans font-black text-[23vw] leading-[0.8] text-white uppercase tracking-tighter flex items-start">
           Mahesh
-          {/* Trademark Symbol */}
           <span className="text-xl md:text-4xl lg:text-6xl font-medium mt-[2vw] ml-1 opacity-60">
             ®
           </span>

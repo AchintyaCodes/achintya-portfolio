@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { motion, useSpring, useMotionValue } from "framer-motion";
+import { motion, useSpring, useMotionValue, useScroll, useTransform } from "framer-motion";
 
 // Components
 import About from "./About";
@@ -159,6 +159,15 @@ const MobileSocialStrip = () => {
 };
 
 const Index = () => {
+  const footerContainerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: footerContainerRef,
+    offset: ["start end", "end end"]
+  });
+
+  // Create parallax effect: Footer starts higher up and moves to normal position as we scroll into it
+  const footerY = useTransform(scrollYProgress, [0, 1], ["-50%", "0%"]);
+
   return (
     <div className="min-h-screen relative bg-black selection:bg-white selection:text-black">
       <BrandLogo />
@@ -221,13 +230,6 @@ const Index = () => {
           <SelectedWorks />
         </div>
 
-        {/*
-          VectorBridge owns the entire Skills & Philosophy transition:
-            - Black arc line on white background
-            - Portal rectangle with SkillsPhilosophy inside
-            - Scroll-driven expansion to full viewport
-          SkillsPhilosophy is NOT rendered again below — it lives inside VectorBridge only.
-        */}
         <div className="bg-white text-black relative z-20">
           <VectorBridge />
         </div>
@@ -236,13 +238,17 @@ const Index = () => {
           <Testimonial />
         </div>
 
-        <div id="contact" className="sticky top-0 z-0 bg-white text-black">
+        {/* Change contact layer to z-20 and relative so it scrolls normally OVER the footer */}
+        <div id="contact" className="relative z-20 bg-white text-black">
           <Contact />
         </div>
+      </div>
 
-        <div className="relative z-20 bg-black text-white">
+      {/* Parallax Footer Reveal Stack */}
+      <div ref={footerContainerRef} className="relative z-0 h-screen w-full overflow-hidden bg-black text-white">
+        <motion.div style={{ y: footerY }} className="h-full w-full">
           <Footer />
-        </div>
+        </motion.div>
       </div>
     </div>
   );
