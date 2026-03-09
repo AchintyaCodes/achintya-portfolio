@@ -105,7 +105,7 @@ const SpinningCTA = () => (
     initial={{ opacity: 0, scale: 0.8 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    className="absolute z-10 hidden md:flex items-center justify-center"
+    className="absolute md:z-30 lg:z-10 hidden md:flex items-center justify-center"
     style={{ bottom: "4rem", right: "4rem" }}
   >
     <style>{`
@@ -147,7 +147,7 @@ const MobileSocialStrip = () => {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
-      className="absolute right-6 top-[35%] z-10 flex flex-col items-center gap-6 md:hidden"
+      className="flex flex-col items-center gap-6"
     >
       {socials.map(({ label, icon: Icon, href }) => (
         <a key={label} href={href} target={href.startsWith("mailto") ? "_self" : "_blank"} rel="noopener noreferrer"
@@ -181,11 +181,21 @@ const Index = () => {
       </div>
 
       {/* Hero */}
-      <section className="relative h-screen bg-black flex flex-col justify-end px-6 py-12 md:px-16 md:py-16 z-20 overflow-hidden">
+      <section className="relative h-screen bg-black flex flex-col px-6 py-12 md:px-16 md:py-16 z-20 overflow-hidden">
         <AvailabilityBadge />
         <SocialStrip />
         <SpinningCTA />
         <div className="hidden lg:block"><SplashCursor /></div>
+
+        {/* Mobile Midpoint Buffer: 80px total height from top to clear hamburger (Hamburger at 24px + 56px height) */}
+        <div className="h-[32px] w-full md:hidden" /> {/* py-12 (48px) + 32px = 80px */}
+
+        {/* Dynamic Centering Container for Mobile Socials */}
+        <div className="flex-1 flex flex-col items-end justify-center md:hidden pr-0 z-10 pointer-events-none">
+          <div className="pointer-events-auto">
+            <MobileSocialStrip />
+          </div>
+        </div>
 
         <div className="z-10 mt-auto mb-6 md:mb-8">
           <motion.div
@@ -220,7 +230,6 @@ const Index = () => {
             </p>
           </motion.div>
         </div>
-        <MobileSocialStrip />
       </section>
 
       {/* Content stack */}
