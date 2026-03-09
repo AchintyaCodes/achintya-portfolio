@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useSpring, useMotionValue, useScroll, useTransform } from "framer-motion";
+import { Github, Linkedin, Instagram, Mail } from "lucide-react";
 
 // Components
 import About from "./About";
@@ -89,7 +90,7 @@ const SocialStrip = () => {
           className="group flex-shrink-0"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
-          <span className="font-sans font-black text-[10px] tracking-[0.22em] uppercase text-white opacity-75 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="font-sans font-black text-[10px] tracking-[0.22em] uppercase text-white group-hover:opacity-100 transition-opacity duration-300">
             {label}
           </span>
         </a>
@@ -136,22 +137,22 @@ const SpinningCTA = () => (
 
 const MobileSocialStrip = () => {
   const socials = [
-    { label: "GH", href: "https://github.com/MAHESHPPAI" },
-    { label: "LI", href: "https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/" },
-    { label: "IG", href: "https://www.instagram.com/mahesh_3.14_/" },
-    { label: "✉", href: "mailto:maheshpailinked@gmail.com" },
+    { label: "Github", icon: Github, href: "https://github.com/MAHESHPPAI" },
+    { label: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/" },
+    { label: "Instagram", icon: Instagram, href: "https://www.instagram.com/mahesh_3.14_/" },
+    { label: "Email", icon: Mail, href: "mailto:maheshpailinked@gmail.com" },
   ];
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
-      className="absolute right-6 top-[35%] z-10 flex flex-col items-center gap-5 md:hidden"
+      className="absolute right-6 top-[35%] z-10 flex flex-col items-center gap-6 md:hidden"
     >
-      {socials.map(({ label, href }) => (
+      {socials.map(({ label, icon: Icon, href }) => (
         <a key={label} href={href} target={href.startsWith("mailto") ? "_self" : "_blank"} rel="noopener noreferrer"
-          className="font-sans font-black text-[10px] tracking-[0.2em] text-white opacity-50 hover:opacity-100 uppercase transition-opacity duration-300 block">
-          {label}
+          className="text-white hover:opacity-75 transition-opacity duration-300 block">
+          <Icon size={18} strokeWidth={2.5} />
         </a>
       ))}
     </motion.div>
