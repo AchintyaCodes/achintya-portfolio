@@ -46,7 +46,7 @@ const skillCategories = [
 const SkillsPhilosophy = () => {
   return (
     <section className="min-h-screen bg-white text-black font-sans flex flex-col">
-      <div className="w-full px-6 md:px-12 lg:px-16 pt-24 pb-16 bg-white z-10">
+      <div className="w-full px-6 md:px-12 lg:px-16 pt-16 pb-12 bg-white z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -58,10 +58,10 @@ const SkillsPhilosophy = () => {
             <h2 className="text-xs font-bold uppercase tracking-widest">Skills & Philosophy</h2>
           </div>
           <div className="md:col-span-4">
-            <blockquote className="text-4xl md:text-7xl font-black uppercase leading-tight">
+            <blockquote className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black uppercase leading-tight">
               “The function of good software is to make the complex appear to be simple.”
             </blockquote>
-            <p className="mt-8">— Grady Booch</p>
+            <p className="mt-6">— Grady Booch</p>
           </div>
         </motion.div>
       </div>
