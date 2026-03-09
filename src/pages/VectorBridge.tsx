@@ -70,7 +70,7 @@ const VectorBridge = () => {
 
         if (portalInnerRef.current && sectionRef.current) {
             const innerHeightPx = portalInnerRef.current.scrollHeight;
-            const totalRequiredHeight = (vh * 1.5) + innerHeightPx;
+            const totalRequiredHeight = (vh * 1.2) + innerHeightPx;
             sectionRef.current.style.height = `${totalRequiredHeight}px`;
             sectionRef.current.style.minHeight = `${totalRequiredHeight}px`;
         }
@@ -128,7 +128,7 @@ const VectorBridge = () => {
                 inner.style.transform = `scale(1)`;
                 box.style.overflow = 'hidden';
             } else {
-                const expansionRunway = vh * 1.5;
+                const expansionRunway = vh * 1.2;
                 const expansionProgress = Math.min(Math.max(localScroll / expansionRunway, 0), 1);
 
                 if (expansionProgress < 1) {
@@ -164,8 +164,8 @@ const VectorBridge = () => {
     });
 
     return (
-        <section ref={sectionRef} className="relative bg-white text-black" style={{ minHeight: '350vh' }}>
-            <div id="philosophy" style={{ position: 'absolute', top: '150vh', left: 0, height: '1px', width: '1px', pointerEvents: 'none' }} />
+        <section ref={sectionRef} className="relative bg-white text-black" style={{ minHeight: '320vh' }}>
+            <div id="philosophy" style={{ position: 'absolute', top: '120vh', left: 0, height: '1px', width: '1px', pointerEvents: 'none' }} />
             <div
                 ref={svgContainerRef}
                 style={{

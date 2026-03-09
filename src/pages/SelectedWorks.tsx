@@ -143,8 +143,8 @@ const SelectedWorks = () => {
     const triggerEndLast = lastCardTop - scaleEndPositionPx;
 
     const voidStart = triggerEndLast;
-    // Normalized to 1.5vh distance to eliminate extra scrolls
-    const voidDistance = containerHeight * 1.5;
+    // Normalized to 1.2vh distance to eliminate extra scrolls
+    const voidDistance = containerHeight * 1.2;
     let voidProgress = 0;
 
     if (scroll > voidStart) {
@@ -232,8 +232,8 @@ const SelectedWorks = () => {
     const threadLen = threadLenRef.current;
     if (thread && threadLen > 0 && isMobile) {
       let drawP = 0;
-      if (voidProgress > 0.4) {
-        drawP = (voidProgress - 0.4) / 0.6;
+      if (voidProgress > 0.2) {
+        drawP = (voidProgress - 0.2) / 0.8;
       }
       drawP = Math.min(Math.max(drawP, 0), 1);
       thread.style.strokeDasharray = `${threadLen}`;
@@ -243,7 +243,8 @@ const SelectedWorks = () => {
     const kineticWheel = kineticWheelRef.current;
     if (kineticWheel) {
       // Clean cutoff exactly when VectorBridge reaches the top
-      if (scroll > endElementTop + containerHeight * 1.5) {
+      // Clean cutoff exactly when VectorBridge covers 20% of the screen
+      if (scroll > endElementTop + containerHeight * 1.2 + containerHeight * 0.2) {
         kineticWheel.style.display = 'none';
         kineticWheel.style.visibility = 'hidden';
       } else if (voidProgress > 0) {
@@ -366,8 +367,8 @@ const SelectedWorks = () => {
             <ScrollStackCard key={project.id} project={project} index={index} />
           ))}
         </div>
-        {/* Reverted exactly to 150vh so dead space is removed completely */}
-        <div className={`scroll-stack-end pointer-events-none h-[150vh]`} />
+        {/* Reverted to 120vh so dead space is removed completely */}
+        <div className={`scroll-stack-end pointer-events-none h-[120vh]`} />
       </div>
 
       <div ref={kineticWheelRef} className="kinetic-wheel pointer-events-none" style={{
@@ -388,7 +389,7 @@ const SelectedWorks = () => {
             {/* The final Y coordinate changed to 3500 to cleanly cross the screen bounds without excessive length */}
             <path
               ref={threadPathRef}
-              d="M 750,280 L 560,750 L 750,1220 L 940,750 L 750,750 L 750,3500"
+              d="M 750,280 L 560,750 L 750,1220 L 940,750 L 750,750 L 750,2500"
               fill="none"
               stroke="#ffffff"
               strokeWidth="12"
