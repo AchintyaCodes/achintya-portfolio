@@ -189,19 +189,36 @@ const SelectedWorks = () => {
       stackInner.style.perspective = '1500px';
 
       if (voidProgress > 0) {
-        const easeScale = Math.pow(voidProgress, 1.5);
-        const currentZ = -easeScale * 3000;
-        const currentScale = 1 - easeScale;
-        const currentOpacity = 1 - Math.pow(voidProgress, 2.5);
+        if (isMobile) {
+          // MOBILE: Fade out cards, no Z-translation
+          const fadeOutProgress = Math.min(voidProgress / 0.33, 1);
+          const currentOpacity = 1 - fadeOutProgress;
 
-        voidContainer.style.transformOrigin = `50% ${originY}px`;
-        voidContainer.style.transform = `translate3d(0, 0, ${currentZ}px) scale(${Math.max(0, currentScale).toFixed(4)})`;
-        voidContainer.style.opacity = Math.max(0, currentOpacity).toFixed(3);
+          voidContainer.style.transformOrigin = `50% ${originY}px`;
+          voidContainer.style.transform = `translate3d(0, 0, 0) scale(1)`;
+          voidContainer.style.opacity = Math.max(0, currentOpacity).toFixed(3);
 
-        if (voidProgress >= 1) {
-          voidContainer.style.visibility = 'hidden';
+          if (fadeOutProgress >= 1) {
+            voidContainer.style.visibility = 'hidden';
+          } else {
+            voidContainer.style.visibility = 'visible';
+          }
         } else {
-          voidContainer.style.visibility = 'visible';
+          // DESKTOP: Existing Z-translation inward
+          const easeScale = Math.pow(voidProgress, 1.5);
+          const currentZ = -easeScale * 3000;
+          const currentScale = 1 - easeScale;
+          const currentOpacity = 1 - Math.pow(voidProgress, 2.5);
+
+          voidContainer.style.transformOrigin = `50% ${originY}px`;
+          voidContainer.style.transform = `translate3d(0, 0, ${currentZ}px) scale(${Math.max(0, currentScale).toFixed(4)})`;
+          voidContainer.style.opacity = Math.max(0, currentOpacity).toFixed(3);
+
+          if (voidProgress >= 1) {
+            voidContainer.style.visibility = 'hidden';
+          } else {
+            voidContainer.style.visibility = 'visible';
+          }
         }
       } else {
         voidContainer.style.transformOrigin = '';
@@ -214,10 +231,13 @@ const SelectedWorks = () => {
     const thread = threadPathRef.current;
     const threadLen = threadLenRef.current;
     if (thread && threadLen > 0 && isMobile) {
-      // Changed drawP to start immediately (removed 1.5 multiplier)
-      const drawP = Math.min(Math.max(voidProgress, 0), 1);
+      // Line drawing starts ONLY after figure transitions to 100% (voidProgress > 0.66)
+      let drawP = 0;
+      if (voidProgress > 0.66) {
+        drawP = (voidProgress - 0.66) / 0.34;
+      }
+      drawP = Math.min(Math.max(drawP, 0), 1);
       thread.style.strokeDasharray = `${threadLen}`;
-      // Logic fix: Ensure dashoffset moves from full length to 0 to "draw" the path
       thread.style.strokeDashoffset = `${(threadLen * (1 - drawP)).toFixed(2)}`;
     }
 
@@ -229,12 +249,23 @@ const SelectedWorks = () => {
       } else if (voidProgress > 0) {
         kineticWheel.style.display = 'block';
         kineticWheel.style.visibility = 'visible';
-        kineticWheel.style.opacity = Math.min(voidProgress * 4, 1).toFixed(3);
 
         if (isMobile) {
-          const slideY = 100 * (1 - voidProgress);
-          kineticWheel.style.transform = `translate3d(0, ${slideY}px, 0)`;
+          // Custom phase handling for mobile wheel/figure
+          let figOpacity = 0;
+          if (voidProgress <= 0.33) {
+            figOpacity = 0.5 * (voidProgress / 0.33); // Phase 1: Fade to 50%
+          } else if (voidProgress <= 0.66) {
+            figOpacity = 0.5 + 0.5 * ((voidProgress - 0.33) / 0.33); // Phase 2: 50% to 100%
+          } else {
+            figOpacity = 1; // Phase 3: Hold 100%
+          }
+
+          kineticWheel.style.opacity = figOpacity.toFixed(3);
+          kineticWheel.style.transform = `translate3d(0, 0, 0)`; // Keep static while fading
         } else {
+          // Desktop behavior
+          kineticWheel.style.opacity = Math.min(voidProgress * 4, 1).toFixed(3);
           const targetRotation = 180 * (1 - voidProgress);
           kineticWheel.style.transformOrigin = '50% 100%';
           kineticWheel.style.transform = `rotate(${targetRotation}deg)`;
@@ -244,7 +275,7 @@ const SelectedWorks = () => {
         kineticWheel.style.opacity = '0';
         kineticWheel.style.visibility = 'hidden';
         if (isMobile) {
-          kineticWheel.style.transform = `translate3d(0, 100px, 0)`;
+          kineticWheel.style.transform = `translate3d(0, 0, 0)`;
         } else {
           kineticWheel.style.transform = `rotate(180deg)`;
         }
@@ -268,7 +299,6 @@ const SelectedWorks = () => {
         const len = threadPathRef.current.getTotalLength();
         if (len > 0) {
           threadLenRef.current = len;
-          // Pre-set dasharray and offset so it starts hidden
           threadPathRef.current.style.strokeDasharray = `${len}`;
           threadPathRef.current.style.strokeDashoffset = `${len}`;
         }
@@ -345,7 +375,8 @@ const SelectedWorks = () => {
       }}>
         {isMobile ? (
           <svg viewBox="0 0 1500 1500" className="w-full h-full" style={{ overflow: 'visible' }}>
-            <path ref={threadPathRef} d="M 750,-300 L 750,150 C 750,550 300,550 300,750 C 300,950 550,1350 750,1350 C 950,1350 1200,950 1200,750 C 1200,550 750,550 750,750 L 750,3000" fill="none" stroke="#ffffff" strokeWidth="6" strokeLinecap="round" />
+            {/* Increased strokeWidth from 6 to 12 below */}
+            <path ref={threadPathRef} d="M 750,-300 L 750,150 C 750,550 300,550 300,750 C 300,950 550,1350 750,1350 C 950,1350 1200,950 1200,750 C 1200,550 750,550 750,750 L 750,3000" fill="none" stroke="#ffffff" strokeWidth="12" strokeLinecap="round" />
             <text x="750" y="150" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">ANALYZE</text>
             <text x="300" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DESIGN</text>
             <text x="750" y="1350" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">BUILD</text>
