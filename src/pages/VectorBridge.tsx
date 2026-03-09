@@ -29,7 +29,6 @@ const VectorBridge = () => {
     const [ready, setReady] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
-    // Updated: Unified initial dimensions to maintain desktop aesthetic on all screens
     const RECT_W = 340;
     const RECT_H = 220;
 
@@ -55,9 +54,9 @@ const VectorBridge = () => {
             newPath = `M ${startX},0 A ${R_px},${R_px} 0 0,0 ${endX},${endY}`;
         } else {
             const startX = vw / 2;
-            const startY = -10;
+            const startY = -10; // Slightly above to eliminate micro-gaps
             const endX = vw / 2;
-            const endY = vh / 2 - RECT_H / 2; // Adjusted to meet the top of the portal rectangle
+            const endY = vh / 2 - RECT_H / 2;
             newPath = `M ${startX},${startY} L ${endX},${endY}`;
         }
 
@@ -166,9 +165,7 @@ const VectorBridge = () => {
 
     return (
         <section ref={sectionRef} className="relative bg-white text-black" style={{ minHeight: '350vh' }}>
-            {/* Direct Navigation Anchor: Positioned at exactly the fully-expanded threshold (1.5vh) */}
             <div id="philosophy" style={{ position: 'absolute', top: '150vh', left: 0, height: '1px', width: '1px', pointerEvents: 'none' }} />
-            {/* SVG Bridge */}
             <div
                 ref={svgContainerRef}
                 style={{
@@ -187,9 +184,12 @@ const VectorBridge = () => {
                         ref={bridgeLineRef}
                         fill="none"
                         stroke="#000"
-                        strokeWidth={isMobile ? "1.5" : "10"}
                         strokeLinecap="round"
-                        style={{ strokeDasharray: '99999', strokeDashoffset: '99999' }}
+                        style={{
+                            strokeWidth: isMobile ? '0.8vw' : '10px', // Mathematically matches SelectedWorks
+                            strokeDasharray: '99999',
+                            strokeDashoffset: '99999'
+                        }}
                     />
                 </svg>
             </div>

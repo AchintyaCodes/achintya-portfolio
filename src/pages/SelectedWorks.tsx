@@ -110,6 +110,7 @@ const SelectedWorks = () => {
   const voidContainerRef = useRef<HTMLDivElement>(null);
   const kineticWheelRef = useRef<HTMLDivElement>(null);
   const threadPathRef = useRef<SVGPathElement>(null);
+  const figureGroupRef = useRef<SVGGElement>(null); // New ref for fading the text/dots
   const threadLenRef = useRef(0);
 
   const [ready, setReady] = useState(false);
@@ -142,6 +143,7 @@ const SelectedWorks = () => {
     const triggerEndLast = lastCardTop - scaleEndPositionPx;
 
     const voidStart = triggerEndLast;
+    // Normalized to 1.5vh distance to eliminate extra scrolls
     const voidDistance = containerHeight * 1.5;
     let voidProgress = 0;
 
@@ -190,8 +192,7 @@ const SelectedWorks = () => {
 
       if (voidProgress > 0) {
         if (isMobile) {
-          // MOBILE: Fade out cards, no Z-translation
-          const fadeOutProgress = Math.min(voidProgress / 0.33, 1);
+          const fadeOutProgress = Math.min(voidProgress / 0.25, 1);
           const currentOpacity = 1 - fadeOutProgress;
 
           voidContainer.style.transformOrigin = `50% ${originY}px`;
@@ -204,7 +205,6 @@ const SelectedWorks = () => {
             voidContainer.style.visibility = 'visible';
           }
         } else {
-          // DESKTOP: Existing Z-translation inward
           const easeScale = Math.pow(voidProgress, 1.5);
           const currentZ = -easeScale * 3000;
           const currentScale = 1 - easeScale;
@@ -231,10 +231,9 @@ const SelectedWorks = () => {
     const thread = threadPathRef.current;
     const threadLen = threadLenRef.current;
     if (thread && threadLen > 0 && isMobile) {
-      // Line drawing starts ONLY after figure transitions to 100% (voidProgress > 0.66)
       let drawP = 0;
-      if (voidProgress > 0.66) {
-        drawP = (voidProgress - 0.66) / 0.34;
+      if (voidProgress > 0.4) {
+        drawP = (voidProgress - 0.4) / 0.6;
       }
       drawP = Math.min(Math.max(drawP, 0), 1);
       thread.style.strokeDasharray = `${threadLen}`;
@@ -243,7 +242,8 @@ const SelectedWorks = () => {
 
     const kineticWheel = kineticWheelRef.current;
     if (kineticWheel) {
-      if (scroll > endElementTop + containerHeight) {
+      // Clean cutoff exactly when VectorBridge reaches the top
+      if (scroll > endElementTop + containerHeight * 1.5) {
         kineticWheel.style.display = 'none';
         kineticWheel.style.visibility = 'hidden';
       } else if (voidProgress > 0) {
@@ -251,20 +251,28 @@ const SelectedWorks = () => {
         kineticWheel.style.visibility = 'visible';
 
         if (isMobile) {
-          // Custom phase handling for mobile wheel/figure
           let figOpacity = 0;
-          if (voidProgress <= 0.33) {
-            figOpacity = 0.5 * (voidProgress / 0.33); // Phase 1: Fade to 50%
-          } else if (voidProgress <= 0.66) {
-            figOpacity = 0.5 + 0.5 * ((voidProgress - 0.33) / 0.33); // Phase 2: 50% to 100%
+          if (voidProgress <= 0.25) {
+            figOpacity = 0.5 * (voidProgress / 0.25);
+          } else if (voidProgress <= 0.5) {
+            figOpacity = 0.5 + 0.5 * ((voidProgress - 0.25) / 0.25);
           } else {
-            figOpacity = 1; // Phase 3: Hold 100%
+            figOpacity = 1;
           }
 
           kineticWheel.style.opacity = figOpacity.toFixed(3);
-          kineticWheel.style.transform = `translate3d(0, 0, 0)`; // Keep static while fading
+          kineticWheel.style.transform = `translate3d(0, 0, 0)`;
+
+          // Fade out the texts/dots right as line hits the bottom
+          if (figureGroupRef.current) {
+            if (voidProgress >= 0.8) {
+              const textFade = 1 - ((voidProgress - 0.8) / 0.2);
+              figureGroupRef.current.style.opacity = Math.max(0, textFade).toFixed(3);
+            } else {
+              figureGroupRef.current.style.opacity = '1';
+            }
+          }
         } else {
-          // Desktop behavior
           kineticWheel.style.opacity = Math.min(voidProgress * 4, 1).toFixed(3);
           const targetRotation = 180 * (1 - voidProgress);
           kineticWheel.style.transformOrigin = '50% 100%';
@@ -276,6 +284,7 @@ const SelectedWorks = () => {
         kineticWheel.style.visibility = 'hidden';
         if (isMobile) {
           kineticWheel.style.transform = `translate3d(0, 0, 0)`;
+          if (figureGroupRef.current) figureGroupRef.current.style.opacity = '1';
         } else {
           kineticWheel.style.transform = `rotate(180deg)`;
         }
@@ -357,7 +366,8 @@ const SelectedWorks = () => {
             <ScrollStackCard key={project.id} project={project} index={index} />
           ))}
         </div>
-        <div className={`scroll-stack-end pointer-events-none ${isMobile ? 'h-[100vh]' : 'h-[150vh]'}`} />
+        {/* Reverted exactly to 150vh so dead space is removed completely */}
+        <div className={`scroll-stack-end pointer-events-none h-[150vh]`} />
       </div>
 
       <div ref={kineticWheelRef} className="kinetic-wheel pointer-events-none" style={{
@@ -375,13 +385,30 @@ const SelectedWorks = () => {
       }}>
         {isMobile ? (
           <svg viewBox="0 0 1500 1500" className="w-full h-full" style={{ overflow: 'visible' }}>
-            {/* Increased strokeWidth from 6 to 12 below */}
-            <path ref={threadPathRef} d="M 750,-300 L 750,150 C 750,550 300,550 300,750 C 300,950 550,1350 750,1350 C 950,1350 1200,950 1200,750 C 1200,550 750,550 750,750 L 750,3000" fill="none" stroke="#ffffff" strokeWidth="12" strokeLinecap="round" />
-            <text x="750" y="150" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">ANALYZE</text>
-            <text x="300" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DESIGN</text>
-            <text x="750" y="1350" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">BUILD</text>
-            <text x="1200" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DELIVER</text>
-            <circle cx="750" cy="750" r="20" fill="#ffffff" />
+            {/* The final Y coordinate changed to 3500 to cleanly cross the screen bounds without excessive length */}
+            <path
+              ref={threadPathRef}
+              d="M 750,280 L 560,750 L 750,1220 L 940,750 L 750,750 L 750,3500"
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth="12"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+
+            {/* Grouped figure elements to easily fade them out at the end */}
+            <g ref={figureGroupRef}>
+              <text x="750" y="150" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">ANALYZE</text>
+              <text x="300" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DESIGN</text>
+              <text x="750" y="1350" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">BUILD</text>
+              <text x="1200" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DELIVER</text>
+
+              <circle cx="750" cy="280" r="15" fill="#ffffff" />
+              <circle cx="560" cy="750" r="15" fill="#ffffff" />
+              <circle cx="750" cy="1220" r="15" fill="#ffffff" />
+              <circle cx="940" cy="750" r="15" fill="#ffffff" />
+              <circle cx="750" cy="750" r="20" fill="#ffffff" />
+            </g>
           </svg>
         ) : (
           <svg viewBox="0 0 3000 1500" className="w-full h-auto" style={{ overflow: 'visible' }}>
