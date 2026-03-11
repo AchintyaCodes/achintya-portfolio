@@ -113,7 +113,7 @@ const SelectedWorks = () => {
   const figureGroupRef = useRef<SVGGElement>(null);
   const threadLenRef = useRef(0);
 
-  // New refs for Typography animation
+  // Refs for Typography animation
   const textAnalyzeRef = useRef<SVGTextElement>(null);
   const textDesignRef = useRef<SVGTextElement>(null);
   const textBuildRef = useRef<SVGTextElement>(null);
@@ -265,11 +265,11 @@ const SelectedWorks = () => {
         ref.current.style.transformBox = 'fill-box';
       };
 
-      // These values align with roughly where the path reaches each word length-wise
-      animateText(textAnalyzeRef, 0.02);
-      animateText(textDesignRef, 0.15);
-      animateText(textBuildRef, 0.30);
-      animateText(textDeliverRef, 0.45);
+      // Recalibrated thresholds for the new S-Curve ribbon
+      animateText(textAnalyzeRef, 0.04);
+      animateText(textDesignRef, 0.20);
+      animateText(textBuildRef, 0.40);
+      animateText(textDeliverRef, 0.60);
     }
 
     const kineticWheel = kineticWheelRef.current;
@@ -413,7 +413,7 @@ const SelectedWorks = () => {
         willChange: 'transform, opacity',
       }}>
         {isMobile ? (
-          <svg viewBox="0 0 1500 1500" className="w-full h-full" style={{ overflow: 'visible' }}>
+          <svg viewBox="0 0 1500 2000" className="w-full h-full" style={{ overflow: 'visible' }}>
             <defs>
               <linearGradient id="line-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stopColor="rgba(255,255,255,0)" />
@@ -430,10 +430,10 @@ const SelectedWorks = () => {
               </filter>
             </defs>
 
-            {/* Smooth Bezier path tracing the journey */}
+            {/* Sweeping S-Curve (Winding Ribbon) */}
             <path
               ref={threadPathRef}
-              d="M 750,280 C 750,500 560,500 560,750 C 560,1000 750,1000 750,1220 C 750,1000 940,1000 940,750 C 940,500 750,500 750,750 L 750,2500"
+              d="M 750,0 L 750,250 C 750,550 250,500 250,800 C 250,1100 1250,1050 1250,1350 C 1250,1650 750,1600 750,1900 L 750,3000"
               fill="none"
               stroke="url(#line-gradient)"
               strokeWidth="10"
@@ -443,15 +443,16 @@ const SelectedWorks = () => {
 
             <g ref={figureGroupRef}>
               <text ref={textAnalyzeRef} x="750" y="150" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">ANALYZE</text>
-              <text ref={textDesignRef} x="300" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">DESIGN</text>
-              <text ref={textBuildRef} x="750" y="1350" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">BUILD</text>
-              <text ref={textDeliverRef} x="1200" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">DELIVER</text>
+              <circle cx="750" cy="250" r="15" fill="#ffffff" filter="url(#glow)" />
 
-              <circle cx="750" cy="280" r="15" fill="#ffffff" filter="url(#glow)" />
-              <circle cx="560" cy="750" r="15" fill="#ffffff" filter="url(#glow)" />
-              <circle cx="750" cy="1220" r="15" fill="#ffffff" filter="url(#glow)" />
-              <circle cx="940" cy="750" r="15" fill="#ffffff" filter="url(#glow)" />
-              <circle cx="750" cy="750" r="20" fill="#ffffff" filter="url(#glow)" />
+              <text ref={textDesignRef} x="250" y="700" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">DESIGN</text>
+              <circle cx="250" cy="800" r="15" fill="#ffffff" filter="url(#glow)" />
+
+              <text ref={textBuildRef} x="1250" y="1250" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">BUILD</text>
+              <circle cx="1250" cy="1350" r="15" fill="#ffffff" filter="url(#glow)" />
+
+              <text ref={textDeliverRef} x="750" y="1800" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">DELIVER</text>
+              <circle cx="750" cy="1900" r="20" fill="#ffffff" filter="url(#glow)" />
             </g>
           </svg>
         ) : (
