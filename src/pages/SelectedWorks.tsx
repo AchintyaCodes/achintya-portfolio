@@ -110,8 +110,14 @@ const SelectedWorks = () => {
   const voidContainerRef = useRef<HTMLDivElement>(null);
   const kineticWheelRef = useRef<HTMLDivElement>(null);
   const threadPathRef = useRef<SVGPathElement>(null);
-  const figureGroupRef = useRef<SVGGElement>(null); // New ref for fading the text/dots
+  const figureGroupRef = useRef<SVGGElement>(null);
   const threadLenRef = useRef(0);
+
+  // New refs for Typography animation
+  const textAnalyzeRef = useRef<SVGTextElement>(null);
+  const textDesignRef = useRef<SVGTextElement>(null);
+  const textBuildRef = useRef<SVGTextElement>(null);
+  const textDeliverRef = useRef<SVGTextElement>(null);
 
   const [ready, setReady] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -143,7 +149,6 @@ const SelectedWorks = () => {
     const triggerEndLast = lastCardTop - scaleEndPositionPx;
 
     const voidStart = triggerEndLast;
-    // Normalized to 1.2vh distance to eliminate extra scrolls
     const voidDistance = containerHeight * 1.2;
     let voidProgress = 0;
 
@@ -230,6 +235,7 @@ const SelectedWorks = () => {
 
     const thread = threadPathRef.current;
     const threadLen = threadLenRef.current;
+
     if (thread && threadLen > 0 && isMobile) {
       let drawP = 0;
       if (voidProgress > 0.2) {
@@ -238,12 +244,36 @@ const SelectedWorks = () => {
       drawP = Math.min(Math.max(drawP, 0), 1);
       thread.style.strokeDasharray = `${threadLen}`;
       thread.style.strokeDashoffset = `${(threadLen * (1 - drawP)).toFixed(2)}`;
+
+      // Flashlight Typography Animation
+      const animateText = (ref: React.RefObject<SVGTextElement>, targetP: number) => {
+        if (!ref.current) return;
+        const threshold = 0.15; // Width of the "flashlight" beam
+        const dist = Math.abs(drawP - targetP);
+        let intensity = 0;
+
+        if (dist < threshold) {
+          intensity = 1 - (dist / threshold); // Scales from 0 to 1 based on proximity
+        }
+
+        const opacity = 0.3 + (0.7 * intensity); // Base 30% opacity, flares to 100%
+        const scale = 1 + (0.05 * intensity); // Slight pop in size
+
+        ref.current.style.opacity = opacity.toFixed(2);
+        ref.current.style.transform = `scale(${scale})`;
+        ref.current.style.transformOrigin = 'center';
+        ref.current.style.transformBox = 'fill-box';
+      };
+
+      // These values align with roughly where the path reaches each word length-wise
+      animateText(textAnalyzeRef, 0.02);
+      animateText(textDesignRef, 0.15);
+      animateText(textBuildRef, 0.30);
+      animateText(textDeliverRef, 0.45);
     }
 
     const kineticWheel = kineticWheelRef.current;
     if (kineticWheel) {
-      // Clean cutoff exactly when VectorBridge reaches the top
-      // Clean cutoff exactly when VectorBridge covers 20% of the screen
       if (scroll > endElementTop + containerHeight * 1.2 + containerHeight * 0.2) {
         kineticWheel.style.display = 'none';
         kineticWheel.style.visibility = 'hidden';
@@ -264,7 +294,6 @@ const SelectedWorks = () => {
           kineticWheel.style.opacity = figOpacity.toFixed(3);
           kineticWheel.style.transform = `translate3d(0, 0, 0)`;
 
-          // Fade out the texts/dots right as line hits the bottom
           if (figureGroupRef.current) {
             if (voidProgress >= 0.8) {
               const textFade = 1 - ((voidProgress - 0.8) / 0.2);
@@ -367,7 +396,6 @@ const SelectedWorks = () => {
             <ScrollStackCard key={project.id} project={project} index={index} />
           ))}
         </div>
-        {/* Reverted to 120vh so dead space is removed completely */}
         <div className={`scroll-stack-end pointer-events-none h-[120vh]`} />
       </div>
 
@@ -386,29 +414,44 @@ const SelectedWorks = () => {
       }}>
         {isMobile ? (
           <svg viewBox="0 0 1500 1500" className="w-full h-full" style={{ overflow: 'visible' }}>
-            {/* The final Y coordinate changed to 3500 to cleanly cross the screen bounds without excessive length */}
+            <defs>
+              <linearGradient id="line-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="rgba(255,255,255,0)" />
+                <stop offset="15%" stopColor="rgba(255,255,255,0.7)" />
+                <stop offset="85%" stopColor="rgba(255,255,255,0.7)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+              </linearGradient>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* Smooth Bezier path tracing the journey */}
             <path
               ref={threadPathRef}
-              d="M 750,280 L 560,750 L 750,1220 L 940,750 L 750,750 L 750,2500"
+              d="M 750,280 C 750,500 560,500 560,750 C 560,1000 750,1000 750,1220 C 750,1000 940,1000 940,750 C 940,500 750,500 750,750 L 750,2500"
               fill="none"
-              stroke="#ffffff"
-              strokeWidth="12"
+              stroke="url(#line-gradient)"
+              strokeWidth="10"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
 
-            {/* Grouped figure elements to easily fade them out at the end */}
             <g ref={figureGroupRef}>
-              <text x="750" y="150" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">ANALYZE</text>
-              <text x="300" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DESIGN</text>
-              <text x="750" y="1350" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">BUILD</text>
-              <text x="1200" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px' }} textAnchor="middle" dy=".3em">DELIVER</text>
+              <text ref={textAnalyzeRef} x="750" y="150" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">ANALYZE</text>
+              <text ref={textDesignRef} x="300" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">DESIGN</text>
+              <text ref={textBuildRef} x="750" y="1350" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">BUILD</text>
+              <text ref={textDeliverRef} x="1200" y="750" fill="#ffffff" style={{ fontFamily: 'sans-serif', fontWeight: 800, fontSize: '100px', opacity: 0.3 }} textAnchor="middle" dy=".3em">DELIVER</text>
 
-              <circle cx="750" cy="280" r="15" fill="#ffffff" />
-              <circle cx="560" cy="750" r="15" fill="#ffffff" />
-              <circle cx="750" cy="1220" r="15" fill="#ffffff" />
-              <circle cx="940" cy="750" r="15" fill="#ffffff" />
-              <circle cx="750" cy="750" r="20" fill="#ffffff" />
+              <circle cx="750" cy="280" r="15" fill="#ffffff" filter="url(#glow)" />
+              <circle cx="560" cy="750" r="15" fill="#ffffff" filter="url(#glow)" />
+              <circle cx="750" cy="1220" r="15" fill="#ffffff" filter="url(#glow)" />
+              <circle cx="940" cy="750" r="15" fill="#ffffff" filter="url(#glow)" />
+              <circle cx="750" cy="750" r="20" fill="#ffffff" filter="url(#glow)" />
             </g>
           </svg>
         ) : (
