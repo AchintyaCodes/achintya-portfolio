@@ -1,73 +1,94 @@
-# Welcome to your Lovable project
+# MAHESH P PAI — Portfolio
 
-## Project info
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MAHESHPPAI)
+[![Portfolio](https://img.shields.io/badge/Live_Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://maheshppai-v1.netlify.app)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+A high-performance personal portfolio showcasing full-stack engineering expertise, architectural design, and a focus on transforming complex problems into elegant, automated solutions.
 
-## How can I edit this code?
 
-There are several ways of editing your application.
+## 🚀 Overview
 
-**Use Lovable**
+This portfolio is a modern React-based web application built with a focus on immersive user experience (UX) and cinematic aesthetics. It features advanced scroll animations, interactive components, and a "Deep Dark" modernist design system.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### Key Features
+- **Immersive Interactivity**: Splash cursor effects, vector bridge interactions, and fluid animations.
+- **Stack-based Project Display**: A custom-engineered scroll stack for showcasing selected works with CSS-in-JS and GSAP power.
+- **Parallax Storytelling**: Multi-layered parallax reveals and scroll-triggered content transitions.
+- **Responsive Architecture**: Fully optimized for mobile, tablet, and desktop viewports.
+- **Mechanical UX**: Integrated smooth-scrolling using Lenis for a tactile feel.
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ Technology Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 18, TypeScript, Vite |
+| **Styling** | Tailwind CSS, shadcn/ui, Radix UI |
+| **Animation** | Framer Motion, GSAP |
+| **Scrolling** | Lenis Scroll, ScrollVelocity |
+| **Validation** | Zod, React Hook Form |
+| **Icons** | Lucide React |
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 📂 Project Structure
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```text
+src/
+├── components/     # Reusable UI components (Navigation, StarBorder, etc.)
+├── pages/          # Layout sections (Hero, About, SelectedWorks, Contact)
+├── lib/            # Utility functions and library wrappers
+├── hooks/          # Custom React hooks
+└── assets/         # Static assets and styles
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🛠️ Getting Started
 
-**Use GitHub Codespaces**
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or bun
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Local Development
 
-## What technologies are used for this project?
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/MAHESHPPAI/portfolio-website.git
+   cd Portfolio-website
+   ```
 
-This project is built with:
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-## How can I deploy this project?
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## 📬 Contact
 
-Yes, you can!
+Let's build something intelligent.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **Email**: [maheshpailinked@gmail.com](mailto:maheshpailinked@gmail.com)
+- **Instagram**: [_.maheshhhhhh._](https://www.instagram.com/_.maheshhhhhh._/)
+- **Availability**: Currently available for freelance and full-time opportunities.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+<p align="center">
+  MADE BY MAHESH ® 2026
+</p>
