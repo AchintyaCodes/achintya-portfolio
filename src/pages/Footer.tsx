@@ -120,11 +120,11 @@ const Footer = () => {
       {/* Bottom Section: Branding Text */}
       <motion.div
         style={{ opacity: textOpacity, scale: textScale }}
-        className="w-full flex-1 flex flex-col justify-center items-center overflow-hidden select-none pb-4"
+        className="w-full flex-1 flex flex-col justify-center items-center overflow-hidden select-none pb-4 px-2"
       >
-        <h1 className="font-sans font-black text-[23vw] leading-[0.8] text-white uppercase tracking-tighter flex items-start">
+        <h1 className="font-sans font-black text-[14vw] sm:text-[16vw] md:text-[18vw] lg:text-[20vw] leading-[0.8] text-white uppercase tracking-tighter flex items-start whitespace-nowrap">
           {personalInfo.name}
-          <span className="text-xl md:text-4xl lg:text-6xl font-medium mt-[2vw] ml-1 opacity-60">
+          <span className="text-lg sm:text-xl md:text-4xl lg:text-5xl font-medium mt-[1.5vw] ml-1 opacity-60">
             ®
           </span>
         </h1>

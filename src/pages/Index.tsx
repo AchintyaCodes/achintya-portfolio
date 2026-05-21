@@ -118,7 +118,7 @@ const MusicPlayer = () => {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, delay: 0.5 }}
-      className="fixed bottom-6 left-6 z-50 flex items-center gap-3"
+      className="fixed bottom-6 left-6 z-50 flex items-center gap-3 bg-black/90 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-2xl"
     >
       <audio 
         ref={audioRef} 
@@ -132,7 +132,7 @@ const MusicPlayer = () => {
       {/* Play/Pause Button - BIGGER */}
       <button
         onClick={togglePlay}
-        className="group relative flex items-center justify-center w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/40 hover:bg-white/30 transition-all duration-300 shadow-lg"
+        className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 transition-all duration-300 shadow-lg"
         aria-label={isPlaying ? "Pause music" : "Play music"}
       >
         <div className="relative w-6 h-6">
@@ -157,7 +157,7 @@ const MusicPlayer = () => {
       {/* Volume Button - BIGGER */}
       <button
         onClick={toggleMute}
-        className="group relative flex items-center justify-center w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 hover:bg-white/30 transition-all duration-300"
+        className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 transition-all duration-300"
         aria-label={isMuted ? "Unmute" : "Mute"}
       >
         <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -176,17 +176,12 @@ const MusicPlayer = () => {
         transition={{ duration: 0.3 }}
         className="overflow-hidden"
       >
-        <div className="px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/40 rounded-full">
-          <span className="text-sm font-bold text-white whitespace-nowrap tracking-wide">
+        <div className="px-3 py-2 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full">
+          <span className="text-xs font-bold text-white whitespace-nowrap tracking-wide">
             🎵 YALA (Slowed) {isPlaying ? '▶️' : '⏸️'}
           </span>
         </div>
       </motion.div>
-
-      {/* Debug Info */}
-      <div className="absolute -top-8 left-0 text-xs text-white/70">
-        Status: {isPlaying ? 'Playing' : 'Paused'} | Muted: {isMuted ? 'Yes' : 'No'}
-      </div>
     </motion.div>
   );
 };
