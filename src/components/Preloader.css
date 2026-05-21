@@ -89,6 +89,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 110px;
 }
 
 .preloader-title {
@@ -96,7 +97,7 @@
   text-align: center;
   position: relative;
   top: 80px;
-  margin: 20px 0;
+  margin: 0;
   text-transform: uppercase;
   font-weight: 900;
   font-family: 'Inter', sans-serif;
@@ -106,13 +107,7 @@
   text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
-.preloader-title:first-child {
-  margin-bottom: 55px;
-}
 
-.preloader-title:last-child {
-  margin-top: 55px;
-}
 
 @media (max-width: 768px) {
   .counter {
