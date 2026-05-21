@@ -35,7 +35,7 @@ const Footer = () => {
   };
 
   return (
-    <footer ref={footerRef} className="bg-black text-white font-sans pt-12 md:pt-20 border-t border-white h-screen flex flex-col">
+    <footer ref={footerRef} className="bg-black text-white font-sans pt-12 md:pt-20 border-t border-white min-h-screen flex flex-col">
 
       {/* Top Section: Info Grid */}
       <motion.div
@@ -120,14 +120,19 @@ const Footer = () => {
       {/* Bottom Section: Branding Text */}
       <motion.div
         style={{ opacity: textOpacity, scale: textScale }}
-        className="w-full flex-1 flex flex-col justify-center items-center overflow-hidden select-none pb-4 px-2"
+        className="w-full flex-1 flex flex-col justify-center items-center overflow-hidden select-none pb-8 px-4"
       >
-        <h1 className="font-sans font-black text-[14vw] sm:text-[16vw] md:text-[18vw] lg:text-[20vw] leading-[0.8] text-white uppercase tracking-tighter flex items-start whitespace-nowrap">
-          {personalInfo.name}
-          <span className="text-lg sm:text-xl md:text-4xl lg:text-5xl font-medium mt-[1.5vw] ml-1 opacity-60">
-            ®
-          </span>
-        </h1>
+        <div className="text-center">
+          <div className="font-sans font-black text-[18vw] sm:text-[20vw] md:text-[22vw] lg:text-[24vw] leading-[0.85] text-white uppercase tracking-tighter">
+            ACHINTYA
+          </div>
+          <div className="font-sans font-black text-[18vw] sm:text-[20vw] md:text-[22vw] lg:text-[24vw] leading-[0.85] text-white uppercase tracking-tighter flex items-start justify-center">
+            GUPTA
+            <span className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-medium mt-[2vw] ml-2 opacity-60">
+              ®
+            </span>
+          </div>
+        </div>
       </motion.div>
     </footer>
   );

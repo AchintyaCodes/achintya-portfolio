@@ -462,8 +462,8 @@ const Index = () => {
       </div>
 
       {/* Parallax Footer Reveal Stack */}
-      <div ref={footerContainerRef} className="relative z-0 h-screen w-full overflow-hidden bg-black text-white">
-        <motion.div style={{ y: footerY }} className="h-full w-full">
+      <div ref={footerContainerRef} className="relative z-0 min-h-screen w-full overflow-hidden bg-black text-white">
+        <motion.div style={{ y: footerY }} className="min-h-full w-full">
           <Footer />
         </motion.div>
       </div>
