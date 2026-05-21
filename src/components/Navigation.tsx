@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import { personalInfo } from "../data/personalData";
 
 interface NavItem {
   label: string;
@@ -17,13 +18,13 @@ const navItems: NavItem[] = [
   { label: "Work", href: "#work", number: "02" },
   { label: "Philosophy", href: "#philosophy", number: "03" },
   { label: "Contact", href: "#contact", number: "04" },
+  { label: "Resume", href: "/resume.pdf", number: "05" },
 ];
 
 const socialItems: SocialItem[] = [
-  { label: "GitHub", href: "https://github.com/MAHESHPPAI" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/" },
-  { label: "Instagram", href: "https://www.instagram.com/mahesh_3.14_/" },
-  { label: "Email", href: "mailto:maheshpailinked@gmail.com" },
+  { label: "GitHub", href: personalInfo.social.github },
+  { label: "LinkedIn", href: personalInfo.social.linkedin },
+  { label: "Email", href: personalInfo.social.email },
 ];
 
 const ease = [0.76, 0, 0.24, 1] as [number, number, number, number];
@@ -177,7 +178,9 @@ const Navigation = () => {
                 >
                   <motion.a
                     href={item.href}
-                    onClick={handleNavClick}
+                    onClick={item.label === "Resume" ? undefined : handleNavClick}
+                    download={item.label === "Resume" ? "Achintya_Gupta_Resume.pdf" : undefined}
+                    target={item.label === "Resume" ? "_blank" : undefined}
                     custom={i}
                     variants={itemVariants}
                     initial="closed"
@@ -203,7 +206,7 @@ const Navigation = () => {
               exit={{ opacity: 0, transition: { duration: 0.6 } }}
               className="text-xs text-white/20 font-mono tracking-widest mt-8 md:mt-0 md:self-end"
             >
-              © 2026 MAHESH
+              © 2026 {personalInfo.name}
             </motion.p>
           </motion.div>
         )}

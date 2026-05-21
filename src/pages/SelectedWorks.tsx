@@ -2,45 +2,7 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import { useLenis } from "lenis/react";
 import StarBorder from "../components/StarBorder";
 import './ScrollStack.css';
-
-const projects = [
-  {
-    id: "001",
-    title: "Enterprise Resource Architecture",
-    stack: "React / Node.js / Firebase / Firestore",
-    description: "A full-stack ERP engine automating multi-currency invoicing, inventory logic, and international tax compliance for distributed teams.",
-    links: { live: "https://erpbeta.netlify.app", code: "#" },
-    image: "/p1.png",
-    cta: "Live Project"
-  },
-  {
-    id: "002",
-    title: "Geospatial Workforce Analytics",
-    stack: "React / Redux / Google Maps API/ Firebase",
-    description: "Real-time tracking system implementing location-based validation protocols and live route visualization for workforce monitoring.",
-    links: { live: "#", code: "#" },
-    image: "/p2.png",
-    cta: "Live Project"
-  },
-  {
-    id: "003",
-    title: "OrderEase: Real-time online table food ordering system",
-    stack: "React / Firebase / Node.js",
-    description: "A real-time restaurant table ordering system that allows customers to place food orders directly from their table while enabling admins to manage menus, waiters, and assign waiters to customers for seamless service coordination.",
-    links: { live: "https://github.com/MAHESHPPAI/OrderEase", code: "#" },
-    image: "./p3.png",
-    cta: "View on Github"
-  },
-  {
-    id: "004",
-    title: "BusBuddy: Transit Management Logic",
-    stack: "React / Firebase / Springboot / ngrok",
-    description: "A real-time campus transportation platform that enables students to book seats and track buses live, drivers to stream GPS data during journeys, and transport officers to manage fleet availability, monitoring, and notifications seamlessly.",
-    links: { live: "https://github.com/MAHESHPPAI/Busbuddy-latest", code: "#" },
-    image: "./p4.png",
-    cta: "View on Github"
-  },
-];
+import { projects } from "../data/personalData";
 
 interface ScrollStackCardProps {
   project: typeof projects[0];
@@ -64,17 +26,31 @@ const ScrollStackCard = ({ project, index }: ScrollStackCardProps) => {
           </div>
         </div>
 
-        <StarBorder
-          as="a"
-          href={project.links.live}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="live-btn-star"
-          color="#f6d365, #fda085"
-          speed="3s"
-        >
-          {project.cta}
-        </StarBorder>
+        <div className="flex gap-3">
+          <StarBorder
+            as="a"
+            href={project.links.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="live-btn-star"
+            color="#f6d365, #fda085"
+            speed="3s"
+          >
+            {project.cta}
+          </StarBorder>
+          
+          <StarBorder
+            as="a"
+            href={project.links.code}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="live-btn-star"
+            color="#00f2fe, #4facfe"
+            speed="3s"
+          >
+            GitHub
+          </StarBorder>
+        </div>
       </div>
 
       <div className="content-grid">

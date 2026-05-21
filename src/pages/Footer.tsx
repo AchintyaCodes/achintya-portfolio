@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { personalInfo } from "../data/personalData";
 
 const Footer = () => {
   const footerRef = useRef<HTMLElement>(null);
@@ -50,13 +51,13 @@ const Footer = () => {
             Identification
           </h3>
           <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide leading-relaxed">
-            Mahesh P Pai
+            {personalInfo.fullName}
           </p>
           <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide leading-relaxed text-white/60">
-            Full Stack Engineer
+            Data Science & Engineering Student
           </p>
           <p className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide leading-relaxed text-white/60">
-            Kerala, India [Lat: 9.7, Long: 76.5]
+            {personalInfo.location}
           </p>
         </motion.div>
 
@@ -67,13 +68,13 @@ const Footer = () => {
           </h3>
           <div className="flex flex-col gap-2">
             <a
-              href="mailto:maheshpailinked@gmail.com"
+              href={personalInfo.social.email}
               className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide hover:underline underline-offset-4 decoration-1 w-fit flex items-center gap-1"
             >
               Email ↗
             </a>
             <a
-              href="https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/"
+              href={personalInfo.social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide hover:underline underline-offset-4 decoration-1 w-fit flex items-center gap-1"
@@ -81,7 +82,7 @@ const Footer = () => {
               LinkedIn ↗
             </a>
             <a
-              href="https://github.com/MAHESHPPAI"
+              href={personalInfo.social.github}
               target="_blank"
               rel="noopener noreferrer"
               className="font-sans text-xs md:text-sm font-medium uppercase tracking-wide hover:underline underline-offset-4 decoration-1 w-fit flex items-center gap-1"
@@ -122,7 +123,7 @@ const Footer = () => {
         className="w-full flex-1 flex flex-col justify-center items-center overflow-hidden select-none pb-4"
       >
         <h1 className="font-sans font-black text-[23vw] leading-[0.8] text-white uppercase tracking-tighter flex items-start">
-          Mahesh
+          {personalInfo.name}
           <span className="text-xl md:text-4xl lg:text-6xl font-medium mt-[2vw] ml-1 opacity-60">
             ®
           </span>

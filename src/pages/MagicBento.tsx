@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { achievements, certifications } from "../data/personalData";
 
 const MagicBento = () => {
   return (
@@ -8,7 +9,7 @@ const MagicBento = () => {
         {/* Section Header */}
         <div className="mb-24">
           <h2 className="font-sans text-xs font-bold uppercase tracking-[0.2em]">
-            More About Me
+            Achievements & Impact
           </h2>
         </div>
 
@@ -16,31 +17,31 @@ const MagicBento = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-40">
 
           <SwissItem
-            value={10}
+            value={4}
             suffix="+"
-            label="Projects Completed"
-            description="Completed multiple projects from concept to final implementation."
+            label="Production Systems"
+            description="Financial software systems deployed and serving real users with quantitative impact."
           />
 
           <SwissItem
             value={2}
-            suffix="+"
-            label="Years Experience"
-            description="Building software with architectural intent and predictable system behavior."
+            suffix="M+"
+            label="Fraud Prevention Impact"
+            description="Modeled fraud prevention impact at production volumes through ML-powered detection systems."
           />
 
           <SwissItem
-            value={500}
-            suffix="+"
-            label="Engineering Hours"
-            description="Engineering judgment refined through real-world constraints."
+            value={99.85}
+            suffix="%"
+            label="Model Accuracy"
+            description="XGBoost fraud detection achieving 99.85% accuracy with 0.968 AUC-ROC on 284K+ transactions."
           />
 
           <SwissItem
-            value={1}
-            suffix="st"
-            label="Systems First"
-            description="Architecture precedes interface. Structure defines outcome."
+            value={4}
+            suffix="+"
+            label="Certifications"
+            description="Professional certifications from Google, IBM, Meta, and McKinsey Forward Program."
           />
 
         </div>

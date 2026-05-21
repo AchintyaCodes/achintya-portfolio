@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { personalInfo } from "../data/personalData";
 
+// You'll need to replace this with your own Google Apps Script URL or email service
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6_hmNogiRhIAkAdfWU9q0wQb2WdEvswPCTHCd9U-giehtMTgKcmZq2NsQES-XYuxd/exec";
 
 const Contact = () => {
@@ -25,9 +27,13 @@ const Contact = () => {
     setStatus("sending");
 
     try {
-      // ✅ Send as URLSearchParams — no-cors mode drops JSON headers,
-      //    but form-encoded bodies are always forwarded correctly.
-      const body = new URLSearchParams(formData);
+      // Add recipient email to form data
+      const formDataWithRecipient = {
+        ...formData,
+        recipient: personalInfo.email // This ensures your email is included
+      };
+      
+      const body = new URLSearchParams(formDataWithRecipient);
 
       await fetch(APPS_SCRIPT_URL, {
         method: "POST",
@@ -39,7 +45,12 @@ const Contact = () => {
       setStatus("success");
       setFormData({ firstName: "", lastName: "", email: "", subject: "", message: "" });
     } catch {
-      setStatus("error");
+      // Fallback to mailto if the form service fails
+      const mailtoLink = `mailto:${personalInfo.email}?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+        `From: ${formData.firstName} ${formData.lastName} (${formData.email})\n\n${formData.message}`
+      )}`;
+      window.location.href = mailtoLink;
+      setStatus("success");
     }
   };
 

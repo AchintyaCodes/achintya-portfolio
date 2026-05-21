@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
+import { aboutMe, education, experience, focus } from "../data/personalData";
 
 const About = () => {
   // Safe window height check for SSR
@@ -46,7 +47,7 @@ const About = () => {
           style={{ y: y1, opacity: opacity1 }}
         >
           <h2 className="font-sans text-xs md:text-sm font-bold uppercase tracking-widest">
-            Background & Data
+            {aboutMe.title}
           </h2>
         </motion.div>
 
@@ -60,10 +61,10 @@ const About = () => {
             </h3>
             <div className="flex flex-col">
               <p className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                Indian Institute of Information Technology, Kottayam
+                {education.institution}
               </p>
               <p className="font-sans text-xl md:text-2xl lg:text-3xl font-normal text-black/70 leading-tight tracking-tight">
-                B.Tech, Computer Science & Engineering (2023–2027)
+                {education.degree} ({education.duration})
               </p>
             </div>
           </motion.div>
@@ -75,25 +76,16 @@ const About = () => {
             </h3>
 
             <div className="flex flex-col gap-6">
-              {/* Job 1 */}
-              <div>
-                <p className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                  aiRender Technologies
-                </p>
-                <p className="font-sans text-xl md:text-2xl lg:text-3xl font-normal text-black/70 leading-tight tracking-tight">
-                  Full Stack Developer (May 2025 – May 2026)
-                </p>
-              </div>
-
-              {/* Job 2 */}
-              <div>
-                <p className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                  Infosys Springboard
-                </p>
-                <p className="font-sans text-xl md:text-2xl lg:text-3xl font-normal text-black/70 leading-tight tracking-tight">
-                  Web Development Intern (Oct 2024 – Dec 2024)
-                </p>
-              </div>
+              {experience.map((job, index) => (
+                <div key={index}>
+                  <p className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
+                    {job.company}
+                  </p>
+                  <p className="font-sans text-xl md:text-2xl lg:text-3xl font-normal text-black/70 leading-tight tracking-tight">
+                    {job.position} ({job.duration})
+                  </p>
+                </div>
+              ))}
             </div>
           </motion.div>
 
@@ -103,12 +95,11 @@ const About = () => {
               03. Focus
             </h3>
             <ul className="flex flex-col">
-              <li className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                Software Engineering Architecture
-              </li>
-              <li className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
-                Artificial Intelligence & Process Automation
-              </li>
+              {focus.map((item, index) => (
+                <li key={index} className="font-sans text-xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
+                  {item}
+                </li>
+              ))}
             </ul>
           </motion.div>
 
