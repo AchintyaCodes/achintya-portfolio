@@ -301,7 +301,7 @@ timeline
             : Machine Learning Fundamentals
             : Financial Mathematics
     
-    2027-05 : Graduation
+    2028-07 : Graduation
             : B.Tech Completion
             : Industry Ready
 ```
@@ -309,7 +309,7 @@ timeline
 </div>
 
 **🏫 Manipal Institute of Technology, MAHE**  
-📅 **Duration:** Aug 2024 – Present  
+📅 **Duration:** Aug 2024 – July 2028  
 🎓 **Degree:** B.Tech in Data Science & Engineering  
 📍 **Location:** Udupi, India  
 
