@@ -3,7 +3,7 @@
 
 export const personalInfo = {
   // Basic Information
-  name: "ACHINTYA",
+  name: "ACHINTYA GUPTA",
   fullName: "Achintya Gupta",
   headline: "Driven by logic",
   tagline: "Building robust software, automating the complex and focused on transforming static systems into intelligent ones.",
