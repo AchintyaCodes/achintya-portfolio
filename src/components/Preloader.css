@@ -43,7 +43,7 @@
 
 .loader {
   position: absolute;
-  top: 50%;
+  top: calc(50% + 80px);
   left: 50%;
   width: 300px;
   height: 50px;
@@ -51,9 +51,7 @@
   display: flex;
   background: rgb(80, 80, 80);
   z-index: 10001;
-  margin-top: 0px;
 }
-
 .loader-1 {
   position: relative;
   background: #fff;
@@ -107,7 +105,13 @@
   text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
+.preloader-title:first-child {
+  margin-bottom: 80px;
+}
 
+.preloader-title:last-child {
+  margin-top: 80px;
+}
 
 @media (max-width: 768px) {
   .counter {
