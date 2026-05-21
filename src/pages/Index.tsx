@@ -211,9 +211,9 @@ const CursorFollower = () => {
 
 const BrandLogo = () => (
   <div className="fixed top-6 left-6 md:top-8 md:left-10 z-50 mix-blend-difference">
-    <h1 className="font-sans font-black text-2xl md:text-4xl tracking-tighter text-white flex items-start">
+    <h1 className="font-sans font-black text-xl md:text-2xl lg:text-3xl tracking-tighter text-white flex items-start">
       {personalInfo.name}
-      <span className="text-xs md:text-lg font-medium ml-1 -mt-1 md:-mt-2">®</span>
+      <span className="text-xs md:text-sm lg:text-base font-medium ml-1 -mt-1 md:-mt-2">®</span>
     </h1>
   </div>
 );

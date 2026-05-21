@@ -39,7 +39,7 @@ const Footer = () => {
 
       {/* Top Section: Info Grid */}
       <motion.div
-        className="px-6 md:px-12 lg:px-16 max-w-[1600px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-x-12 shrink-0"
+        className="px-6 md:px-12 lg:px-16 max-w-[1600px] mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-x-12 shrink-0 mb-8"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -123,12 +123,12 @@ const Footer = () => {
         className="w-full flex-1 flex flex-col justify-center items-center overflow-hidden select-none pb-8 px-4"
       >
         <div className="text-center">
-          <div className="font-sans font-black text-[18vw] sm:text-[20vw] md:text-[22vw] lg:text-[24vw] leading-[0.85] text-white uppercase tracking-tighter">
+          <div className="font-sans font-black text-[12vw] sm:text-[14vw] md:text-[16vw] lg:text-[18vw] leading-[0.85] text-white uppercase tracking-tighter">
             ACHINTYA
           </div>
-          <div className="font-sans font-black text-[18vw] sm:text-[20vw] md:text-[22vw] lg:text-[24vw] leading-[0.85] text-white uppercase tracking-tighter flex items-start justify-center">
+          <div className="font-sans font-black text-[12vw] sm:text-[14vw] md:text-[16vw] lg:text-[18vw] leading-[0.85] text-white uppercase tracking-tighter flex items-start justify-center">
             GUPTA
-            <span className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-medium mt-[2vw] ml-2 opacity-60">
+            <span className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium mt-[2vw] ml-2 opacity-60">
               ®
             </span>
           </div>
