@@ -96,7 +96,7 @@
   text-align: center;
   position: relative;
   top: 80px;
-  margin: 0;
+  margin: 20px 0;
   text-transform: uppercase;
   font-weight: 900;
   font-family: 'Inter', sans-serif;
@@ -107,11 +107,11 @@
 }
 
 .preloader-title:first-child {
-  margin-bottom: 45px;
+  margin-bottom: 55px;
 }
 
 .preloader-title:last-child {
-  margin-top: 45px;
+  margin-top: 55px;
 }
 
 @media (max-width: 768px) {
