@@ -1,99 +1,92 @@
-<<<<<<< HEAD
-# MAHESH P PAI — Portfolio
+# Achintya Gupta - Portfolio
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/)
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MAHESHPPAI)
-[![Portfolio](https://img.shields.io/badge/Live_Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://maheshppai-v1.netlify.app)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/achintya-gupta-bb0091311)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AchintyaCodes)
+[![Live Portfolio](https://img.shields.io/badge/Live-Portfolio-FF6B6B?style=for-the-badge)](https://achintya-portfolio.vercel.app)
 
-A high-performance personal portfolio showcasing full-stack engineering expertise, architectural design, and a focus on transforming complex problems into elegant, automated solutions.
+## 🚀 About Me
 
+Second-year Data Science & Engineering student at MIT Manipal with **4 production-deployed financial software systems** – spanning LLM-powered fraud audit, quantitative risk modeling, and full-stack SaaS analytics. 
 
-## 🚀 Overview
+Seeking internship roles in **ML engineering, quantitative analytics, or financial technology** where statistical modeling meets scalable infrastructure.
 
-This portfolio is a modern React-based web application built with a focus on immersive user experience (UX) and cinematic aesthetics. It features advanced scroll animations, interactive components, and a "Deep Dark" modernist design system.
+## 🎯 Featured Projects
 
-### Key Features
-- **Immersive Interactivity**: Splash cursor effects, vector bridge interactions, and fluid animations.
-- **Stack-based Project Display**: A custom-engineered scroll stack for showcasing selected works with CSS-in-JS and GSAP power.
-- **Parallax Storytelling**: Multi-layered parallax reveals and scroll-triggered content transitions.
-- **Responsive Architecture**: Fully optimized for mobile, tablet, and desktop viewports.
-- **Mechanical UX**: Integrated smooth-scrolling using Lenis for a tactile feel.
+### 🛡️ FraudGuard AI
+**Tech Stack:** Python, FastAPI, XGBoost, SHAP, Llama 3.3 70B, Next.js, Vercel
+
+- **99.85% accuracy** with 0.968 AUC-ROC on 284K+ transactions
+- **70%+ fraud recall rate** with hybrid SMOTE resampling
+- **Sub-3 second** Basel III compliant audit report generation
+- **$2M+ fraud prevention impact** at production volumes
+
+### 📊 Quantitative Portfolio Risk Platform
+**Tech Stack:** Python, FastAPI, Next.js, NumPy, SciPy, Pandas
+
+- **8 quantitative risk models** including Monte Carlo simulation
+- **Basel III compliant metrics** (VaR, CVaR, Maximum Drawdown)
+- **Sub-2s response time** across 6 macro stress scenarios
+- **200 scenarios, 252-day horizon** Monte Carlo analysis
+
+### 💰 FinFlow - Financial Analytics Platform
+**Tech Stack:** Next.js, FastAPI, PostgreSQL, JWT
+
+- **Full-SDLC SaaS platform** from architecture to CI/CD
+- **JWT/bcrypt security** with 4 transactional CRUD modules
+- **Real-time revenue visualization**
+- **Zero cold-start latency** on serverless PostgreSQL
+
+## 🛠️ Technical Skills
+
+**Languages:** Python, Java, C++, SQL, TypeScript, JavaScript (ES6+), R
+
+**ML & Data:** Machine Learning, LLM Integration, RAG, XGBoost, SHAP, SMOTE, Pandas, NumPy, Scikit-Learn
+
+**Quant/FinEng:** Financial Modeling, Risk Analytics (VaR/CVaR), Portfolio Optimization, Monte Carlo, Fraud Detection
+
+**Cloud & Tools:** Vercel, Render, Hugging Face Hub, Groq API, FastAPI, Next.js, PostgreSQL, REST APIs, Docker, Git
+
+## 🏆 Achievements
+
+- **Case-a-thon 2026:** Advanced to Round 2 of 3 (438 participants) - MIT Manipal
+- **GSSoC 2026:** Selected Contributor, AI/Agents Track (30,000+ participants)
+- **4+ Professional Certifications:** Google Data Analytics, IBM Python for Data Science, Meta Data Analytics, McKinsey Forward Program
+
+## 🎓 Education
+
+**Manipal Institute of Technology, MAHE** | *Aug 2024 – Present*  
+B.Tech in Data Science & Engineering  
+**Relevant Coursework:** Data Structures & Algorithms, Statistical Modeling, Linear Algebra & Probability, Database Management Systems
+
+## 💼 Experience
+
+**Technology & Operations Lead** | *AIESEC, MIT* | *Feb 2025 – Present*
+- Engineered Python + Google Sheets API automation reducing reporting overhead by **40%**
+- Lifted B2B conversion rate from 20% to **35%**, generating **$1,600+ in chapter revenue**
+- Reduced operational cycle time by **30%** while coordinating a team of 7
+
+## 🌐 Portfolio Features
+
+This portfolio showcases:
+- **🎵 Background Music** with custom controls
+- **⚡ Insane Preloader** with animated counter and loading bars
+- **🎨 Modern Animations** using Framer Motion and GSAP
+- **📱 Fully Responsive** design for all devices
+- **🎯 Interactive Elements** with smooth scrolling and parallax effects
+
+## 🚀 Built With
+
+- **Frontend:** React, TypeScript, Tailwind CSS, Framer Motion
+- **Animations:** GSAP, Lenis Smooth Scrolling
+- **Deployment:** Vercel
+- **Design:** Modern glassmorphism and dark theme
+
+## 📫 Get In Touch
+
+- **Email:** achintya.mann@gmail.com
+- **LinkedIn:** [achintya-gupta-bb0091311](https://linkedin.com/in/achintya-gupta-bb0091311)
+- **GitHub:** [AchintyaCodes](https://github.com/AchintyaCodes)
 
 ---
 
-## 🛠️ Technology Stack
-
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend** | React 18, TypeScript, Vite |
-| **Styling** | Tailwind CSS, shadcn/ui, Radix UI |
-| **Animation** | Framer Motion, GSAP |
-| **Scrolling** | Lenis Scroll, ScrollVelocity |
-| **Validation** | Zod, React Hook Form |
-| **Icons** | Lucide React |
-
----
-
-## 📂 Project Structure
-
-```text
-src/
-├── components/     # Reusable UI components (Navigation, StarBorder, etc.)
-├── pages/          # Layout sections (Hero, About, SelectedWorks, Contact)
-├── lib/            # Utility functions and library wrappers
-├── hooks/          # Custom React hooks
-└── assets/         # Static assets and styles
-```
-
----
-
-## 🛠️ Getting Started
-
-### Prerequisites
-- Node.js (v18 or higher)
-- npm or bun
-
-### Local Development
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/MAHESHPPAI/portfolio-website.git
-   cd Portfolio-website
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   bun install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-4. **Build for production**
-   ```bash
-   npm run build
-   ```
-
----
-
-## 📬 Contact
-
-Let's build something intelligent.
-
-- **Email**: [maheshpailinked@gmail.com](mailto:maheshpailinked@gmail.com)
-- **Instagram**: [_.maheshhhhhh._](https://www.instagram.com/_.maheshhhhhh._/)
-- **Availability**: Currently available for freelance and full-time opportunities.
-
----
-
-<p align="center">
-  MADE BY MAHESH ® 2026
-</p>
-=======
-# achintya-portfolio
-Personal portfolio showcasing ML engineering, quantitative analytics, and financial technology projects. Built with React, TypeScript, and modern animations.
->>>>>>> c3c3021046f25000d0ad503d55af8436bf9a318c
+*"Building robust software, automating the complex and focused on transforming static systems into intelligent ones."*
