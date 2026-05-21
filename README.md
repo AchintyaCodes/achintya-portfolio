@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MAHESH P PAI — Portfolio
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mahesh-p-pai-b0987b2a8/)
@@ -92,3 +93,7 @@ Let's build something intelligent.
 <p align="center">
   MADE BY MAHESH ® 2026
 </p>
+=======
+# achintya-portfolio
+Personal portfolio showcasing ML engineering, quantitative analytics, and financial technology projects. Built with React, TypeScript, and modern animations.
+>>>>>>> c3c3021046f25000d0ad503d55af8436bf9a318c
