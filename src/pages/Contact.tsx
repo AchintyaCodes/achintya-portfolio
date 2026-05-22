@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { personalInfo } from "../data/personalData";
 
-// You'll need to replace this with your own Google Apps Script URL or email service
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6_hmNogiRhIAkAdfWU9q0wQb2WdEvswPCTHCd9U-giehtMTgKcmZq2NsQES-XYuxd/exec";
+// Contact form using Formspree (free email service) or mailto fallback
+const FORMSPREE_URL = "https://formspree.io/f/YOUR_FORM_ID"; // You'll need to set this up
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -26,32 +26,16 @@ const Contact = () => {
     e.preventDefault();
     setStatus("sending");
 
-    try {
-      // Add recipient email to form data
-      const formDataWithRecipient = {
-        ...formData,
-        recipient: personalInfo.email // This ensures your email is included
-      };
-      
-      const body = new URLSearchParams(formDataWithRecipient);
-
-      await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
-      });
-
-      setStatus("success");
-      setFormData({ firstName: "", lastName: "", email: "", subject: "", message: "" });
-    } catch {
-      // Fallback to mailto if the form service fails
-      const mailtoLink = `mailto:${personalInfo.email}?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
-        `From: ${formData.firstName} ${formData.lastName} (${formData.email})\n\n${formData.message}`
-      )}`;
-      window.location.href = mailtoLink;
-      setStatus("success");
-    }
+    // For now, use mailto as the primary method since it's most reliable
+    const mailtoLink = `mailto:${personalInfo.email}?subject=${encodeURIComponent(
+      `Portfolio Contact: ${formData.subject}`
+    )}&body=${encodeURIComponent(
+      `From: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    )}`;
+    
+    window.location.href = mailtoLink;
+    setStatus("success");
+    setFormData({ firstName: "", lastName: "", email: "", subject: "", message: "" });
   };
 
   const containerVariants = {
@@ -170,7 +154,7 @@ const Contact = () => {
               </button>
 
               {status === "success" && (
-                <p className="text-sm text-green-600 font-medium">✓ Message sent! I'll get back to you soon.</p>
+                <p className="text-sm text-green-600 font-medium">✓ Email client opened! Please send the message from your email app.</p>
               )}
               {status === "error" && (
                 <p className="text-sm text-red-500 font-medium">✗ Something went wrong. Please try again.</p>
